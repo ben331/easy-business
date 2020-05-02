@@ -1,9 +1,25 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Company {
-
+	
+	private CashRegister cashRegister;
+	
+	private ArrayList<DairyProduct> dairyProducts;
+	
+	private ArrayList<DairyDrink> dairyDrinks;
+	
+	private Employee employees;
+	
+	private Employee activeEmployeesRoot;
+	
+	private Customer firstDebtor;
+	
+	private Customer firstCustomer;
+	
+	
 	public void saveData() {
 		
 	}
@@ -33,23 +49,28 @@ public class Company {
 	}
 	
 	public ArrayList<DairyProduct> searchExpiredProducts(){
-		
+		ArrayList<DairyProduct> expiredProducts=null;
+		return expiredProducts;
 	}
 	
 	public Customer searchCustomer(String id) {
-		
+		Customer customer = null;
+		return customer;
 	}
 	
 	public Customer searchDebtor(String id) {
-		
+		Customer debtor = null;
+		return debtor;
 	}
 	
 	public Employee searchEmployee(String id) {
-		
+		Employee employee = null;
+		return employee;
 	}
 	
-	public ArrayList<Register> searchRegisterOfDate(LocalDate x){
-		
+	public ArrayList<Register> searchRegisterOfDate(LocalDate date){
+		ArrayList<Register> registers = null;
+		return registers;
 	}
 	
 	public void sortPByFlavorAndSize() {
@@ -111,13 +132,8 @@ public class Company {
 		
 	}
 	
-	public String determineBalancePoints() {
-		
-	}
-	
 	public String determineBalancePoints(double gain) {
-		
+		String report="";
+		return report;
 	}
-	
-	
 }

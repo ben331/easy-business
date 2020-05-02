@@ -2,7 +2,5 @@ package model;
 
 public interface Remunerable {
 
-	public static void calculateSalary(double f, double v) {
-		
-	}
+	public abstract void calculateSalary(double f, double v);
 }

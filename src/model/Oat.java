@@ -20,7 +20,7 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Expirable {
 	}
 
 	@Override
-	public boolean isExpirable(int days) {
+	public boolean isExpired(int days) {
 		
 		return false;
 	}
@@ -29,6 +29,4 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Expirable {
 	public void calculateBreakEvenPoint() {
 		
 	}
-	
-	
 }

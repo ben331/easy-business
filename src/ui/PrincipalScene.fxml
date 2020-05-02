@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#saveChanges" text="Save changes" />
+                  <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="CashRegister">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#cashRegister" text="View" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Customers">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#showCustomers" text="All" />
+                  <MenuItem mnemonicParsing="false" onAction="#showDebtors" text="Debtors" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Employees">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showActiveEmployess" text="Actives" />
+                  <MenuItem mnemonicParsing="false" onAction="#showEmployees" text="All" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Stock">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showDairyProducts" text="Dairy Products" />
+                  <MenuItem mnemonicParsing="false" onAction="#showDairyDrinks" text="Dairy Drinks" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Others">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showAnalysis" text="Analysis" />
+                  <MenuItem mnemonicParsing="false" onAction="#showSettings" text="Settings" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#helps" text="Helps" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <BorderPane fx:id="mainPane" prefHeight="505.0" prefWidth="787.0" />
+   </children>
+</VBox>

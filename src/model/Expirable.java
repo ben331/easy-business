@@ -2,8 +2,5 @@ package model;
 
 public interface Expirable {
 
-	public static boolean isExpirable(int days) {
-		
-		return false;
-	}
+	public abstract boolean isExpired(int days);
 }

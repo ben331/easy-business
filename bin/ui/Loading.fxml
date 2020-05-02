@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox alignment="BOTTOM_CENTER" fillWidth="false" maxHeight="230.0" maxWidth="404.0" minHeight="230.0" minWidth="404.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="179.0" fitWidth="397.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../imgs/splash.JPG" />
+         </image>
+      </ImageView>
+      <Label fx:id="loading" contentDisplay="CENTER" prefHeight="47.0" prefWidth="71.0" style="-fx-background-color: #f4f4f4;" text="Loading..." textAlignment="CENTER">
+         <font>
+            <Font name="System Italic" size="16.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>

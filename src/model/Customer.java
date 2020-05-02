@@ -7,17 +7,17 @@ public class Customer extends Person{
 
 	private Customer nextCustomer;
 	private Customer prevCustomer;
-	private double debValue;
+	private double debtValue;
 	private ArrayList<LocalDate> purchasesDates;
 	private ArrayList<String> purchasesDetail;
 	
-	public Customer(String id, String name, String lastName, String celphoneNumber, String address, double debValue) {
+	public Customer(String id, String name, String lastName, String celphoneNumber, String address, double debtValue) {
 		super( id,  name,  lastName,  celphoneNumber,  address);
-		this.debValue=debValue;
+		this.debtValue=debtValue;
 	}
 	
 	public boolean hasDebt() {
-		
+		return debtValue > 0;
 	}
 
 	public Customer getNextCustomer() {
@@ -28,8 +28,8 @@ public class Customer extends Person{
 		return prevCustomer;
 	}
 	
-	public double getDebValue() {
-		return debValue;
+	public double getDebtValue() {
+		return debtValue;
 	}
 
 	public ArrayList<LocalDate> getPurchasesDates() {
@@ -48,8 +48,8 @@ public class Customer extends Person{
 		this.prevCustomer = prevCustomer;
 	}
 	
-	public void setDebValue(double debValue) {
-		this.debValue = debValue;
+	public void setDebtValue(double debValue) {
+		this.debtValue = debValue;
 	}
 
 	public void setPurchasesDates(ArrayList<LocalDate> purchasesDates) {

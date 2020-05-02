@@ -20,7 +20,7 @@ public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable{
 	}
 
 	@Override
-	public boolean isExpirable(int days) {
+	public boolean isExpired(int days) {
 		
 		return false;
 	}
