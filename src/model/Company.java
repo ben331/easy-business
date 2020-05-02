@@ -117,15 +117,31 @@ public class Company {
 		
 	}
 	
-	public void addEmployee() {
+	public void addCustomer(String id, String name, String lastName, String celphoneNumber, String address, double debtValue) {
+		Customer newCustomer = new Customer( id,  name,  lastName,  celphoneNumber,  address,  debtValue);
 		
+		if(firstCustomer==null) {
+			firstCustomer=newCustomer;
+		}else {
+			Customer current = firstCustomer;
+			while(current.getNextCustomer()!=firstCustomer) {
+				current = current.getNextCustomer();
+			}
+			current.setNextCustomer(newCustomer);
+			newCustomer.setPrevCustomer(current);
+			newCustomer.setNextCustomer(firstCustomer);
+			firstCustomer.setPrevCustomer(newCustomer);
+			firstCustomer=newCustomer;
+		}
 	}
-	public void addCustomer(String id, String n, String ln, String cp, String cn, String a, double d) {
-		
-	}
-	
-	public void addEmployee(String id, String n, String ln, String cp, String cn, String a, int h) {
-		
+
+	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked, Employee head) {
+		Employee newEmployee = new Employee(id,  name,  lastName,  celphoneNumber,  address,  hoursWorked); 
+		if(head!=null) {
+			addEmployee(newEmployee, head);
+		}else {
+			head = newEmployee;
+		}
 	}
 	
 	public void addNewProduct(String c, String n, double sp, LocalDate	pd) {

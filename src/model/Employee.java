@@ -1,6 +1,6 @@
 package model;
 
-public class Employee extends Person {
+public class Employee extends Person implements Comparable<Employee> {
 
 	private int hoursWorked;
 	private Employee head;
@@ -42,6 +42,11 @@ public class Employee extends Person {
 
 	public void setRight(Employee right) {
 		this.right = right;
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		
 	}
 	
 	
