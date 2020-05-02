@@ -43,12 +43,12 @@
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#showAnalysis" text="Analysis" />
                   <MenuItem mnemonicParsing="false" onAction="#showSettings" text="Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#showSettings" text="Warnings" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
-                  <MenuItem mnemonicParsing="false" onAction="#helps" text="Helps" />
                </items>
             </Menu>
         </menus>
