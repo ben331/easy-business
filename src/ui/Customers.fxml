@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TableView fx:id="customerTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="idCustomerColumn" prefWidth="72.0" text="Id" />
+          <TableColumn fx:id="nameCustomerColumn" prefWidth="87.0" text="Name" />
+            <TableColumn fx:id="lastnameCustomerColumn" prefWidth="83.0" text="Last name" />
+            <TableColumn fx:id="celphoneCustomerColumn" prefWidth="103.0" text="Celphone num" />
+            <TableColumn fx:id="addressCustomerColumn" prefWidth="138.0" text="Address" />
+            <TableColumn fx:id="dateCustomerColumn" prefWidth="118.0" text="Last purchase date" />
+        </columns>
+      </TableView>
+   </center>
+   <right>
+      <VBox alignment="CENTER" prefHeight="523.0" prefWidth="275.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="245.0" prefWidth="275.0">
+               <children>
+                  <ImageView fx:id="employeeImg" fitHeight="97.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="95.0" layoutY="28.0" text="Name:" />
+                  <TextField fx:id="customerName" editable="false" layoutX="139.0" layoutY="24.0" prefHeight="26.0" prefWidth="122.0" />
+                  <Label layoutX="95.0" layoutY="89.0" text="Id:" />
+                  <TextField fx:id="customerId" layoutX="120.0" layoutY="85.0" prefHeight="26.0" prefWidth="141.0" />
+                  <Button layoutX="184.0" layoutY="129.0" mnemonicParsing="false" onAction="#searchCustomer" prefHeight="29.0" prefWidth="72.0" text="Search" />
+                  <Label layoutX="18.0" layoutY="135.0" text="Cel:" />
+                  <TextField fx:id="customerCel" editable="false" layoutX="39.0" layoutY="131.0" prefHeight="26.0" prefWidth="117.0" />
+                  <Label layoutX="16.0" layoutY="186.0" text="Address:" />
+                  <TextField fx:id="customerAddress" editable="false" layoutX="57.0" layoutY="182.0" prefHeight="26.0" prefWidth="205.0" />
+               </children>
+            </Pane>
+            <Pane prefHeight="153.0" prefWidth="239.0">
+               <children>
+                  <Label layoutX="111.0" layoutY="30.0" text="Sorting">
+                     <font>
+                        <Font name="System Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <RadioButton layoutX="72.0" layoutY="83.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="189.0" selected="true" text="By Name and lastname">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="sortingCustomers" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton layoutX="72.0" layoutY="107.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="By last purchase date" toggleGroup="$sortingCustomers" />
+               </children>
+            </Pane>
+            <Button mnemonicParsing="false" onAction="#sortCustomers" prefHeight="25.0" prefWidth="72.0" text="Sort" />
+         </children>
+      </VBox>
+   </right>
+   <left>
+      <Label prefHeight="17.0" prefWidth="34.0" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <Label prefHeight="40.0" prefWidth="344.0" text="Customers" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold Italic" size="23.0" />
+         </font>
+      </Label>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="72.0" prefWidth="911.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#showDialogeToAddCustomer" prefHeight="38.0" prefWidth="187.0" text="Add new customer" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

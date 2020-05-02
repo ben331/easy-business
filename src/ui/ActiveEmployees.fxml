@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TableView fx:id="activeETable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="idActiveEColumn" prefWidth="86.0" text="Id" />
+          <TableColumn fx:id="nameActiveEColumn" prefWidth="100.0" text="Name" />
+            <TableColumn fx:id="lastnameActiveEColumn" prefWidth="119.0" text="Last name" />
+            <TableColumn fx:id="positionActiveEColumn" prefWidth="137.0" text="Position" />
+            <TableColumn fx:id="timeEntryColumn" prefWidth="159.0" text="Time Entry" />
+        </columns>
+      </TableView>
+   </center>
+   <right>
+      <VBox alignment="CENTER" prefHeight="502.0" prefWidth="275.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="180.0" prefWidth="275.0">
+               <children>
+                  <ImageView fx:id="employeeImg" fitHeight="97.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="95.0" layoutY="28.0" text="Name:" />
+                  <TextField fx:id="activeEName" editable="false" layoutX="139.0" layoutY="24.0" prefHeight="26.0" prefWidth="122.0" />
+                  <Label layoutX="95.0" layoutY="89.0" text="Id:" />
+                  <TextField fx:id="activeEId" layoutX="120.0" layoutY="85.0" prefHeight="26.0" prefWidth="141.0" />
+                  <Button layoutX="115.0" layoutY="129.0" mnemonicParsing="false" onAction="#registerEntry" prefHeight="29.0" prefWidth="141.0" text="Register entry" />
+                  <Button layoutX="25.0" layoutY="131.0" mnemonicParsing="false" onAction="#searchActiveE" prefHeight="28.0" prefWidth="64.0" text="Search" />
+               </children>
+            </Pane>
+            <Label prefHeight="167.0" prefWidth="28.0" />
+            <Pane prefHeight="195.0" prefWidth="275.0">
+               <children>
+                  <ImageView fx:id="activeEImg" fitHeight="97.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="97.0" layoutY="73.0" text="Name:" />
+                  <TextField fx:id="employeeSelectedName" editable="false" layoutX="141.0" layoutY="69.0" prefHeight="26.0" prefWidth="122.0" />
+                  <Button layoutX="122.0" layoutY="129.0" mnemonicParsing="false" onAction="#checkOut" prefHeight="29.0" prefWidth="141.0" text="Check out" />
+                  <Label layoutX="21.0" layoutY="121.0" text="Hours" />
+                  <TextField fx:id="hours" editable="false" layoutX="12.0" layoutY="140.0" prefHeight="25.0" prefWidth="50.0" />
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </right>
+   <left>
+      <Label prefHeight="17.0" prefWidth="34.0" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <Label prefHeight="40.0" prefWidth="493.0" text="Active Employees" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold Italic" size="23.0" />
+         </font>
+      </Label>
+   </top>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="72.0" prefWidth="911.0" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

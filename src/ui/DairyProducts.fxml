@@ -26,9 +26,9 @@
          <children>
             <ImageView fx:id="productImg" fitHeight="150.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true" />
             <Label prefHeight="23.0" prefWidth="26.0" />
-            <Button mnemonicParsing="false" onAction="#sell" prefHeight="29.0" prefWidth="72.0" text="Sell" />
+            <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="29.0" prefWidth="72.0" text="Sell" />
             <Label prefHeight="25.0" prefWidth="28.0" />
-            <Button mnemonicParsing="false" onAction="#discard" prefHeight="30.0" prefWidth="90.0" text="Discard" />
+            <Button mnemonicParsing="false" onAction="#discardProduct" prefHeight="30.0" prefWidth="90.0" text="Discard" />
          </children>
       </VBox>
    </right>
