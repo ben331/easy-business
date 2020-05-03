@@ -40,7 +40,7 @@
             <HBox alignment="CENTER_LEFT" prefHeight="105.0" prefWidth="724.0">
                <children>
                   <Label contentDisplay="RIGHT" prefHeight="37.0" prefWidth="86.0" text="Balance" textAlignment="RIGHT" />
-                  <TextField fx:id="balance" prefHeight="26.0" prefWidth="213.0" />
+                  <TextField fx:id="balance" editable="false" prefHeight="26.0" prefWidth="213.0" />
                </children>
             </HBox>
          </children>

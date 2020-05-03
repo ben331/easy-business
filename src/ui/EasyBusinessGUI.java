@@ -2,10 +2,14 @@ package ui;
 
 import java.io.IOException;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -21,7 +25,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import model.*;
 
-public class EasyBuisnessGUI {
+
+public class EasyBusinessGUI {
+	
+	private Company company;
+	
+	public EasyBusinessGUI(Company company) {
+		this.company = company;
+	}
 
 	private Company comp;
 
@@ -372,8 +383,11 @@ public class EasyBuisnessGUI {
     }
 
     @FXML
-    void cashRegister(ActionEvent event) {
-
+    void cashRegister(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
@@ -385,40 +399,72 @@ public class EasyBuisnessGUI {
     void saveChanges(ActionEvent event) {
 
     }
-
+    
     @FXML
-    void showActiveEmployess(ActionEvent event) {
+    void checkOut(ActionEvent event) {
+    	
+    }
+    
+    @FXML
+    void sortDairyDrinks(ActionEvent event) {
 
     }
 
     @FXML
-    void showAnalysis(ActionEvent event) {
-
+    void showActiveEmployees(ActionEvent event) throws IOException {
+    	System.out.println("entra");
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("ActiveEmployees.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showCustomers(ActionEvent event) {
-
+    void showAnalysis(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Analysis.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showDairyDrinks(ActionEvent event) {
-
+    void showCustomers(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Customers.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showDairyProducts(ActionEvent event) {
-
+    void showDairyDrinks(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyDrinks.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showDebtors(ActionEvent event) {
-
+    void showDairyProducts(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyProducts.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showEmployees(ActionEvent event) {
+    void showDebtors(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Debtors.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
 
+    @FXML
+    void showEmployees(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
@@ -500,6 +546,11 @@ public class EasyBuisnessGUI {
     void searchDebtor(ActionEvent event) {
 
     }
+    
+    @FXML
+    void searchCustomer(ActionEvent event) {
+
+    }
 
     @FXML
     void sortDebtors(ActionEvent event) {
@@ -532,28 +583,6 @@ public class EasyBuisnessGUI {
 
     }
     
-    private void initializeTableCashRegister() {
-    	ObservableList<CashRegister> cashRegisters = FXCollections.observableArrayList();
-    	cashTable.setItems(cashRegisters);
-    	
-    	detailColumn.setCellValueFactory(new PropertyValueFactory<CashRegister,String>("detail"));
-    	movementColumn.setCellValueFactory(new PropertyValueFactory<CashRegister,String>("movement"));
-    	timeColumn.setCellValueFactory(new PropertyValueFactory<CashRegister,String>("time"));
-
-    }
-    
-    private void initializeTableDairyProducts() {
-    	ObservableList<DairyDrink> dairyProducts = FXCollections.observableArrayList(comp.getDairyDrink());
-    	dairyDrinksTable.setItems(dairyProducts);
-    	
-    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("drink"));
-    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("code"));
-    	flavorColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("flavor"));
-    	sizeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("size"));
-    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("suggar"));
-    	typeOatColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("typeOat"));
-    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("dateDrin"));
-    }
     
     
 }

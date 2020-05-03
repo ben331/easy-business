@@ -29,7 +29,7 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Employees">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#showActiveEmployess" text="Actives" />
+                  <MenuItem mnemonicParsing="false" onAction="#showActiveEmployees" text="Actives" />
                   <MenuItem mnemonicParsing="false" onAction="#showEmployees" text="All" />
                </items>
             </Menu>
