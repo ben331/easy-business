@@ -137,7 +137,8 @@ public class Company {
 	}
 
 	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked) {
-		Employee newEmployee = new Employee(id,  name,  lastName,  celphoneNumber,  address,  hoursWorked); 
+		
+		Employee newEmployee = new Employee( id,  name,  lastName,  celphoneNumber,  address,  hoursWorked);
 		Employee current = employeesRoot;
 		boolean wasAdded=false;
 		
