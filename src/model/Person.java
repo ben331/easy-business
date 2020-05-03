@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.image.Image;
+
 public abstract class Person {
 
 	private String id;
@@ -7,14 +9,16 @@ public abstract class Person {
 	private String lastName;
 	private String celphoneNumber;
 	private String address;
+	private Image photo;
 	
-	public Person(String id, String name, String lastName, String celphoneNumber, String address) {
+	public Person(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
 		this.celphoneNumber = celphoneNumber;
 		this.address = address;
+		this.photo = photo;
 	}
 
 	public String getId() {
@@ -35,6 +39,10 @@ public abstract class Person {
 
 	public String getAddress() {
 		return address;
+	}
+	
+	public Image getPhoto() {
+		return photo;
 	}
 
 	public void setId(String id) {

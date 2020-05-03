@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.image.Image;
+
 public abstract class Employee extends Person implements Comparable<Employee> {
 
 	private int hoursWorked;
@@ -7,8 +9,8 @@ public abstract class Employee extends Person implements Comparable<Employee> {
 	private Employee left;
 	private Employee right;
 	
-	public Employee(String id, String name, String lastName, String celphoneNumber, String address) {
-		super( id,  name,  lastName,  celphoneNumber,  address);
+	public Employee(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
+		super( id,  name,  lastName,  celphoneNumber,  address, photo);
 	}
 
 	public int getHoursWorked() {

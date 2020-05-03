@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 public class Customer extends Person{
 
 	private Customer nextCustomer;
@@ -11,9 +13,8 @@ public class Customer extends Person{
 	private ArrayList<LocalDate> purchasesDates;
 	private ArrayList<String> purchasesDetail;
 	
-	public Customer(String id, String name, String lastName, String celphoneNumber, String address, double debtValue) {
-		super( id,  name,  lastName,  celphoneNumber,  address);
-		this.debtValue=debtValue;
+	public Customer(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
+		super( id,  name,  lastName,  celphoneNumber,  address, photo);
 	}
 	
 	public boolean hasDebt() {

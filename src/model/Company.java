@@ -3,9 +3,12 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import customException.*;
+import javafx.scene.image.Image;
 
 public class Company {
 	
+	//Attributes
 	private CashRegister cashRegister;
 	
 	private ArrayList<DairyProduct> dairyProducts;
@@ -21,6 +24,74 @@ public class Company {
 	private Customer firstCustomer;
 	
 	
+	//Constructor----------------------------------------------------------------------------------------------------------------------
+	public Company() {}
+	
+	
+	//Getters---------------------------------------------------------------------------------------------------------------------------
+	public ArrayList<DairyProduct> getDairyProducts() {
+		return dairyProducts;
+	}
+	
+	public ArrayList<DairyDrink> getDairyDrink(){
+		return dairyDrinks;
+	}
+
+	public CashRegister getCashRegister() {
+		return cashRegister;
+	}
+
+	public ArrayList<DairyDrink> getDairyDrinks() {
+		return dairyDrinks;
+	}
+
+	public Employee getEmployeesRoot() {
+		return employeesRoot;
+	}
+
+	public Employee getActiveEmployeesRoot() {
+		return activeEmployeesRoot;
+	}
+
+	public Customer getFirstDebtor() {
+		return firstDebtor;
+	}
+
+	public Customer getFirstCustomer() {
+		return firstCustomer;
+	}
+	
+	public List<Employee> getEmployees(){
+		List<Employee> employees = new ArrayList<Employee>();
+		if(employeesRoot!=null) {
+			BSTtoListInOrder(employeesRoot, employees);
+		}
+		return employees;
+	}
+	
+	private void BSTtoListInOrder(Employee current, List<Employee> list) {
+		if(current.getLeft()!=null) {
+			BSTtoListInOrder(current.getLeft(), list);
+		}
+		list.add(current);
+		if(current.getRight()!=null) {
+			BSTtoListInOrder(current.getRight(), list);
+		}
+	}
+	
+	public List<Customer> getCustomers(){
+		List<Customer> customers = new ArrayList<Customer>();
+		Customer current = firstCustomer;
+		if(firstCustomer!=null) {
+			do {
+				customers.add(current);
+				current=current.getNextCustomer();
+			}while(current!=firstCustomer);
+		}
+		return customers;
+	}
+	
+	//Analyzer methods-----------------------------------------------------------------------------------------------------------------
 	public void saveData() {
 		
 	}
@@ -118,37 +189,53 @@ public class Company {
 		
 	}
 	
-	public void addCustomer(String id, String name, String lastName, String celphoneNumber, String address, double debtValue) {
-		Customer newCustomer = new Customer( id,  name,  lastName,  celphoneNumber,  address,  debtValue);
+	public void addCustomer(String id, String name, String lastName, String celphoneNumber, String address, Image photo) throws EmptyDataException {
+		
+		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
+		
+		if(!emptyData.equals("")) {
+			throw new EmptyDataException(emptyData);
+		}
+		
+		Customer newCustomer = new Customer( id,  name,  lastName,  celphoneNumber,  address, photo);
 		
 		if(firstCustomer==null) {
 			firstCustomer=newCustomer;
+			firstCustomer.setNextCustomer(newCustomer);
+			firstCustomer.setPrevCustomer(newCustomer);
+		}else if(firstCustomer == firstCustomer.getNextCustomer()){
+			firstCustomer.setNextCustomer(newCustomer);
+			firstCustomer.setPrevCustomer(newCustomer);
+			newCustomer.setNextCustomer(firstCustomer);
+			newCustomer.setPrevCustomer(newCustomer);
 		}else {
-			Customer current = firstCustomer;
-			while(current.getNextCustomer()!=firstCustomer) {
-				current = current.getNextCustomer();
-			}
-			current.setNextCustomer(newCustomer);
-			newCustomer.setPrevCustomer(current);
+			Customer last = firstCustomer.getPrevCustomer();
+			last.setNextCustomer(newCustomer);
+			newCustomer.setPrevCustomer(last);
 			newCustomer.setNextCustomer(firstCustomer);
 			firstCustomer.setPrevCustomer(newCustomer);
-			firstCustomer=newCustomer;
 		}
 	}
 
-	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int position) throws Exception {
+	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, int position) throws Exception {
+		
+		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
+		
+		if(!emptyData.equals("")) {
+			throw new EmptyDataException(emptyData);
+		}
 		
 		Employee employee=null;
 		
 		switch(position) {
 		case 1:
-			employee = new Seller(id, name, lastName, celphoneNumber, address);
+			employee = new Seller(id, name, lastName, celphoneNumber, address, photo);
 			break;
 		case 2:
-			employee = new Operator(id, name, lastName, celphoneNumber, address);
+			employee = new Operator(id, name, lastName, celphoneNumber, address, photo);
 			break;
 		case 3:
-			employee = new Domiciliary(id, name, lastName, celphoneNumber, address);
+			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo);
 			break;
 		default:
 			throw new Exception("Invalided position of employee");
@@ -188,69 +275,19 @@ public class Company {
 		return report;
 	}
 	
-	public ArrayList<DairyProduct> getDairyProducts() {
-		return dairyProducts;
-	}
-	
-	public ArrayList<DairyDrink> getDairyDrink(){
-		return dairyDrinks;
-	}
-
-	public CashRegister getCashRegister() {
-		return cashRegister;
-	}
-
-	public ArrayList<DairyDrink> getDairyDrinks() {
-		return dairyDrinks;
-	}
-
-	public Employee getEmployeesRoot() {
-		return employeesRoot;
-	}
-
-	public Employee getActiveEmployeesRoot() {
-		return activeEmployeesRoot;
-	}
-
-	public Customer getFirstDebtor() {
-		return firstDebtor;
-	}
-
-	public Customer getFirstCustomer() {
-		return firstCustomer;
-	}
-	
-	public List<Employee> getEmployees(){
-		List<Employee> employees = new ArrayList<Employee>();
-		if(employeesRoot!=null) {
-			BSTtoListInOrder(employeesRoot, employees);
+	public String verifyFields(String id, String name, String lastName, String celphoneNumber, String address) {
+		String fields="";
+		if(id.equals("")) {
+			fields="Id ";
+		}if(name.equals("")) {
+			fields+="Name ";
+		}if(lastName.equals("")) {
+			fields+="Lastname ";
+		}if(celphoneNumber.equals("")) {
+			fields+="CelphoneNumber ";
+		}if(address.equals("")) {
+			fields+="Address ";
 		}
-		return employees;
-	}
-	
-	private void BSTtoListInOrder(Employee current, List<Employee> list) {
-		if(current.getLeft()!=null) {
-			BSTtoListInOrder(current.getLeft(), list);
-		}
-		list.add(current);
-		if(current.getRight()!=null) {
-			BSTtoListInOrder(current.getRight(), list);
-		}
-	}
-	
-	public List<Customer> getCustomers(){
-		List<Customer> customers = new ArrayList<Customer>();
-		if(firstCustomer.getNextCustomer()!=null) {
-			LinkListToListInOrder(firstCustomer, customers);
-		}
-		return customers;
-	}
-	
-	private void LinkListToListInOrder(Customer current, List<Customer>List) {
-		if(current.getNextCustomer()!=null) {
-			List.add(current);
-			LinkListToListInOrder(current.getNextCustomer(), List);
-		}
-		List.add(current);
-	}
+		return fields;
+	}	
 }

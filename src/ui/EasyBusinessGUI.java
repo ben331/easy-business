@@ -1,8 +1,8 @@
 package ui;
 
+import java.io.File;
 import java.io.IOException;
-
-
+import customException.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -21,8 +23,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 import model.*;
 
 
@@ -320,6 +326,19 @@ public class EasyBusinessGUI {
     private TextField EmployeeAddress;
 
     
+    @FXML
+    void chooseImageFile(ActionEvent event) {
+    	FileChooser fc = new FileChooser();
+    	fc.getExtensionFilters().add(new ExtensionFilter("Image Files","*.png","*.jpg"));
+    	File selectedFile = fc.showOpenDialog(null);
+    	
+    	if(selectedFile!=null) {
+    		photoForm.setText(selectedFile.getAbsolutePath());
+    	}
+    }
+
+
+    
     public BorderPane getMainPane() {
 		return mainPane;
 	}
@@ -404,7 +423,6 @@ public class EasyBusinessGUI {
 
     @FXML
     void showActiveEmployees(ActionEvent event) throws IOException {
-    	System.out.println("entra");
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("ActiveEmployees.fxml"));
     	loader.setController(this);
     	Parent scene = loader.load();
@@ -425,6 +443,7 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeTableCustomers();
     }
 
     @FXML
@@ -485,8 +504,33 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void addCustomer(ActionEvent event) {
-
+    void addCustomer(ActionEvent event) throws IOException {
+    	try {
+    		if(photoForm.getText().equals("")) {
+    			throw new EmptyDataException("Photo");
+    		}
+    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
+    		
+    		company.addCustomer(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image);
+    		
+    		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Successfull Process");
+			alert.setContentText("Customer added successfully");
+			alert.showAndWait();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Customers.fxml"));
+	    	loader.setController(this);
+	    	Parent scene = loader.load();
+	    	mainPane.setCenter(scene);
+	    	initializeTableCustomers();
+	    	
+			
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
     }
 
     @FXML
@@ -495,8 +539,11 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void showDialogeToAddCustomer(ActionEvent event) {
-
+    void showDialogeToAddCustomer(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerForm.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
@@ -557,7 +604,7 @@ public class EasyBusinessGUI {
 
     @FXML
     void addEmployee(ActionEvent event) {
-
+    	
     }
 
     @FXML
