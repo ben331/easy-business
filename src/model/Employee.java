@@ -7,9 +7,8 @@ public abstract class Employee extends Person implements Comparable<Employee> {
 	private Employee left;
 	private Employee right;
 	
-	public Employee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked) {
+	public Employee(String id, String name, String lastName, String celphoneNumber, String address) {
 		super( id,  name,  lastName,  celphoneNumber,  address);
-		this.hoursWorked=hoursWorked;
 	}
 
 	public int getHoursWorked() {
