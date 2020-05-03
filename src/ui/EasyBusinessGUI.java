@@ -34,22 +34,20 @@ public class EasyBusinessGUI {
 		this.company = company;
 	}
 
-	private Company comp;
-
     @FXML
     private DatePicker registersDate;
 
     @FXML
-    private TableView<CashRegister> cashTable;
+    private TableView<Register> cashTable;
 
     @FXML
-    private TableColumn<CashRegister, String> movementColumn;
+    private TableColumn<Register, String> movementColumn;
 
     @FXML
-    private TableColumn<CashRegister, String> detailColumn;
+    private TableColumn<Register, String> detailColumn;
 
     @FXML
-    private TableColumn<CashRegister, String> timeColumn;
+    private TableColumn<Register, String> timeColumn;
 
     @FXML
     private TextField balance;
@@ -148,22 +146,22 @@ public class EasyBusinessGUI {
     private BorderPane mainPane;
 
     @FXML
-    private TableView<?> activeETable;
+    private TableView<Employee> activeETable;
 
     @FXML
-    private TableColumn<?, ?> idActiveEColumn;
+    private TableColumn<Employee, String> idActiveEColumn;
 
     @FXML
-    private TableColumn<?, ?> nameActiveEColumn;
+    private TableColumn<Employee, String> nameActiveEColumn;
 
     @FXML
-    private TableColumn<?, ?> lastnameActiveEColumn;
+    private TableColumn<Employee, String> lastnameActiveEColumn;
 
     @FXML
-    private TableColumn<?, ?> positionActiveEColumn;
+    private TableColumn<Employee, String> positionActiveEColumn;
 
     @FXML
-    private TableColumn<?, ?> timeEntryColumn;
+    private TableColumn<Employee, String> timeEntryColumn;
 
     @FXML
     private ImageView employeeImg;
@@ -208,28 +206,25 @@ public class EasyBusinessGUI {
     private TextField photoForm;
     
     @FXML
-    private TableView<?> customerTable;
+    private TableView<Customer> customerTable;
 
     @FXML
-    private TableColumn<?, ?> idCustomerColumn;
+    private TableColumn<Customer, String> idCustomerColumn;
 
     @FXML
-    private TableColumn<?, ?> nameCustomerColumn;
+    private TableColumn<Customer, String> nameCustomerColumn;
 
     @FXML
-    private TableColumn<?, ?> lastnameCustomerColumn;
+    private TableColumn<Customer, String> lastnameCustomerColumn;
 
     @FXML
-    private TableColumn<?, ?> celphoneCustomerColumn;
+    private TableColumn<Customer, String> celphoneCustomerColumn;
 
     @FXML
-    private TableColumn<?, ?> addressCustomerColumn;
+    private TableColumn<Customer, String> addressCustomerColumn;
 
     @FXML
-    private TableColumn<?, ?> dateCustomerColumn;
-
-    @FXML
-    private TableColumn<?, ?> dateCustomerColumn1;
+    private TableColumn<Customer, String> dateCustomerColumn;
 
     @FXML
     private ImageView customerImg;
@@ -324,9 +319,6 @@ public class EasyBusinessGUI {
     @FXML
     private TextField EmployeeAddress;
 
-    public EasyBuisnessGUI(Company comp) throws IOException {
-		this.comp = comp;
-	}
     
     public BorderPane getMainPane() {
 		return mainPane;
@@ -583,6 +575,50 @@ public class EasyBusinessGUI {
 
     }
     
+    private void initializeTableCashRegister() {
+    	ObservableList<Register> cashRegisters = FXCollections.observableArrayList(company.getCashRegister().getRegisters());
+    	cashTable.setItems(cashRegisters);
+    	
+    	detailColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("detail"));
+    	movementColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("movement"));
+    	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("time"));
+
+    }
     
+    private void initializeTableDairyProducts() {
+    	ObservableList<DairyDrink> dairyProducts = FXCollections.observableArrayList(company.getDairyDrink());
+    	dairyDrinksTable.setItems(dairyProducts);
+    	
+    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("drink"));
+    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("code"));
+    	flavorColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("flavor"));
+    	sizeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("size"));
+    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("suggar"));
+    	typeOatColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("typeOat"));
+    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("dateDrin"));
+    }
+    
+    private void initializeTableEmployees() {
+    	ObservableList<Employee> employees = FXCollections.observableArrayList(company.getEmployees());
+    	activeETable.setItems(employees);
+    	
+    	 idActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("id")); 
+    	 nameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
+    	 lastnameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName")); 
+    	 positionActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("position")); 
+    	 timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("time"));
+    }
+    
+    private void initializeTableCustomers() {
+    	ObservableList<Customer> customers = FXCollections.observableArrayList(company.getCustomers());
+    	customerTable.setItems(customers);
+    	
+    	idCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("id"));  
+    	nameCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("name"));  
+    	lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));  
+    	celphoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("celphoneNumber"));  
+    	addressCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("address"));  
+    	dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("dateCustomer")); 
+    }
     
 }

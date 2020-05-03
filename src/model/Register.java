@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalTime;
+
 public class Register {
 
 	public String detail;
@@ -8,12 +10,14 @@ public class Register {
 	private Register head;
 	private Register left;
 	private Register rigth;
+	private LocalTime time;
 	
-	public Register(String detail, double value, boolean expensive) {
+	public Register(String detail, double value, boolean expensive,LocalTime time) {
 		super();
 		this.detail = detail;
 		this.value = value;
 		this.expensive = expensive;
+		this.time=time;
 	}
 
 	public String getDetail() {
@@ -40,16 +44,8 @@ public class Register {
 		return rigth;
 	}
 
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	public void setExpensive(boolean expensive) {
-		this.expensive = expensive;
+	public LocalTime getTime() {
+		return time;
 	}
 
 	public void setHead(Register head) {
@@ -63,7 +59,6 @@ public class Register {
 	public void setRigth(Register rigth) {
 		this.rigth = rigth;
 	}
-	
 	
 	
 }

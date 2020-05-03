@@ -144,11 +144,11 @@ public class Company {
 		if(employeesRoot!=null) {
 			while(!wasAdded) {
 				if(current.compareTo(newEmployee)<0) {
-					if(current.getLefth()!=null) {
-						current.setLefth(newEmployee);
+					if(current.getLeft()!=null) {
+						current.setLeft(newEmployee);
 						wasAdded=true;
 					}else {
-						current=current.getLefth();
+						current=current.getLeft();
 					}
 				}else {
 					if(current.getRight()!=null) {
@@ -179,5 +179,63 @@ public class Company {
 	
 	public ArrayList<DairyDrink> getDairyDrink(){
 		return dairyDrinks;
+	}
+
+	public CashRegister getCashRegister() {
+		return cashRegister;
+	}
+
+	public ArrayList<DairyDrink> getDairyDrinks() {
+		return dairyDrinks;
+	}
+
+	public Employee getEmployeesRoot() {
+		return employeesRoot;
+	}
+
+	public Employee getActiveEmployeesRoot() {
+		return activeEmployeesRoot;
+	}
+
+	public Customer getFirstDebtor() {
+		return firstDebtor;
+	}
+
+	public Customer getFirstCustomer() {
+		return firstCustomer;
+	}
+	
+	public List<Employee> getEmployees(){
+		List<Employee> employees = new ArrayList<Employee>();
+		if(employeesRoot!=null) {
+			BSTtoListInOrder(employeesRoot, employees);
+		}
+		return employees;
+	}
+	
+	private void BSTtoListInOrder(Employee current, List<Employee> list) {
+		if(current.getLeft()!=null) {
+			BSTtoListInOrder(current.getLeft(), list);
+		}
+		list.add(current);
+		if(current.getRight()!=null) {
+			BSTtoListInOrder(current.getRight(), list);
+		}
+	}
+	
+	public List<Customer> getCustomers(){
+		List<Customer> customers = new ArrayList<Customer>();
+		if(firstCustomer.getNextCustomer()!=null) {
+			LinkListToListInOrder(firstCustomer, customers);
+		}
+		return customers;
+	}
+	
+	private void LinkListToListInOrder(Customer current, List<Customer>List) {
+		if(current.getNextCustomer()!=null) {
+			List.add(current);
+			LinkListToListInOrder(current.getNextCustomer(), List);
+		}
+		List.add(current);
 	}
 }

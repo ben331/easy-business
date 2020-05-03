@@ -4,7 +4,7 @@ public class Employee extends Person implements Comparable<Employee> {
 
 	private int hoursWorked;
 	private Employee head;
-	private Employee lefth;
+	private Employee left;
 	private Employee right;
 	
 	public Employee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked) {
@@ -24,8 +24,8 @@ public class Employee extends Person implements Comparable<Employee> {
 		return head;
 	}
 
-	public Employee getLefth() {
-		return lefth;
+	public Employee getLeft() {
+		return left;
 	}
 
 	public Employee getRight() {
@@ -36,8 +36,8 @@ public class Employee extends Person implements Comparable<Employee> {
 		this.head = head;
 	}
 
-	public void setLefth(Employee lefth) {
-		this.lefth = lefth;
+	public void setLeft(Employee left) {
+		this.left = left;
 	}
 
 	public void setRight(Employee right) {
