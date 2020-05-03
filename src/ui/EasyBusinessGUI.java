@@ -17,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -57,6 +58,9 @@ public class EasyBusinessGUI {
 
     @FXML
     private TextField balance;
+    
+    @FXML
+    private ToggleGroup occupation;
 
     @FXML
     private TableView<DairyDrink> dairyDrinksTable;
@@ -212,6 +216,15 @@ public class EasyBusinessGUI {
     private TextField photoForm;
     
     @FXML
+    private RadioButton operator;
+
+    @FXML
+    private RadioButton domiciliary;
+
+    @FXML
+    private RadioButton seller;
+    
+    @FXML
     private TableView<Customer> customerTable;
 
     @FXML
@@ -278,43 +291,25 @@ public class EasyBusinessGUI {
     private TextField customerBuyingId;
     
     @FXML
-    private TextField idEmployeeForm;
+    private TableView<Employee> employeeTable;
 
     @FXML
-    private TextField nameEmployeeForm;
+    private TableColumn<Employee, String> idEmployeeColumn;
 
     @FXML
-    private TextField lastnameEmployeeForm;
+    private TableColumn<Employee, String> nameEmployeeColumn;
 
     @FXML
-    private TextField addressEmployeeForm;
+    private TableColumn<Employee, String> lastnameEmployeeColumn;
 
     @FXML
-    private TextField celNumberEmployeeForm;
+    private TableColumn<Employee, String> celphoneEmployeeColumn;
 
     @FXML
-    private TextField photoEmployeeForm;
-    
-    @FXML
-    private TableView<?> employeeTable;
+    private TableColumn<Employee, String> addressEmployeeColumn;
 
     @FXML
-    private TableColumn<?, ?> idEmployeeColumn;
-
-    @FXML
-    private TableColumn<?, ?> nameEmployeeColumn;
-
-    @FXML
-    private TableColumn<?, ?> lastnameEmployeeColumn;
-
-    @FXML
-    private TableColumn<?, ?> celphoneEmployeeColumn;
-
-    @FXML
-    private TableColumn<?, ?> addressEmployeeColumn;
-
-    @FXML
-    private TableColumn<?, ?> positionColumn;
+    private TableColumn<Employee, String> positionColumn;
 
     @FXML
     private TextField employeeId;
@@ -476,6 +471,7 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeTableEmployees();
     }
 
     @FXML
@@ -603,8 +599,44 @@ public class EasyBusinessGUI {
     
 
     @FXML
-    void addEmployee(ActionEvent event) {
-    	
+    void addEmployee(ActionEvent event) throws Exception {
+    	try {
+    		if(photoForm.getText().equals("")) {
+    			throw new EmptyDataException("Photo");
+    		}
+    		
+    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
+    		
+    		String position;
+    		
+    		if(seller.isSelected()) {
+    			position="SELLER";
+    		}else if(operator.isSelected()) {
+    			position="OPERATOR";
+    		}else {
+    			position="DOMICILIARY";
+    		}
+    		
+    		company.addEmployee(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image, position);
+    		
+    		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Successfull Process");
+			alert.setContentText("Employee added successfully");
+			alert.showAndWait();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
+	    	loader.setController(this);
+	    	Parent scene = loader.load();
+	    	mainPane.setCenter(scene);
+	    	initializeTableEmployees();
+	    	
+			
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
     }
 
     @FXML
@@ -618,8 +650,11 @@ public class EasyBusinessGUI {
     }
 
     @FXML
-    void showDialogeToAddEmployee(ActionEvent event) {
-
+    void showDialogeToAddEmployee(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeForm.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
     
     private void initializeTableCashRegister() {
@@ -647,13 +682,14 @@ public class EasyBusinessGUI {
     
     private void initializeTableEmployees() {
     	ObservableList<Employee> employees = FXCollections.observableArrayList(company.getEmployees());
-    	activeETable.setItems(employees);
+    	employeeTable.setItems(employees);
     	
-    	 idActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("id")); 
-    	 nameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
-    	 lastnameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName")); 
-    	 positionActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("position")); 
-    	 timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("time"));
+    	idEmployeeColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("id"));  
+    	nameEmployeeColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));  
+    	lastnameEmployeeColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("lastName"));  
+    	celphoneEmployeeColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("celphoneNumber"));  
+    	addressEmployeeColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("address"));  
+    	positionColumn.setCellValueFactory(new PropertyValueFactory<Employee, String>("position")); 
     }
     
     private void initializeTableCustomers() {

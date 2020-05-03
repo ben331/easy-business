@@ -56,6 +56,17 @@ public abstract class Employee extends Person implements Comparable<Employee> {
 		return diference;
 	}
 	
-	
+	public String getPosition() {
+		String position="";
+		
+		if(this instanceof Seller) {
+			position="Seller";
+		}else if(this instanceof Operator) {
+			position="Operator";
+		}else {
+			position="Domiciliary";
+		}
+		return position;
+	}
 	
 }

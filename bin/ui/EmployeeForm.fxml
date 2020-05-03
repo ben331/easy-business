@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -39,26 +40,29 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="idEmployeeForm" layoutX="117.0" layoutY="96.0" prefHeight="25.0" prefWidth="178.0" />
-      <TextField fx:id="nameEmployeeForm" layoutX="117.0" layoutY="137.0" prefHeight="25.0" prefWidth="178.0" />
-      <TextField fx:id="lastnameEmployeeForm" layoutX="117.0" layoutY="179.0" prefHeight="25.0" prefWidth="178.0" />
-      <TextField fx:id="addressEmployeeForm" layoutX="117.0" layoutY="255.0" prefHeight="25.0" prefWidth="178.0" />
-      <TextField fx:id="celNumberEmployeeForm" layoutX="129.0" layoutY="219.0" prefHeight="25.0" prefWidth="167.0" />
+      <TextField fx:id="idForm" layoutX="117.0" layoutY="96.0" prefHeight="25.0" prefWidth="178.0" />
+      <TextField fx:id="nameForm" layoutX="117.0" layoutY="137.0" prefHeight="25.0" prefWidth="178.0" />
+      <TextField fx:id="lastnameForm" layoutX="117.0" layoutY="179.0" prefHeight="25.0" prefWidth="178.0" />
+      <TextField fx:id="addressForm" layoutX="117.0" layoutY="255.0" prefHeight="25.0" prefWidth="178.0" />
+      <TextField fx:id="celNumberForm" layoutX="129.0" layoutY="219.0" prefHeight="25.0" prefWidth="167.0" />
       <Label layoutX="40.0" layoutY="301.0" text="Photo">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="photoEmployeeForm" editable="false" layoutX="105.0" layoutY="301.0" prefHeight="25.0" prefWidth="167.0" />
-      <Button layoutX="271.0" layoutY="301.0" mnemonicParsing="false" onAction="#browseEmployee" prefHeight="25.0" prefWidth="18.0" text="..." />
+      <TextField fx:id="photoForm" editable="false" layoutX="105.0" layoutY="301.0" prefHeight="25.0" prefWidth="167.0" />
+      <Button layoutX="271.0" layoutY="301.0" mnemonicParsing="false" onAction="#chooseImageFile" prefHeight="25.0" prefWidth="18.0" text="..." />
       <Button layoutX="133.0" layoutY="431.0" mnemonicParsing="false" onAction="#addEmployee" text="Add employee" />
-      <Label layoutX="64.0" layoutY="361.0" text="Occupation:">
+      <Label layoutX="64.0" layoutY="361.0" text="Position:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <RadioButton layoutX="168.0" layoutY="373.0" mnemonicParsing="false" text="Operator" />
-      <RadioButton layoutX="168.0" layoutY="395.0" mnemonicParsing="false" text="Domiciliary" />
-      <RadioButton layoutX="168.0" layoutY="353.0" mnemonicParsing="false" text="Seller" />
+      <RadioButton fx:id="operator" layoutX="168.0" layoutY="373.0" mnemonicParsing="false" text="Operator">
+         <toggleGroup>
+            <ToggleGroup fx:id="occupation" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="domiciliary" layoutX="168.0" layoutY="395.0" mnemonicParsing="false" text="Domiciliary" toggleGroup="$occupation" />
+      <RadioButton fx:id="seller" layoutX="168.0" layoutY="353.0" mnemonicParsing="false" selected="true" text="Seller" toggleGroup="$occupation" />
    </children>
 </Pane>

@@ -217,7 +217,7 @@ public class Company {
 		}
 	}
 
-	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, int position) throws Exception {
+	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, String position) throws Exception {
 		
 		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
 		
@@ -228,13 +228,13 @@ public class Company {
 		Employee employee=null;
 		
 		switch(position) {
-		case 1:
+		case "SELLER":
 			employee = new Seller(id, name, lastName, celphoneNumber, address, photo);
 			break;
-		case 2:
+		case "OPERATOR":
 			employee = new Operator(id, name, lastName, celphoneNumber, address, photo);
 			break;
-		case 3:
+		case "DOMICILIARY":
 			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo);
 			break;
 		default:
