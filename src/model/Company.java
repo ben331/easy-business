@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Company {
 	
@@ -11,7 +12,7 @@ public class Company {
 	
 	private ArrayList<DairyDrink> dairyDrinks;
 	
-	private Employee employees;
+	private Employee employeesRoot;
 	
 	private Employee activeEmployeesRoot;
 	
@@ -135,12 +136,31 @@ public class Company {
 		}
 	}
 
-	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked, Employee head) {
+	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked) {
 		Employee newEmployee = new Employee(id,  name,  lastName,  celphoneNumber,  address,  hoursWorked); 
-		if(head!=null) {
-			addEmployee(newEmployee, head);
+		Employee current = employeesRoot;
+		boolean wasAdded=false;
+		
+		if(employeesRoot!=null) {
+			while(!wasAdded) {
+				if(current.compareTo(newEmployee)<0) {
+					if(current.getLefth()!=null) {
+						current.setLefth(newEmployee);
+						wasAdded=true;
+					}else {
+						current=current.getLefth();
+					}
+				}else {
+					if(current.getRight()!=null) {
+						current.setRight(newEmployee);
+						wasAdded=true;
+					}else {
+						current=current.getRight();
+					}
+				}
+			}
 		}else {
-			head = newEmployee;
+			employeesRoot=newEmployee;
 		}
 	}
 	
@@ -151,5 +171,13 @@ public class Company {
 	public String determineBalancePoints(double gain) {
 		String report="";
 		return report;
+	}
+	
+	public ArrayList<DairyProduct> getDairyProducts() {
+		return dairyProducts;
+	}
+	
+	public ArrayList<DairyDrink> getDairyDrink(){
+		return dairyDrinks;
 	}
 }

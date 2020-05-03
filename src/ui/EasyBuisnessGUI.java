@@ -1,5 +1,9 @@
 package ui;
 
+import java.io.IOException;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,52 +16,56 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import model.*;
 
 public class EasyBuisnessGUI {
+
+	private Company comp;
 
     @FXML
     private DatePicker registersDate;
 
     @FXML
-    private TableView<?> cashTable;
+    private TableView<CashRegister> cashTable;
 
     @FXML
-    private TableColumn<?, ?> movementColumn;
+    private TableColumn<CashRegister, String> movementColumn;
 
     @FXML
-    private TableColumn<?, ?> detailColumn;
+    private TableColumn<CashRegister, String> detailColumn;
 
     @FXML
-    private TableColumn<?, ?> timeColumn;
+    private TableColumn<CashRegister, String> timeColumn;
 
     @FXML
     private TextField balance;
 
     @FXML
-    private TableView<?> dairyDrinksTable;
+    private TableView<DairyDrink> dairyDrinksTable;
 
     @FXML
-    private TableColumn<?, ?> drinkColumn;
+    private TableColumn<DairyDrink, String> drinkColumn;
 
     @FXML
-    private TableColumn<?, ?> codeColumn;
+    private TableColumn<DairyDrink, String> codeColumn;
+    
+    @FXML
+    private TableColumn<DairyDrink, String> flavorColumn;
 
     @FXML
-    private TableColumn<?, ?> flavorColumn;
+    private TableColumn<DairyDrink, String> sizeColumn;
 
     @FXML
-    private TableColumn<?, ?> sizeColumn;
+    private TableColumn<DairyDrink, String> suggarColumn;
 
     @FXML
-    private TableColumn<?, ?> suggarColumn;
+    private TableColumn<DairyDrink, String> typeOatColumn;
 
     @FXML
-    private TableColumn<?, ?> typeOatColumn;
-
-    @FXML
-    private TableColumn<?, ?> dateDrinkColumn;
+    private TableColumn<DairyDrink, String> dateDrinkColumn;
 
     @FXML
     private ToggleGroup Sorting;
@@ -69,16 +77,16 @@ public class EasyBuisnessGUI {
     private TableView<?> dairyProductsTable;
 
     @FXML
-    private TableColumn<?, ?> productColumn;
+    private TableColumn<DairyProduct, String> productColumn;
 
     @FXML
-    private TableColumn<?, ?> codeProductColumn;
+    private TableColumn<DairyProduct, String> codeProductColumn;
 
     @FXML
-    private TableColumn<?, ?> descriptionColumn;
+    private TableColumn<DairyProduct, String> descriptionColumn;
 
     @FXML
-    private TableColumn<?, ?> dateProductColumn;
+    private TableColumn<DairyProduct, String> dateProductColumn;
 
     @FXML
     private ImageView productImg;
@@ -305,7 +313,14 @@ public class EasyBuisnessGUI {
     @FXML
     private TextField EmployeeAddress;
 
-
+    public EasyBuisnessGUI(Company comp) throws IOException {
+		this.comp = comp;
+	}
+    
+    public BorderPane getMainPane() {
+		return mainPane;
+	}
+    
     @FXML
     void endDay(ActionEvent event) {
 
@@ -516,5 +531,29 @@ public class EasyBuisnessGUI {
     void showDialogeToAddEmployee(ActionEvent event) {
 
     }
+    
+    private void initializeTableCashRegister() {
+    	ObservableList<CashRegister> cashRegisters = FXCollections.observableArrayList();
+    	cashTable.setItems(cashRegisters);
+    	
+    	detailColumn.setCellValueFactory(new PropertyValueFactory<CashRegister,String>("detail"));
+    	movementColumn.setCellValueFactory(new PropertyValueFactory<CashRegister,String>("movement"));
+    	timeColumn.setCellValueFactory(new PropertyValueFactory<CashRegister,String>("time"));
+
+    }
+    
+    private void initializeTableDairyProducts() {
+    	ObservableList<DairyDrink> dairyProducts = FXCollections.observableArrayList(comp.getDairyDrink());
+    	dairyDrinksTable.setItems(dairyProducts);
+    	
+    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("drink"));
+    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("code"));
+    	flavorColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("flavor"));
+    	sizeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("size"));
+    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("suggar"));
+    	typeOatColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("typeOat"));
+    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("dateDrin"));
+    }
+    
     
 }

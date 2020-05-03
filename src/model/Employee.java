@@ -46,7 +46,13 @@ public class Employee extends Person implements Comparable<Employee> {
 
 	@Override
 	public int compareTo(Employee o) {
-		
+		int diference=0;
+		if(this.getLastName().equals(o.getLastName())) {
+			diference=this.getName().compareTo(o.getName());
+		}else {
+			diference = this.getLastName().compareTo(o.getLastName());
+		}
+		return diference;
 	}
 	
 	
