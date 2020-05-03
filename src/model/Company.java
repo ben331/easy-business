@@ -136,23 +136,39 @@ public class Company {
 		}
 	}
 
-	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked) {
-		Employee newEmployee = new Employee(id,  name,  lastName,  celphoneNumber,  address,  hoursWorked); 
+	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, int position) throws Exception {
+		
+		Employee employee=null;
+		
+		switch(position) {
+		case 1:
+			employee = new Seller(id, name, lastName, celphoneNumber, address);
+			break;
+		case 2:
+			employee = new Operator(id, name, lastName, celphoneNumber, address);
+			break;
+		case 3:
+			employee = new Domiciliary(id, name, lastName, celphoneNumber, address);
+			break;
+		default:
+			throw new Exception("Invalided position of employee");
+		}
+		
 		Employee current = employeesRoot;
 		boolean wasAdded=false;
 		
 		if(employeesRoot!=null) {
 			while(!wasAdded) {
-				if(current.compareTo(newEmployee)<0) {
+				if(current.compareTo(employee)<0) {
 					if(current.getLefth()!=null) {
-						current.setLefth(newEmployee);
+						current.setLefth(employee);
 						wasAdded=true;
 					}else {
 						current=current.getLefth();
 					}
 				}else {
 					if(current.getRight()!=null) {
-						current.setRight(newEmployee);
+						current.setRight(employee);
 						wasAdded=true;
 					}else {
 						current=current.getRight();
@@ -160,7 +176,7 @@ public class Company {
 				}
 			}
 		}else {
-			employeesRoot=newEmployee;
+			employeesRoot=employee;
 		}
 	}
 	

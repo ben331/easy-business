@@ -1,15 +1,14 @@
 package model;
 
-public class Employee extends Person implements Comparable<Employee> {
+public abstract class Employee extends Person implements Comparable<Employee> {
 
 	private int hoursWorked;
 	private Employee head;
 	private Employee lefth;
 	private Employee right;
 	
-	public Employee(String id, String name, String lastName, String celphoneNumber, String address, int hoursWorked) {
+	public Employee(String id, String name, String lastName, String celphoneNumber, String address) {
 		super( id,  name,  lastName,  celphoneNumber,  address);
-		this.hoursWorked=hoursWorked;
 	}
 
 	public int getHoursWorked() {
