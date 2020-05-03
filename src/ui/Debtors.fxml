@@ -39,7 +39,7 @@
                   <TextField fx:id="customerId" layoutX="120.0" layoutY="85.0" prefHeight="26.0" prefWidth="141.0" />
                   <Button layoutX="176.0" layoutY="139.0" mnemonicParsing="false" onAction="#searchDebtor" prefHeight="29.0" prefWidth="72.0" text="Search" />
                   <Label layoutX="29.0" layoutY="159.0" text="Debt:" />
-                  <TextField fx:id="debt" layoutX="27.0" layoutY="184.0" prefHeight="26.0" prefWidth="120.0" />
+                  <TextField fx:id="debt" editable="false" layoutX="27.0" layoutY="184.0" prefHeight="26.0" prefWidth="120.0" />
                   <Button layoutX="176.0" layoutY="196.0" mnemonicParsing="false" onAction="#charge" prefHeight="29.0" prefWidth="72.0" text="Charge" />
                </children>
             </Pane>

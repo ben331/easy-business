@@ -1,7 +1,12 @@
 package ui;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -14,8 +19,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import model.Company;
 
-public class EasyBuisnessGUI {
+public class EasyBusinessGUI {
+	
+	private Company company;
+	
+	public EasyBusinessGUI(Company company) {
+		this.company = company;
+	}
 
     @FXML
     private DatePicker registersDate;
@@ -357,8 +369,11 @@ public class EasyBuisnessGUI {
     }
 
     @FXML
-    void cashRegister(ActionEvent event) {
-
+    void cashRegister(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
@@ -370,40 +385,72 @@ public class EasyBuisnessGUI {
     void saveChanges(ActionEvent event) {
 
     }
-
+    
     @FXML
-    void showActiveEmployess(ActionEvent event) {
+    void checkOut(ActionEvent event) {
+    	
+    }
+    
+    @FXML
+    void sortDairyDrinks(ActionEvent event) {
 
     }
 
     @FXML
-    void showAnalysis(ActionEvent event) {
-
+    void showActiveEmployees(ActionEvent event) throws IOException {
+    	System.out.println("entra");
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("ActiveEmployees.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showCustomers(ActionEvent event) {
-
+    void showAnalysis(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Analysis.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showDairyDrinks(ActionEvent event) {
-
+    void showCustomers(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Customers.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showDairyProducts(ActionEvent event) {
-
+    void showDairyDrinks(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyDrinks.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showDebtors(ActionEvent event) {
-
+    void showDairyProducts(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyProducts.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void showEmployees(ActionEvent event) {
+    void showDebtors(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Debtors.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
 
+    @FXML
+    void showEmployees(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
@@ -483,6 +530,11 @@ public class EasyBuisnessGUI {
 
     @FXML
     void searchDebtor(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void searchCustomer(ActionEvent event) {
 
     }
 

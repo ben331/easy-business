@@ -44,6 +44,7 @@
                   </RadioButton>
                   <RadioButton layoutX="23.0" layoutY="124.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="169.0" text="By suggar level and flavor" toggleGroup="$Sorting" />
                   <RadioButton layoutX="23.0" layoutY="178.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="178.0" text="By date and flavor" toggleGroup="$Sorting" />
+                  <Button layoutX="81.0" layoutY="209.0" mnemonicParsing="false" onAction="#sortDairyDrinks" text="Sort" />
                </children>
             </Pane>
             <ImageView fx:id="drinkImg" fitHeight="150.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true" />
