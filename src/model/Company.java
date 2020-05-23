@@ -100,12 +100,14 @@ public class Company {
 		
 	}
 	
-	public void addYoghurts(String f, char s, char sz, int n) {
-		
+	public void addYoghurts(String code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
+		Yoghurt yoghurt = new Yoghurt(code,  name,  salePrice,  preparationDate,  size,  sugarLevel,  flavor);
+		dairyDrinks.add(yoghurt);
 	}
 	
-	public void addOats(char t, int n) {
-		
+	public void addOats(String code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String typeOat) {
+		Oat oat = new Oat( code,  name,  salePrice,  preparationDate,  size, sugarLevel, typeOat);
+		dairyDrinks.add(oat);
 	}
 	
 	public void addProduct(String c, String n, double sp) {
