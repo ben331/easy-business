@@ -25,7 +25,11 @@ public class Company {
 	
 	
 	//Constructor----------------------------------------------------------------------------------------------------------------------
-	public Company() {}
+	public Company() {
+		cashRegister = new CashRegister();
+		dairyProducts = new ArrayList<DairyProduct>();
+		dairyDrinks = new ArrayList<DairyDrink>();
+	}
 	
 	
 	//Getters---------------------------------------------------------------------------------------------------------------------------
@@ -99,6 +103,7 @@ public class Company {
 	public void loadData() {
 		
 	}
+	
 	
 	public void addYoghurts(String code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
 		Yoghurt yoghurt = new Yoghurt(code,  name,  salePrice,  preparationDate,  size,  sugarLevel,  flavor);
@@ -219,7 +224,7 @@ public class Company {
 		}
 	}
 
-	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, String position) throws Exception {
+	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, char position) throws Exception {
 		
 		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
 		
@@ -227,16 +232,20 @@ public class Company {
 			throw new EmptyDataException(emptyData);
 		}
 		
+		if(searchEmployee(id)!=null) {
+			throw new DoubleRegistrationException(id, "Employees");
+		}
+		
 		Employee employee=null;
 		
 		switch(position) {
-		case "SELLER":
+		case Employee.SELLER:
 			employee = new Seller(id, name, lastName, celphoneNumber, address, photo);
 			break;
-		case "OPERATOR":
+		case Employee.OPERATOR:
 			employee = new Operator(id, name, lastName, celphoneNumber, address, photo);
 			break;
-		case "DOMICILIARY":
+		case Employee.DOMICILIARY:
 			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo);
 			break;
 		default:
@@ -248,15 +257,17 @@ public class Company {
 		if(employeesRoot!=null) {
 			while(!wasAdded) {
 				if(current.compareTo(employee)<0) {
-					if(current.getLeft()!=null) {
+					if(current.getLeft()==null) {
 						current.setLeft(employee);
+						employee.setHead(current);
 						wasAdded=true;
 					}else {
 						current=current.getLeft();
 					}
 				}else {
-					if(current.getRight()!=null) {
+					if(current.getRight()==null) {
 						current.setRight(employee);
+						employee.setHead(current);
 						wasAdded=true;
 					}else {
 						current=current.getRight();
@@ -277,6 +288,8 @@ public class Company {
 		return report;
 	}
 	
+	
+	//Auxiliary methods
 	public String verifyFields(String id, String name, String lastName, String celphoneNumber, String address) {
 		String fields="";
 		if(id.equals("")) {

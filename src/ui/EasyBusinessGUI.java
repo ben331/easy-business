@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -29,18 +28,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import model.*;
 
 
 public class EasyBusinessGUI {
 	
+	//Attributes--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
+	//Constructor--------------------------------------------------------------------------------------------------------------------------
 	public EasyBusinessGUI(Company company) {
 		this.company = company;
 	}
 
+	//Scene Cash Register--------------------------------------------------------------------------------------------------------------------------
     @FXML
     private DatePicker registersDate;
 
@@ -58,6 +59,57 @@ public class EasyBusinessGUI {
 
     @FXML
     private TextField balance;
+
+    @FXML
+    private ToggleGroup registerType;
+
+    @FXML
+    private RadioButton radButEgress;
+    
+    @FXML
+    private TextField valueToRegister;
+
+    @FXML
+    private TextField detailToRegister;
+    
+    @FXML
+    void showDialogueToRegister(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToRegister.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
+    
+    @FXML
+    void toRegister(ActionEvent event) throws IOException {
+    	try {
+    		int value = Integer.parseInt(valueToRegister.getText());
+    		company.getCashRegister().registerMoney(detailToRegister.getText(), value, radButEgress.isSelected());
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
+        	loader.setController(this);
+        	Parent scene = loader.load();
+        	mainPane.setCenter(scene);
+        	initializeTableCashRegister();
+        	balance.setText(company.getCashRegister().getCash()+"");
+    	}catch(EmptyDataException | NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
+    }
+    
+    @FXML
+    void searchRegisters(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void endDay(ActionEvent event) {
+
+    }
+    
+    //Customers Scene --------------------------------------------------------------------------------------------------------------------------
     
     @FXML
     private ToggleGroup occupation;
@@ -142,12 +194,6 @@ public class EasyBusinessGUI {
 
     @FXML
     private ToggleGroup suggar;
-    
-    @FXML
-    private TextField valueToRegister;
-
-    @FXML
-    private TextField detailToRegister;
 
     @FXML
     private Label loading;
@@ -339,26 +385,6 @@ public class EasyBusinessGUI {
 	}
     
     @FXML
-    void endDay(ActionEvent event) {
-
-    }
-
-    @FXML
-    void searchRegisters(ActionEvent event) {
-
-    }
-
-    @FXML
-    void toRegisterEgress(ActionEvent event) {
-
-    }
-
-    @FXML
-    void toRegisterIngress(ActionEvent event) {
-
-    }
-    
-    @FXML
     void discard(ActionEvent event) {
 
     }
@@ -377,11 +403,6 @@ public class EasyBusinessGUI {
     void quantityYoghurts(ActionEvent event) {
 
     }
-
-    @FXML
-    void toRegister(ActionEvent event) {
-
-    }
     
     @FXML
     void about(ActionEvent event) {
@@ -394,6 +415,8 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeTableCashRegister();
+    	balance.setText(company.getCashRegister().getCash()+"");
     }
 
     @FXML
@@ -607,14 +630,14 @@ public class EasyBusinessGUI {
     		
     		Image image = new Image(new File(photoForm.getText()).toURI().toString());
     		
-    		String position;
+    		char position;
     		
     		if(seller.isSelected()) {
-    			position="SELLER";
+    			position = Employee.SELLER;
     		}else if(operator.isSelected()) {
-    			position="OPERATOR";
+    			position = Employee.OPERATOR;
     		}else {
-    			position="DOMICILIARY";
+    			position = Employee.DOMICILIARY;
     		}
     		
     		company.addEmployee(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image, position);
@@ -662,7 +685,7 @@ public class EasyBusinessGUI {
     	cashTable.setItems(cashRegisters);
     	
     	detailColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("detail"));
-    	movementColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("movement"));
+    	movementColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("value"));
     	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("time"));
 
     }

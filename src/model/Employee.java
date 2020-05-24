@@ -3,7 +3,13 @@ package model;
 import javafx.scene.image.Image;
 
 public abstract class Employee extends Person implements Comparable<Employee> {
-
+	
+	//Domain constants of employee type
+	public static final char SELLER = 'S';
+	public static final char OPERATOR = 'O';
+	public static final char DOMICILIARY = 'D';
+	
+	//Attributes
 	private int hoursWorked;
 	private Employee head;
 	private Employee left;
@@ -56,15 +62,15 @@ public abstract class Employee extends Person implements Comparable<Employee> {
 		return diference;
 	}
 	
-	public String getPosition() {
-		String position="";
+	public char getPosition() {
+		char position;
 		
 		if(this instanceof Seller) {
-			position="Seller";
+			position=Employee.SELLER;
 		}else if(this instanceof Operator) {
-			position="Operator";
+			position=Employee.OPERATOR;
 		}else {
-			position="Domiciliary";
+			position=Employee.DOMICILIARY;
 		}
 		return position;
 	}

@@ -6,17 +6,14 @@ public class Register {
 
 	public String detail;
 	public double value;
-	public boolean expensive;
-	private Register head;
-	private Register left;
-	private Register rigth;
+	public boolean expense;
 	private LocalTime time;
 	
-	public Register(String detail, double value, boolean expensive,LocalTime time) {
+	public Register(String detail, double value, boolean expense,LocalTime time) {
 		super();
 		this.detail = detail;
 		this.value = value;
-		this.expensive = expensive;
+		this.expense = expense;
 		this.time=time;
 	}
 
@@ -28,37 +25,11 @@ public class Register {
 		return value;
 	}
 
-	public boolean isExpensive() {
-		return expensive;
-	}
-
-	public Register getHead() {
-		return head;
-	}
-
-	public Register getLeft() {
-		return left;
-	}
-
-	public Register getRigth() {
-		return rigth;
+	public boolean isExpense() {
+		return expense;
 	}
 
 	public LocalTime getTime() {
 		return time;
 	}
-
-	public void setHead(Register head) {
-		this.head = head;
-	}
-
-	public void setLeft(Register left) {
-		this.left = left;
-	}
-
-	public void setRigth(Register rigth) {
-		this.rigth = rigth;
-	}
-	
-	
 }
