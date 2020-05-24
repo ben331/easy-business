@@ -124,7 +124,22 @@ public class Company {
 	}
 	
 	public void discardProduct(String code) {
-		
+		boolean found=false;
+		if(dairyDrinks!=null && !found) {
+			for(int i=0;i<dairyDrinks.size();i++) {
+				if(code.equals(dairyDrinks.get(i).getCode())) {
+					dairyDrinks.remove(dairyDrinks.get(i));
+					found=true;
+				}
+			}
+		}else if(dairyProducts!=null && !found) {
+			for(int i=0;i<dairyProducts.size();i++) {
+				if(code.equals(dairyProducts.get(i).getCode())) {
+					dairyProducts.remove(dairyProducts.get(i));
+					found=true;
+				}
+			}
+		}
 	}
 	
 	public ArrayList<DairyProduct> searchExpiredProducts(){
