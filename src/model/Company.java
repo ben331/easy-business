@@ -96,6 +96,59 @@ public class Company {
 	}
 	
 	//Analyzer methods-----------------------------------------------------------------------------------------------------------------
+	
+	//Customer Methods-----------------------------------------------------------------------------------------------------------------
+	
+	public Customer searchCustomer(String id) {
+		Customer customer = null;
+		Customer current = firstCustomer;
+		do {
+			current = current.getNextCustomer();
+		}while(current!=firstCustomer && !current.getId().equals(id));
+		
+		if(current.getId().equals(id)) {
+			customer = current;
+		}
+		return customer;
+	}
+	
+	public void addCustomer(String id, String name, String lastName, String celphoneNumber, String address, Image photo) throws EmptyDataException, DoubleRegistrationException {
+		
+		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
+		
+		if(!emptyData.equals("")) {
+			throw new EmptyDataException(emptyData);
+		}
+		
+		if(searchCustomer(id)!=null) {
+			throw new DoubleRegistrationException(id, "Customers");
+		}
+		
+		Customer newCustomer = new Customer( id,  name,  lastName,  celphoneNumber,  address, photo);
+		
+		//Case: Empty list.
+		if(firstCustomer==null) {
+			firstCustomer=newCustomer;
+			firstCustomer.setNextCustomer(newCustomer);
+			firstCustomer.setPrevCustomer(newCustomer);
+		}
+		//Case: List with size: 1.
+		else if(firstCustomer == firstCustomer.getNextCustomer()){
+			firstCustomer.setNextCustomer(newCustomer);
+			firstCustomer.setPrevCustomer(newCustomer);
+			newCustomer.setNextCustomer(firstCustomer);
+			newCustomer.setPrevCustomer(firstCustomer);
+		}
+		//Case: List with size >= 2.
+		else {
+			Customer last = firstCustomer.getPrevCustomer();
+			last.setNextCustomer(newCustomer);
+			newCustomer.setPrevCustomer(last);
+			newCustomer.setNextCustomer(firstCustomer);
+			firstCustomer.setPrevCustomer(newCustomer);
+		}
+	}
+	
 	public void saveData() {
 		
 	}
@@ -148,10 +201,7 @@ public class Company {
 		return expiredProducts;
 	}
 	
-	public Customer searchCustomer(String id) {
-		Customer customer = null;
-		return customer;
-	}
+	
 	
 	public Customer searchDebtor(String id) {
 		Customer debtor = null;
@@ -212,33 +262,7 @@ public class Company {
 		
 	}
 	
-	public void addCustomer(String id, String name, String lastName, String celphoneNumber, String address, Image photo) throws EmptyDataException {
-		
-		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
-		
-		if(!emptyData.equals("")) {
-			throw new EmptyDataException(emptyData);
-		}
-		
-		Customer newCustomer = new Customer( id,  name,  lastName,  celphoneNumber,  address, photo);
-		
-		if(firstCustomer==null) {
-			firstCustomer=newCustomer;
-			firstCustomer.setNextCustomer(newCustomer);
-			firstCustomer.setPrevCustomer(newCustomer);
-		}else if(firstCustomer == firstCustomer.getNextCustomer()){
-			firstCustomer.setNextCustomer(newCustomer);
-			firstCustomer.setPrevCustomer(newCustomer);
-			newCustomer.setNextCustomer(firstCustomer);
-			newCustomer.setPrevCustomer(newCustomer);
-		}else {
-			Customer last = firstCustomer.getPrevCustomer();
-			last.setNextCustomer(newCustomer);
-			newCustomer.setPrevCustomer(last);
-			newCustomer.setNextCustomer(firstCustomer);
-			firstCustomer.setPrevCustomer(newCustomer);
-		}
-	}
+	
 
 	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, char position) throws Exception {
 		

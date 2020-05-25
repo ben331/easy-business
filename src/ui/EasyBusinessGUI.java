@@ -36,15 +36,23 @@ import model.*;
 
 public class EasyBusinessGUI {
 	
-	//Attributes--------------------------------------------------------------------------------------------------------------------------
+	//Relations--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
 	//Constructor--------------------------------------------------------------------------------------------------------------------------
 	public EasyBusinessGUI(Company company) {
 		this.company = company;
 	}
-
-	//Scene Cash Register--------------------------------------------------------------------------------------------------------------------------
+	
+	//Main Scene fields----------------------------------------------------------------------------------------------------------------------------
+	@FXML
+    private BorderPane mainPane;
+	
+	public BorderPane getMainPane() {
+		return mainPane;
+	}
+	
+	//Scene CashRegister fields --------------------------------------------------------------------------------------------------------------------------
     @FXML
     private DatePicker registersDate;
 
@@ -81,71 +89,9 @@ public class EasyBusinessGUI {
     @FXML
     private Button buttonBackToToday;
 
-    @FXML
-    void saveRegisters(ActionEvent event) throws FileNotFoundException, IOException {
-    	company.getCashRegister().saveRegisters();
-    }
     
-    @FXML
-    void showDialogueToRegister(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToRegister.fxml"));
-    	loader.setController(this);
-    	Parent scene = loader.load();
-    	mainPane.setCenter(scene);
-    }
     
-    @FXML
-    void toRegister(ActionEvent event) throws IOException {
-    	try {
-    		int value = Integer.parseInt(valueToRegister.getText());
-    		company.getCashRegister().registerMoney(detailToRegister.getText(), value, radButEgress.isSelected());
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
-        	loader.setController(this);
-        	Parent scene = loader.load();
-        	mainPane.setCenter(scene);
-        	initializeTableCashRegister();
-        	cash.setText(company.getCashRegister().getCash()+"");
-    	}catch(EmptyDataException | NumberFormatException e) {
-    		Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning");
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-    	}
-    }
-    
-    @FXML
-    void searchRegisters(ActionEvent event) throws ClassNotFoundException {
-    	
-    	try {
-    		company.getCashRegister().saveRegisters();
-    		company.getCashRegister().loadRegistersOfDate(registersDate.getValue());
-    		initializeTableCashRegister();
-    		cash.setText(company.getCashRegister().determineCash()+"");
-    		buttonRegister.setDisable(true);
-    		buttonBackToToday.setDisable(false);
-    	}catch(IOException e) {
-    		Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning");
-			alert.setContentText("Registers not found.\nThere are not registers for that day, file was deleted or the file changed location");
-			alert.showAndWait();
-    	}catch(EmptyDataException e) {
-    		Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning");
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-    	}
-    }
-    
-    @FXML
-    void backToToday(ActionEvent event) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException {
-    	company.getCashRegister().loadRegistersOfDate(LocalDate.now());
-    	initializeTableCashRegister();
-		cash.setText(company.getCashRegister().determineCash()+"");
-		buttonRegister.setDisable(false);
-		buttonBackToToday.setDisable(true);
-    }
-    
-    //Customers Scene --------------------------------------------------------------------------------------------------------------------------
+    //Inventary Scene fields--------------------------------------------------------------------------------------------------------------------------
     
     @FXML
     private ToggleGroup occupation;
@@ -234,8 +180,7 @@ public class EasyBusinessGUI {
     @FXML
     private Label loading;
     
-    @FXML
-    private BorderPane mainPane;
+    //Employees Scene fields---------------------------------------------------------------------------------------------------------------
 
     @FXML
     private TableView<Employee> activeETable;
@@ -273,12 +218,15 @@ public class EasyBusinessGUI {
     @FXML
     private TextField hours;
     
+    //Analizing Scene fields------------------------------------------------------------------------------------------------------------------------------------------------
+    
     @FXML
     private TextField gain;
 
     @FXML
     private TextArea report;
     
+    //Form Scene fields------------------------------------------------------------------------------------------------------------------------------------------------    
     @FXML
     private TextField idForm;
 
@@ -305,6 +253,8 @@ public class EasyBusinessGUI {
 
     @FXML
     private RadioButton seller;
+    
+    //Customers Scene fields------------------------------------------------------------------------------------------------------------------------------------------------
     
     @FXML
     private TableView<Customer> customerTable;
@@ -372,6 +322,8 @@ public class EasyBusinessGUI {
     @FXML
     private TextField customerBuyingId;
     
+    
+    //Employees scene fields-----------------------------------------------------------------------------------------------------------
     @FXML
     private TableView<Employee> employeeTable;
 
@@ -401,60 +353,61 @@ public class EasyBusinessGUI {
 
     @FXML
     private TextField EmployeeAddress;
-
-    
+        
+    //Employee methods----------------------------------------------------------------------------------------------------------------
     @FXML
-    void chooseImageFile(ActionEvent event) {
-    	FileChooser fc = new FileChooser();
-    	fc.getExtensionFilters().add(new ExtensionFilter("Image Files","*.png","*.jpg"));
-    	File selectedFile = fc.showOpenDialog(null);
-    	
-    	if(selectedFile!=null) {
-    		photoForm.setText(selectedFile.getAbsolutePath());
+    void addEmployee(ActionEvent event) throws Exception {
+    	try {
+    		if(photoForm.getText().equals("")) {
+    			throw new EmptyDataException("Photo");
+    		}
+    		
+    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
+    		
+    		char position;
+    		
+    		if(seller.isSelected()) {
+    			position = Employee.SELLER;
+    		}else if(operator.isSelected()) {
+    			position = Employee.OPERATOR;
+    		}else {
+    			position = Employee.DOMICILIARY;
+    		}
+    		
+    		company.addEmployee(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image, position);
+    		
+    		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Successfull Process");
+			alert.setContentText("Employee added successfully");
+			alert.showAndWait();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
+	    	loader.setController(this);
+	    	Parent scene = loader.load();
+	    	mainPane.setCenter(scene);
+	    	initializeTableEmployees();
+	    	
+			
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
     	}
     }
 
-
-    
-    public BorderPane getMainPane() {
-		return mainPane;
-	}
-    
     @FXML
-    void discard(ActionEvent event) {
-
-    }
-
-    @FXML
-    void addOats(ActionEvent event) {
+    void browseEmployee(ActionEvent event) {
 
     }
     
     @FXML
-    void addProducts(ActionEvent event) {
+    void searchEmployee(ActionEvent event) {
 
     }
+
+    //Main Scene Methods------------------------------------------------------------------------------------------------------------------
     
-    @FXML
-    void quantityYoghurts(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void about(ActionEvent event) {
-
-    }
-
-    @FXML
-    void cashRegister(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
-    	loader.setController(this);
-    	Parent scene = loader.load();
-    	mainPane.setCenter(scene);
-    	initializeTableCashRegister();
-    	cash.setText(company.getCashRegister().getCash()+"");
-    }
-
     @FXML
     void close(ActionEvent event) {
 
@@ -466,15 +419,29 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void checkOut(ActionEvent event) {
-    	
+    void about(ActionEvent event) {
+
+    }
+    
+    //Navigators Methods--------------------------------------------------------------------------------------------------------------------------
+    @FXML
+    void showDialogeToAddEmployee(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeForm.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
     
     @FXML
-    void sortDairyDrinks(ActionEvent event) {
-
+    void showCashRegister(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    	initializeTableCashRegister();
+    	cash.setText(company.getCashRegister().getCash()+"");
     }
-
+    
     @FXML
     void showActiveEmployees(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("ActiveEmployees.fxml"));
@@ -539,24 +506,85 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void registerEntry(ActionEvent event) {
-
+    void showDialogeToAddCustomer(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerForm.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
 
     @FXML
-    void searchActiveE(ActionEvent event) {
+    void showDialogueToAddProducts(ActionEvent event) {
 
     }
     
+    //Cash Register Methods-------------------------------------------------------------------------------------------------------------
+    
     @FXML
-    void getSalesRequired(ActionEvent event) {
-
+    void saveRegisters(ActionEvent event) throws FileNotFoundException, IOException {
+    	company.getCashRegister().saveRegisters();
     }
-
+    
     @FXML
-    void predictUpcomingSales(ActionEvent event) {
-
+    void showDialogueToRegister(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToRegister.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
+    
+    @FXML
+    void toRegister(ActionEvent event) throws IOException {
+    	try {
+    		int value = Integer.parseInt(valueToRegister.getText());
+    		company.getCashRegister().registerMoney(detailToRegister.getText(), value, radButEgress.isSelected());
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("CashRegister.fxml"));
+        	loader.setController(this);
+        	Parent scene = loader.load();
+        	mainPane.setCenter(scene);
+        	initializeTableCashRegister();
+        	cash.setText(company.getCashRegister().getCash()+"");
+    	}catch(EmptyDataException | NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
+    }
+    
+    @FXML
+    void searchRegisters(ActionEvent event) throws ClassNotFoundException {
+    	
+    	try {
+    		company.getCashRegister().saveRegisters();
+    		company.getCashRegister().loadRegistersOfDate(registersDate.getValue());
+    		initializeTableCashRegister();
+    		cash.setText(company.getCashRegister().determineCash()+"");
+    		buttonRegister.setDisable(true);
+    		buttonBackToToday.setDisable(false);
+    	}catch(IOException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Registers not found.\nThere are not registers for that day, file was deleted or the file changed location");
+			alert.showAndWait();
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
+    }
+    
+    @FXML
+    void backToToday(ActionEvent event) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException {
+    	company.getCashRegister().loadRegistersOfDate(LocalDate.now());
+    	initializeTableCashRegister();
+		cash.setText(company.getCashRegister().determineCash()+"");
+		buttonRegister.setDisable(false);
+		buttonBackToToday.setDisable(true);
+    }
+    
+    //Customers Methods---------------------------------------------------------------------------------------------------------------
     
     @FXML
     void addCustomer(ActionEvent event) throws IOException {
@@ -580,55 +608,12 @@ public class EasyBusinessGUI {
 	    	initializeTableCustomers();
 	    	
 			
-    	}catch(EmptyDataException e) {
-    		Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error");
+    	}catch(EmptyDataException | DoubleRegistrationException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
     	}
-    }
-
-    @FXML
-    void browse(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void showDialogeToAddCustomer(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerForm.fxml"));
-    	loader.setController(this);
-    	Parent scene = loader.load();
-    	mainPane.setCenter(scene);
-    }
-
-    @FXML
-    void sortCustomers(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void discardDrink(ActionEvent event) {
-
-    }
-
-    @FXML
-    void sellDrink(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void discardProduct(ActionEvent event) {
-
-    }
-
-    @FXML
-    void sellProduct(ActionEvent event) {
-
-    }
-
-    @FXML
-    void showDialogueToAddProducts(ActionEvent event) {
-
     }
     
     @FXML
@@ -655,90 +640,103 @@ public class EasyBusinessGUI {
     void sell(ActionEvent event) {
 
     }
-    
 
     @FXML
-    void addEmployee(ActionEvent event) throws Exception {
-    	try {
-    		if(photoForm.getText().equals("")) {
-    			throw new EmptyDataException("Photo");
-    		}
-    		
-    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
-    		
-    		char position;
-    		
-    		if(seller.isSelected()) {
-    			position = Employee.SELLER;
-    		}else if(operator.isSelected()) {
-    			position = Employee.OPERATOR;
-    		}else {
-    			position = Employee.DOMICILIARY;
-    		}
-    		
-    		company.addEmployee(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image, position);
-    		
-    		Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Successfull Process");
-			alert.setContentText("Employee added successfully");
-			alert.showAndWait();
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
-	    	loader.setController(this);
-	    	Parent scene = loader.load();
-	    	mainPane.setCenter(scene);
-	    	initializeTableEmployees();
-	    	
-			
-    	}catch(EmptyDataException e) {
-    		Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error");
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
+    void sortCustomers(ActionEvent event) {
+
+    }
+    
+    //Form Methods--------------------------------------------------------------------------------------------------------------------
+    @FXML
+    void chooseImageFile(ActionEvent event) {
+    	FileChooser fc = new FileChooser();
+    	fc.getExtensionFilters().add(new ExtensionFilter("Image Files","*.png","*.jpg"));
+    	File selectedFile = fc.showOpenDialog(null);
+    	
+    	if(selectedFile!=null) {
+    		photoForm.setText(selectedFile.getAbsolutePath());
     	}
     }
-
+    
     @FXML
-    void browseEmployee(ActionEvent event) {
+    void browse(ActionEvent event) {
 
     }
     
+    //Active Employees Methods--------------------------------------------------------------------------------------------------------------------
     @FXML
-    void searchEmployee(ActionEvent event) {
-
-    }
-
-    @FXML
-    void showDialogeToAddEmployee(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("EmployeeForm.fxml"));
-    	loader.setController(this);
-    	Parent scene = loader.load();
-    	mainPane.setCenter(scene);
-    }
-    
-    private void initializeTableCashRegister() {
-    	ObservableList<Register> cashRegisters = FXCollections.observableArrayList(company.getCashRegister().getRegisters());
-    	cashTable.setItems(cashRegisters);
+    void checkOut(ActionEvent event) {
     	
-    	detailColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("detail"));
-    	movementColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("value"));
-    	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("time"));
+    }
+    
+    @FXML
+    void registerEntry(ActionEvent event) {
+
+    }
+
+    @FXML
+    void searchActiveE(ActionEvent event) {
 
     }
     
-    private void initializeTableDairyProducts() {
-    	ObservableList<DairyDrink> dairyProducts = FXCollections.observableArrayList(company.getDairyDrink());
-    	dairyDrinksTable.setItems(dairyProducts);
-    	
-    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("drink"));
-    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("code"));
-    	flavorColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("flavor"));
-    	sizeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("size"));
-    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("suggar"));
-    	typeOatColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("typeOat"));
-    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("dateDrin"));
+    //Inventary scene Methods---------------------------------------------------------------------------------------------------------------
+    @FXML
+    void sortDairyDrinks(ActionEvent event) {
+
     }
     
+    @FXML
+    void discard(ActionEvent event) {
+
+    }
+
+    @FXML
+    void addOats(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void addProducts(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void quantityYoghurts(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void discardDrink(ActionEvent event) {
+
+    }
+
+    @FXML
+    void sellDrink(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void discardProduct(ActionEvent event) {
+
+    }
+
+    @FXML
+    void sellProduct(ActionEvent event) {
+
+    }
+    
+    //Analysis scene Methods-----------------------------------------------------------------------------------------------------------------
+    @FXML
+    void getSalesRequired(ActionEvent event) {
+
+    }
+
+    @FXML
+    void predictUpcomingSales(ActionEvent event) {
+
+    }
+    
+    //Initializer Methods----------------------------------------------------------------------------------------------------------------
     private void initializeTableEmployees() {
     	ObservableList<Employee> employees = FXCollections.observableArrayList(company.getEmployees());
     	employeeTable.setItems(employees);
@@ -763,4 +761,26 @@ public class EasyBusinessGUI {
     	dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("dateCustomer")); 
     }
     
+    private void initializeTableDairyProducts() {
+    	ObservableList<DairyDrink> dairyProducts = FXCollections.observableArrayList(company.getDairyDrink());
+    	dairyDrinksTable.setItems(dairyProducts);
+    	
+    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("drink"));
+    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("code"));
+    	flavorColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("flavor"));
+    	sizeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("size"));
+    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("suggar"));
+    	typeOatColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("typeOat"));
+    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("dateDrin"));
+    }
+    
+    private void initializeTableCashRegister() {
+    	ObservableList<Register> cashRegisters = FXCollections.observableArrayList(company.getCashRegister().getRegisters());
+    	cashTable.setItems(cashRegisters);
+    	
+    	detailColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("detail"));
+    	movementColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("value"));
+    	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("time"));
+
+    }
 }

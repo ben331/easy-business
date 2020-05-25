@@ -18,7 +18,7 @@
           </Menu>
           <Menu mnemonicParsing="false" onAction="#saveRegisters" text="CashRegister">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#cashRegister" text="View" />
+              <MenuItem mnemonicParsing="false" onAction="#showCashRegister" text="View" />
                   <MenuItem mnemonicParsing="false" onAction="#cashRegister" text="Save registers" />
             </items>
           </Menu>
