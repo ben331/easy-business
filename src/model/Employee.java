@@ -2,8 +2,7 @@ package model;
 
 import javafx.scene.image.Image;
 
-public abstract class Employee extends Person implements Comparable<Employee> {
-	
+public abstract class Employee extends Person  {
 	//Domain constants of employee type
 	public static final char SELLER = 'S';
 	public static final char OPERATOR = 'O';
@@ -49,17 +48,6 @@ public abstract class Employee extends Person implements Comparable<Employee> {
 
 	public void setRight(Employee right) {
 		this.right = right;
-	}
-
-	@Override
-	public int compareTo(Employee o) {
-		int diference=0;
-		if(this.getLastName().equals(o.getLastName())) {
-			diference=this.getName().compareTo(o.getName());
-		}else {
-			diference = this.getLastName().compareTo(o.getLastName());
-		}
-		return diference;
 	}
 	
 	public char getPosition() {

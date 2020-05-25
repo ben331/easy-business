@@ -35,7 +35,8 @@ import model.*;
 
 
 public class EasyBusinessGUI {
-	
+	//Constant
+	public static final String DEFAULT_PROFILE_PHOTO = "imgs/deafultProfile.jpg";
 	//Relations--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
@@ -281,13 +282,7 @@ public class EasyBusinessGUI {
     private ImageView customerImg;
 
     @FXML
-    private TextField debt;
-
-    @FXML
-    private ToggleGroup sortingDebtors;
-    
-    @FXML
-    private TextField customerName;
+    private TextField customerFullName;
 
     @FXML
     private TextField customerId;
@@ -300,7 +295,17 @@ public class EasyBusinessGUI {
 
     @FXML
     private ToggleGroup sortingCustomers;
+
+    @FXML
+    private RadioButton sortByDate;
     
+    //Debtors scene fields
+    @FXML
+    private TextField debt;
+
+    @FXML
+    private ToggleGroup sortingDebtors;
+
     @FXML
     private TableView<?> debtorTable;
 
@@ -589,10 +594,12 @@ public class EasyBusinessGUI {
     @FXML
     void addCustomer(ActionEvent event) throws IOException {
     	try {
+    		Image image;
     		if(photoForm.getText().equals("")) {
-    			throw new EmptyDataException("Photo");
+    			image = new Image(new File(DEFAULT_PROFILE_PHOTO).toURI().toString());
+    		}else {
+    			image = new Image(new File(photoForm.getText()).toURI().toString());
     		}
-    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
     		
     		company.addCustomer(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image);
     		
@@ -628,7 +635,25 @@ public class EasyBusinessGUI {
     
     @FXML
     void searchCustomer(ActionEvent event) {
-
+    	try {
+    		Customer customer = company.searchCustomer(customerId.getText());
+    		if(customer == null) {
+    			Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Customer not found");
+    			alert.showAndWait();
+    		}else {
+    			customerFullName.setText(customer.getName()+" "+customer.getLastName());
+    			customerCel.setText(customer.getCelphoneNumber());
+    			customerAddress.setText(customer.getAddress());
+    			customerImg.setImage(customer.getPhoto());
+    		}
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
     }
 
     @FXML
@@ -643,7 +668,12 @@ public class EasyBusinessGUI {
 
     @FXML
     void sortCustomers(ActionEvent event) {
-
+    	if(sortByDate.isSelected()) {
+    		
+    	}else {
+    		company.sortCByFullName();
+    	}
+    	initializeTableCustomers();
     }
     
     //Form Methods--------------------------------------------------------------------------------------------------------------------

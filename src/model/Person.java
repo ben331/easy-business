@@ -2,7 +2,7 @@ package model;
 
 import javafx.scene.image.Image;
 
-public abstract class Person {
+public abstract class Person implements Comparable<Person>{
 
 	private String id;
 	private String name;
@@ -65,5 +65,13 @@ public abstract class Person {
 		this.address = address;
 	}
 	
-	
+	public int compareTo(Person p) {
+		int difference;
+		if(this.lastName.equals(p.lastName)) {
+			difference = this.lastName.compareTo(p.lastName);
+		}else {
+			difference = this.lastName.compareTo(p.lastName);
+		}
+		return difference;
+	}
 }

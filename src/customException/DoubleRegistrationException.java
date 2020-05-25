@@ -14,7 +14,7 @@ public class DoubleRegistrationException extends Exception{
 	
 	@Override
 	public String getMessage() {
-		return "Person with id: " + repeatedId + "is already registered in " + list + "list";
+		return "Person with id: " + repeatedId + ", is already registered in " + list + "list";
 	}
 
 	public String getRepeatedId() {

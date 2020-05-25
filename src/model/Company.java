@@ -85,8 +85,8 @@ public class Company {
 	
 	public List<Customer> getCustomers(){
 		List<Customer> customers = new ArrayList<Customer>();
-		Customer current = firstCustomer;
 		if(firstCustomer!=null) {
+			Customer current = firstCustomer;
 			do {
 				customers.add(current);
 				current=current.getNextCustomer();
@@ -99,15 +99,19 @@ public class Company {
 	
 	//Customer Methods-----------------------------------------------------------------------------------------------------------------
 	
-	public Customer searchCustomer(String id) {
-		Customer customer = null;
+	public Customer searchCustomer(String id) throws EmptyDataException {
+		if(id==null || id.equals("")) {
+			throw new EmptyDataException("id");
+		}
+		Customer customer=null;
 		Customer current = firstCustomer;
-		do {
-			current = current.getNextCustomer();
-		}while(current!=firstCustomer && !current.getId().equals(id));
-		
-		if(current.getId().equals(id)) {
-			customer = current;
+		if(firstCustomer!=null) {
+			do {
+				current = current.getNextCustomer();
+			}while(current!=firstCustomer && !current.getId().equals(id));
+			if(current.getId().equals(id)) {
+				customer = current;
+			}
 		}
 		return customer;
 	}
@@ -149,6 +153,73 @@ public class Company {
 		}
 	}
 	
+	public void sortCByFullName() { //Bubble Sort
+		if(firstCustomer!=null) {
+			boolean thereWasSwap=true;
+			
+			while(thereWasSwap) {
+				Customer current = firstCustomer;
+				thereWasSwap=false;
+				
+				//Case: list >=2
+				while(current.getNextCustomer()!=firstCustomer) {
+					if(current.getNextCustomer().compareTo(current)<0) {
+						swap(current, current.getNextCustomer());
+						thereWasSwap = true;
+					}
+					current=current.getNextCustomer();
+				}
+			}
+		}
+	}
+	
+	private void swap(Customer c1, Customer c2) {
+		
+		//Case: list size: 2.
+		if(c2.getNextCustomer()==firstCustomer) {
+			firstCustomer = c2;
+		}
+		//Case: list size: 3.
+		else if(c1.getPrevCustomer()==c2.getNextCustomer()){
+			Customer c3=c1.getPrevCustomer();
+			c1.setNextCustomer(c3);
+			c1.setPrevCustomer(c2);
+			
+			c2.setNextCustomer(c1);
+			c2.setPrevCustomer(c3);
+			
+			c3.setNextCustomer(c2);
+			c3.setPrevCustomer(c1);
+		}
+		//Case: list size >= 4.
+		else {
+			Customer pc1 = c1.getPrevCustomer();
+			Customer nc2 = c2.getNextCustomer();
+			
+			pc1.setNextCustomer(c2);
+			
+			c2.setPrevCustomer(pc1);
+			c2.setNextCustomer(c1);
+			
+			c1.setPrevCustomer(c2);
+			c1.setNextCustomer(nc2);
+		}
+		
+		//Case: c1 is the first
+		if(c1==firstCustomer) {
+			firstCustomer = c2;
+		}
+		//Case: c1 is the last
+		else if(c2==firstCustomer) {
+			firstCustomer = c1;
+		}
+	}
+	
+	public void sortCByLastPurchase() { //Selection Sort
+		
+	}
+	
+	//Stock scene methods-------------------------------------------------------------------------------------------------------------
 	public void saveData() {
 		
 	}
@@ -230,13 +301,7 @@ public class Company {
 		
 	}
 	
-	public void sortCByFullName() {
-		
-	}
 	
-	public void sortCByLastPurchase() {
-		
-	}
 	
 	public void saveRegisters() {
 		

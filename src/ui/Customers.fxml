@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -32,9 +33,12 @@
          <children>
             <Pane prefHeight="245.0" prefWidth="275.0">
                <children>
-                  <ImageView fx:id="employeeImg" fitHeight="97.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="95.0" layoutY="28.0" text="Name:" />
-                  <TextField fx:id="customerName" editable="false" layoutX="139.0" layoutY="24.0" prefHeight="26.0" prefWidth="122.0" />
+                  <ImageView fx:id="customerImg" fitHeight="97.0" fitWidth="73.0" layoutX="10.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imgs/deafultProfile.jpg" />
+                     </image></ImageView>
+                  <Label layoutX="88.0" layoutY="24.0" prefHeight="17.0" prefWidth="65.0" text="Full Name:" />
+                  <TextField fx:id="customerFullName" editable="false" layoutX="87.0" layoutY="50.0" prefHeight="26.0" prefWidth="174.0" />
                   <Label layoutX="95.0" layoutY="89.0" text="Id:" />
                   <TextField fx:id="customerId" layoutX="120.0" layoutY="85.0" prefHeight="26.0" prefWidth="141.0" />
                   <Button layoutX="184.0" layoutY="129.0" mnemonicParsing="false" onAction="#searchCustomer" prefHeight="29.0" prefWidth="72.0" text="Search" />
@@ -56,7 +60,7 @@
                         <ToggleGroup fx:id="sortingCustomers" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton layoutX="72.0" layoutY="107.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="By last purchase date" toggleGroup="$sortingCustomers" />
+                  <RadioButton fx:id="sortByDate" layoutX="72.0" layoutY="107.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="By last purchase date" toggleGroup="$sortingCustomers" />
                </children>
             </Pane>
             <Button mnemonicParsing="false" onAction="#sortCustomers" prefHeight="25.0" prefWidth="72.0" text="Sort" />
