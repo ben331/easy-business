@@ -1,13 +1,21 @@
 package model;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import customException.EmptyDataException;
 
 public class CashRegister {
  
+	public static final String FILE_NAME_PREFIX="data/registersCash/Registers_OfDate_";
+	public static final String EXTENSION = ".reg";
 	private ArrayList<Register> registers;
 	private double cash;
 	
@@ -45,5 +53,31 @@ public class CashRegister {
 		registers.add(register);
 		
 		cash +=v;
+	}
+	
+	public void saveRegisters() throws FileNotFoundException, IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME_PREFIX+LocalDate.now()+EXTENSION));
+    	oos.writeObject(registers);
+    	oos.close();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void loadRegistersOfDate(LocalDate localDate) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException {
+		if(localDate == null) {
+			throw new EmptyDataException("Date");
+		}
+		String fileName = FILE_NAME_PREFIX + localDate + EXTENSION;
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+		registers = (ArrayList<Register>)(ois.readObject());
+		ois.close();
+	}
+	
+	public double determineCash() {
+		double cash=0;
+		for(int i=0; i<registers.size();i++) {
+			cash+=registers.get(i).getValue();
+		}
+		this.cash = cash;
+		return cash;
 	}
 }

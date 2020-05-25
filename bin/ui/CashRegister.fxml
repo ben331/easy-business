@@ -39,8 +39,8 @@
             </TableView>
             <HBox alignment="CENTER_LEFT" prefHeight="105.0" prefWidth="724.0">
                <children>
-                  <Label contentDisplay="RIGHT" prefHeight="37.0" prefWidth="86.0" text="Balance" textAlignment="RIGHT" />
-                  <TextField fx:id="balance" editable="false" prefHeight="26.0" prefWidth="213.0" />
+                  <Label contentDisplay="RIGHT" prefHeight="37.0" prefWidth="86.0" text="Cash" textAlignment="RIGHT" />
+                  <TextField fx:id="cash" editable="false" prefHeight="26.0" prefWidth="213.0" />
                </children>
             </HBox>
          </children>
@@ -50,9 +50,9 @@
       <HBox alignment="CENTER" prefHeight="74.0" prefWidth="724.0" BorderPane.alignment="CENTER">
          <children>
             <Label prefHeight="18.0" prefWidth="27.0" />
-            <Button mnemonicParsing="false" onAction="#showDialogueToRegister" prefHeight="32.0" prefWidth="96.0" text="Register" />
+            <Button fx:id="buttonRegister" mnemonicParsing="false" onAction="#showDialogueToRegister" prefHeight="32.0" prefWidth="96.0" text="Register" />
             <Label prefHeight="18.0" prefWidth="327.0" />
-            <Button mnemonicParsing="false" onAction="#endDay" prefHeight="32.0" prefWidth="93.0" text="End Day" />
+            <Button fx:id="buttonBackToToday" disable="true" mnemonicParsing="false" onAction="#backToToday" prefHeight="32.0" prefWidth="93.0" text="Back to today" />
          </children>
       </HBox>
    </bottom>

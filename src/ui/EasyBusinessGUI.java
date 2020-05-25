@@ -1,7 +1,10 @@
 package ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+
 import customException.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,7 +61,7 @@ public class EasyBusinessGUI {
     private TableColumn<Register, String> timeColumn;
 
     @FXML
-    private TextField balance;
+    private TextField cash;
 
     @FXML
     private ToggleGroup registerType;
@@ -71,6 +74,17 @@ public class EasyBusinessGUI {
 
     @FXML
     private TextField detailToRegister;
+    
+    @FXML
+    private Button buttonRegister;
+
+    @FXML
+    private Button buttonBackToToday;
+
+    @FXML
+    void saveRegisters(ActionEvent event) throws FileNotFoundException, IOException {
+    	company.getCashRegister().saveRegisters();
+    }
     
     @FXML
     void showDialogueToRegister(ActionEvent event) throws IOException {
@@ -90,7 +104,7 @@ public class EasyBusinessGUI {
         	Parent scene = loader.load();
         	mainPane.setCenter(scene);
         	initializeTableCashRegister();
-        	balance.setText(company.getCashRegister().getCash()+"");
+        	cash.setText(company.getCashRegister().getCash()+"");
     	}catch(EmptyDataException | NumberFormatException e) {
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
@@ -100,13 +114,35 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void searchRegisters(ActionEvent event) {
-
+    void searchRegisters(ActionEvent event) throws ClassNotFoundException {
+    	
+    	try {
+    		company.getCashRegister().saveRegisters();
+    		company.getCashRegister().loadRegistersOfDate(registersDate.getValue());
+    		initializeTableCashRegister();
+    		cash.setText(company.getCashRegister().determineCash()+"");
+    		buttonRegister.setDisable(true);
+    		buttonBackToToday.setDisable(false);
+    	}catch(IOException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Registers not found.\nThere are not registers for that day, file was deleted or the file changed location");
+			alert.showAndWait();
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
     }
     
     @FXML
-    void endDay(ActionEvent event) {
-
+    void backToToday(ActionEvent event) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException {
+    	company.getCashRegister().loadRegistersOfDate(LocalDate.now());
+    	initializeTableCashRegister();
+		cash.setText(company.getCashRegister().determineCash()+"");
+		buttonRegister.setDisable(false);
+		buttonBackToToday.setDisable(true);
     }
     
     //Customers Scene --------------------------------------------------------------------------------------------------------------------------
@@ -416,7 +452,7 @@ public class EasyBusinessGUI {
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
     	initializeTableCashRegister();
-    	balance.setText(company.getCashRegister().getCash()+"");
+    	cash.setText(company.getCashRegister().getCash()+"");
     }
 
     @FXML

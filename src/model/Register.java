@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
-public class Register {
+@SuppressWarnings("serial")
+public class Register implements Serializable {
 
 	public String detail;
 	public double value;
