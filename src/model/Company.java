@@ -215,8 +215,24 @@ public class Company {
 		}
 	}
 	
-	public void sortCByLastPurchase() { //Selection Sort
-		
+	public void sortCByLastPurchase() { //Bubble Sort
+		if(firstCustomer!=null) {
+			boolean thereWasSwap=true;
+			
+			while(thereWasSwap) {
+				Customer current = firstCustomer;
+				thereWasSwap=false;
+				
+				//Case: list >=2
+				while(current.getNextCustomer()!=firstCustomer) {
+					if(current.getNextCustomer().compareByDate(current)<0) {
+						swap(current, current.getNextCustomer());
+						thereWasSwap = true;
+					}
+					current=current.getNextCustomer();
+				}
+			}
+		}
 	}
 	
 	//Stock scene methods-------------------------------------------------------------------------------------------------------------

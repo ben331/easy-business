@@ -68,7 +68,7 @@ public abstract class Person implements Comparable<Person>{
 	public int compareTo(Person p) {
 		int difference;
 		if(this.lastName.equals(p.lastName)) {
-			difference = this.lastName.compareTo(p.lastName);
+			difference = this.name.compareTo(p.name);
 		}else {
 			difference = this.lastName.compareTo(p.lastName);
 		}

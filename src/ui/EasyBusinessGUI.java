@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import customException.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -519,8 +520,35 @@ public class EasyBusinessGUI {
     }
 
     @FXML
-    void showDialogueToAddProducts(ActionEvent event) {
+    void showDialogueToAddOats(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToAddOats.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
 
+    @FXML
+    void showDialogueToAddYoghurts(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToAddYoghurts.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
+
+    @FXML
+    void showDialogueToSell(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToSell.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
+    
+    @FXML
+    void showDialogueToAddProducts(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToAddProducts.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
     
     //Cash Register Methods-------------------------------------------------------------------------------------------------------------
@@ -669,11 +697,32 @@ public class EasyBusinessGUI {
     @FXML
     void sortCustomers(ActionEvent event) {
     	if(sortByDate.isSelected()) {
-    		
+    		new Thread() {
+    			@Override
+    			public void run() {
+    				company.sortCByLastPurchase();;
+    			}
+    		}.start();
+    		Platform.runLater( new Thread() {
+    			@Override
+    			public void run() {
+    				initializeTableCustomers();
+    			}
+    		});
     	}else {
-    		company.sortCByFullName();
+    		new Thread() {
+    			@Override
+    			public void run() {
+    				company.sortCByFullName();
+    			}
+    		}.start();
+    		Platform.runLater( new Thread() {
+    			@Override
+    			public void run() {
+    				initializeTableCustomers();
+    			}
+    		});
     	}
-    	initializeTableCustomers();
     }
     
     //Form Methods--------------------------------------------------------------------------------------------------------------------

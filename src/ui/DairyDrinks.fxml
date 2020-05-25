@@ -49,7 +49,7 @@
             </Pane>
             <ImageView fx:id="drinkImg" fitHeight="150.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true" />
             <Label prefHeight="23.0" prefWidth="26.0" />
-            <Button mnemonicParsing="false" onAction="#sellDrink" prefHeight="29.0" prefWidth="72.0" text="Sell" />
+            <Button mnemonicParsing="false" onAction="#showDialogueToSell" prefHeight="29.0" prefWidth="72.0" text="Sell" />
             <Label prefHeight="25.0" prefWidth="28.0" />
             <Button mnemonicParsing="false" onAction="#discardDrink" prefHeight="30.0" prefWidth="90.0" text="Discard" />
          </children>
@@ -68,9 +68,9 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="72.0" prefWidth="911.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="117.0" text="Add Yoghurts" />
+            <Button mnemonicParsing="false" onAction="#showDialogueToAddYoghurts" prefHeight="38.0" prefWidth="117.0" text="Add Yoghurts" />
             <Label prefHeight="17.0" prefWidth="32.0" />
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="117.0" text="Add Oats" />
+            <Button mnemonicParsing="false" onAction="#showDialogueToAddOats" prefHeight="38.0" prefWidth="117.0" text="Add Oats" />
          </children>
       </HBox>
    </bottom>

@@ -15,6 +15,8 @@ public class Customer extends Person{
 	
 	public Customer(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
 		super( id,  name,  lastName,  celphoneNumber,  address, photo);
+		purchasesDates = new ArrayList<LocalDate>();
+		purchasesDetail = new ArrayList<String>();
 	}
 	
 	public boolean hasDebt() {
@@ -31,6 +33,24 @@ public class Customer extends Person{
 	
 	public double getDebtValue() {
 		return debtValue;
+	}
+	
+	public int compareByDate(Customer c) {
+		int difference;
+		if(purchasesDates.size()==0 && c.getPurchasesDates().size()==0) {
+			difference=0;
+		}else if(purchasesDates.size()==0 && c.getPurchasesDates().size()>0) {
+			difference=-1;
+		}else if(purchasesDates.size()>0 && c.getPurchasesDates().size()==0) {
+			difference = 1;
+		}else{
+			LocalDate last1=purchasesDates.get(purchasesDates.size()-1);
+			LocalDate last2=c.getPurchasesDates().get(c.getPurchasesDates().size()-1);
+			
+			difference = last1.compareTo(last2);
+		};
+		
+		return difference;
 	}
 
 	public ArrayList<LocalDate> getPurchasesDates() {
