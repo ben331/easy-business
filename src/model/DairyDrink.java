@@ -1,8 +1,7 @@
 package model;
 
 import java.time.LocalDate;
-
-public class DairyDrink extends DairyProduct {
+public class DairyDrink extends DairyProduct implements Comparable<DairyDrink>{
 
 	public static final char SMALL = 's';
 	public static final char MEDIAN = 'm';
@@ -33,6 +32,19 @@ public class DairyDrink extends DairyProduct {
 
 	public void setSugarLevel(char sugarLevel) {
 		this.sugarLevel = sugarLevel;
+	}
+
+	@Override
+	public int compareTo(DairyDrink d) {
+		int difference;
+		if(this instanceof Yoghurt && d instanceof Oat) {
+			difference = 1;
+		}else if(this instanceof Oat && d instanceof Yoghurt) {
+			difference = -1;
+		}else {
+			difference =0;
+		}
+		return difference;
 	}
 	
 	
