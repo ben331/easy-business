@@ -6,7 +6,11 @@ import java.time.LocalTime;
 import javafx.scene.image.Image;
 
 @SuppressWarnings("serial")
-public abstract class Employee extends Person implements Serializable {
+public abstract class Employee extends Person implements Remunerable, Serializable {
+	
+	public static final String FILE_NAME_PREFIX="data/registersPayRoll/Payroll_OfDate_";
+	public static final String EXTENSION = ".prl";
+	
 	//Domain constants of employee type
 	public static final char SELLER = 'S';
 	public static final char OPERATOR = 'O';
@@ -18,9 +22,11 @@ public abstract class Employee extends Person implements Serializable {
 	private Employee left;
 	private Employee right;
 	private LocalTime timeEntry;
+	private Settings settings;
 	
-	public Employee(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
+	public Employee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, Settings settings) {
 		super( id,  name,  lastName,  celphoneNumber,  address, photo);
+		this.settings=settings;
 	}
 
 	public void setTimeEntry(LocalTime timeEntry) {
@@ -82,5 +88,9 @@ public abstract class Employee extends Person implements Serializable {
 
 	public LocalTime getTimeEntry() {
 		return timeEntry;
+	}
+
+	public Settings getSettings() {
+		return settings;
 	}
 }

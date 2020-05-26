@@ -45,7 +45,7 @@ import model.*;
 public class EasyBusinessGUI {
 	//Constant
 	public static final String DEFAULT_PROFILE_PHOTO = "imgs/deafultProfile.jpg";
-	private static final String FILE_NAME_MODEL = "data/model.ser";
+	private static final String FILE_NAME_MODEL = "data/serials/model.srl";
 	//Relations--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
@@ -783,12 +783,11 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void charge(ActionEvent event) throws EmptyDataException, InsufficientBalanceException {
+    void charge(ActionEvent event) throws IOException{
     	try {
-    		String id= customerId.getText();
-        	Customer debtor=company.searchCustomer(id);
-        	company.charge(debtor.getId());
-    	}catch(EmptyDataException | InsufficientBalanceException e){
+        	company.charge(customerId.getText());
+        	initializeTableDebtor();
+    	}catch(InsufficientBalanceException | EmptyDataException e){
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
 			alert.setContentText(e.getMessage());
@@ -1115,7 +1114,7 @@ public class EasyBusinessGUI {
     	    	mainPane.setCenter(scene);
     	    	initializeTableDairyDrinks();
     		}
-		} catch (EmptyDataException | BuyerWithDebtException | InsufficientBalanceException e) {
+		} catch (EmptyDataException | BuyerWithDebtException | InsufficientBalanceException | SaleOfExpiredProductException e) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
 			alert.setContentText(e.getMessage());
@@ -1159,6 +1158,8 @@ public class EasyBusinessGUI {
 
     @FXML
     void predictUpcomingSales(ActionEvent event) {
+    	
+    	
     	//Heavy Algorithm
     	new Thread() {
     		@Override

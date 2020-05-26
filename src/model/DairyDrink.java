@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 @SuppressWarnings("serial")
-public class DairyDrink extends DairyProduct implements Comparable<DairyDrink>, Serializable{
+public class DairyDrink extends DairyProduct implements Comparable<DairyDrink>, Expirable, Serializable{
 
 	public static final char SMALL = 's';
 	public static final char MEDIAN = 'm';
@@ -57,5 +57,10 @@ public class DairyDrink extends DairyProduct implements Comparable<DairyDrink>, 
 
 	public void setSettings(Settings settings) {
 		this.settings = settings;
+	}
+
+	@Override
+	public boolean isExpired() {
+		return false;
 	}
 }

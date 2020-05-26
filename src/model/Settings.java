@@ -30,6 +30,17 @@ public class Settings implements Serializable {
 	private double varCostMedianOat;
 	private double varCostSmallOat;
 	
+	private double fixedCostSeller;
+	private double varCostSeller;
+	
+	private double fixedCostOperator;
+	private double varCostOperator;
+	
+	private double fixedCostDomiciliary;
+	private double varCostDomiciliary;
+	
+	private int daysForYoghurtExpire;
+	private int daysForOatExpire;
 	
 	
 	
@@ -51,10 +62,94 @@ public class Settings implements Serializable {
 		this.varCostBigOat = 13750;
 		this.varCostMedianOat = 5500;
 		this.varCostSmallOat = 2750;
+		
+		fixedCostSeller=25000;
+		varCostSeller=4000;
+		
+		fixedCostOperator=50000;
+		varCostOperator=8000;
+		
+		fixedCostDomiciliary=20000;
+		varCostDomiciliary=5000;
+		
+		daysForYoghurtExpire = 12;
+		daysForOatExpire = 13;
 	}
 	
 	
 	
+	public double getFixedCostSeller() {
+		return fixedCostSeller;
+	}
+
+
+
+	public void setFixedCostSeller(double fixedCostSeller) {
+		this.fixedCostSeller = fixedCostSeller;
+	}
+
+
+
+	public double getVarCostSeller() {
+		return varCostSeller;
+	}
+
+
+
+	public void setVarCostSeller(double varCostSeller) {
+		this.varCostSeller = varCostSeller;
+	}
+
+
+
+	public double getFixedCostOperator() {
+		return fixedCostOperator;
+	}
+
+
+
+	public void setFixedCostOperator(double fixedCostOperator) {
+		this.fixedCostOperator = fixedCostOperator;
+	}
+
+
+
+	public double getVarCostOperator() {
+		return varCostOperator;
+	}
+
+
+
+	public void setVarCostOperator(double varCostOperator) {
+		this.varCostOperator = varCostOperator;
+	}
+
+
+
+	public double getFixedCostDomiciliary() {
+		return fixedCostDomiciliary;
+	}
+
+
+
+	public void setFixedCostDomiciliary(double fixedCostDomiciliary) {
+		this.fixedCostDomiciliary = fixedCostDomiciliary;
+	}
+
+
+
+	public double getVarCostDomiciliary() {
+		return varCostDomiciliary;
+	}
+
+
+
+	public void setVarCostDomiciliary(double varCostDomiciliary) {
+		this.varCostDomiciliary = varCostDomiciliary;
+	}
+
+
+
 	public double getPriceBigYoghurt() {
 		return priceBigYoghurt;
 	}
@@ -320,5 +415,29 @@ public class Settings implements Serializable {
 			break;
 		}
 		return price;
+	}
+
+
+
+	public int getDaysForYoghurtExpire() {
+		return daysForYoghurtExpire;
+	}
+
+
+
+	public void setDaysForYoghurtExpire(int daysForYoghurtExpire) {
+		this.daysForYoghurtExpire = daysForYoghurtExpire;
+	}
+
+
+
+	public int getDaysForOatExpire() {
+		return daysForOatExpire;
+	}
+
+
+
+	public void setDaysForOatExpire(int daysForOatExpire) {
+		this.daysForOatExpire = daysForOatExpire;
 	}
 }

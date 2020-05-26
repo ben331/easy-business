@@ -2,9 +2,10 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 
 @SuppressWarnings("serial")
-public class Oat extends DairyDrink implements AnalyzableByCost, Expirable, Serializable {
+public class Oat extends DairyDrink implements AnalyzableByCost, Serializable {
 
 	private String typeOat;
 	
@@ -27,9 +28,9 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Expirable, Seri
 	}
 
 	@Override
-	public boolean isExpired(int days) {
-		
-		return false;
+	public boolean isExpired() {
+		LocalDate expiryDate = (LocalDate) Period.ofDays(getSettings().getDaysForOatExpire()).addTo(getPreparationDate());
+		return LocalDate.now().isAfter(expiryDate);
 	}
 
 	@Override

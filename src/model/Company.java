@@ -1,5 +1,8 @@
 package model;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -352,11 +355,17 @@ public class Company implements Serializable{
 		dairyProducts.add(d);
 	}
 	
-	public void sellProduct(String id, String c, boolean paid) throws EmptyDataException, BuyerWithDebtException, InsufficientBalanceException {
+	public void sellProduct(String id, String c, boolean paid) throws EmptyDataException, BuyerWithDebtException, InsufficientBalanceException, SaleOfExpiredProductException {
 		Customer customer = searchCustomer(id);
 		String detail;
 		int code = Integer.parseInt(c);
 		DairyProduct product = searchProduct(code);
+		
+		if(product instanceof DairyDrink) {
+			if(((DairyDrink) product).isExpired()) {
+				throw new SaleOfExpiredProductException(product.getCode());
+			};
+		}
 		
 		if(product instanceof Yoghurt) {
 			detail = product.getName()+" "+((Yoghurt) product).getFlavor();
@@ -420,23 +429,69 @@ public class Company implements Serializable{
 		return expiredProducts;
 	}
 	
-	public void charge(String id) throws EmptyDataException, InsufficientBalanceException {
-		Customer debtor = searchCustomer(id);
+	public void payPayroll() throws EmptyDataException, InsufficientBalanceException, IOException {
 		
-		double value=debtor.getDebtValue();
-		String detail=debtor.getName()+" paid";
-		
-		cashRegister.registerMoney(detail, value, false);
-		
-		deleteDebtor(debtor.getId());
-		debtor.setDebtValue(0);
+		if(employeesRoot!=null) {
+			
+			
+			String report = "\n---------------------------PAYMENT--PAYROLL---REPORT-----------------------------------\n\n\n";
+			report+=generateReport(employeesRoot);
+			BufferedWriter br = new BufferedWriter(new FileWriter(Employee.FILE_NAME_PREFIX+LocalDate.now()+Employee.EXTENSION));
+			br.write(report);
+			br.close();
+			
+			double totalPayRoll = payAndReset(employeesRoot);
+					
+			cashRegister.registerMoney("Payment PayRoll", totalPayRoll, true);
+		}
 	}
 	
-	public void deleteDebtor(String id) throws EmptyDataException {
+	public void charge(String id) throws EmptyDataException, InsufficientBalanceException {
+		Customer c = searchCustomer(id);
+		if(c.hasDebt()) {
+			
+			cashRegister.registerMoney(c.getName()+" Paid", c.getDebtValue(), false);
+			c.setDebtValue(0);
+			deleteDebtor(c);
+		}
+	}
+	
+	private String generateReport(Employee e) {
+		String report="";
+		if(e.getLeft()!=null) {
+			report = generateReport(e.getLeft());
+		}
+		
+		report += "\n Id: "+e.getId()+"        Name: "+e.getName()+"     Hours Worked: "+e.getHoursWorked()+ "    Salary: "+e.calculateSalary()+"\n";
+		
+		if(e.getRight()!=null) {
+			report += generateReport(e.getRight());
+		}
+		
+		return report;
+	};
+	
+	private double payAndReset(Employee nodo) {
+		double sum=0;
+		if(nodo!=null) {
+			if(nodo.getLeft()!=null) {
+				sum+=payAndReset(nodo.getLeft());
+			}
+			
+			sum+=nodo.calculateSalary();
+			nodo.setHoursWorked(0);
+			
+			if(nodo.getRight()!=null) {
+				sum+=payAndReset(nodo.getRight());
+			}
+		}
+		return sum;
+	}
+	
+	public void deleteDebtor(Customer debtor) throws EmptyDataException {
 		
 		//Case > 0
 		if(firstDebtor!=null) {
-			Customer debtor = searchCustomer(id);
 			//Case 1: list size: 1.
 			if(firstDebtor==firstDebtor.getNextCustomer()) {
 				firstDebtor=null;
@@ -552,70 +607,74 @@ public class Company implements Serializable{
 		Collections.sort(dairyDrinks, new DairyDrinkComparatorByDateAndFlavor());
 	}
 	
-	public void payPayroll() {
-		
-	}
-	
 	public String predictUpcomingSales() {
 		String report="";
 		
+		//If there are customers
 		if(firstCustomer!=null) {
 			Customer current = firstCustomer;
 			ArrayList<String[]> purchases = new ArrayList<String[]>();
+			
+			//Find probably purchase of every Customer
 			do {
 				purchases.add(purchasesForTheNextWeekOfCustomer(current));
 				current = current.getNextCustomer();
 			}while(current!=firstCustomer);
 			
-			if(purchases.size()!=0) {
-				ArrayList<String[]> categories = new ArrayList<String[]>();
-				categories.add(new String[] {"","0"});
+			ArrayList<String[]> categories = new ArrayList<String[]>();
+			categories.add(new String[] {"","0"});
+			
+			//Determine Categories of purchases
+			for(int i=0; i<purchases.size();i++) {
 				
-				//Determine Categories of purchases
-				for(int i=0; i<purchases.size();i++) {
-					for(int j=0; j<categories.size();i++) {
-						if(purchases.get(i)[0].equals(categories.get(j)[0])) {
-							int f1 = Integer.parseInt((categories.get(j)[1]));
-							int f2 = Integer.parseInt((purchases.get(i)[1]));
-							
-							categories.get(j)[1]=""+(f1+f2);
-							
-						}else {
-							categories.add(purchases.get(i));
-						}
-					}					
-				}
-				
-				categories.remove(0);
-				
-				//Determine the thow categories with most frecuency
-				String[] p1 = null;
-				String[] p2 = null;
-				int max=0;
-				int fi;
-				for(int i=0; i<categories.size();i++) {
-					fi=Integer.parseInt(categories.get(i)[1]);
-					if(fi>max) {
-						p1 = categories.get(i);
-						max = fi;
+				boolean categoryExists = false;
+				for(int j=0; j<categories.size() ;j++) {
+					if(purchases.get(i)[0].equals(categories.get(j)[0])) {
+						int f1 = Integer.parseInt((categories.get(j)[1]));
+						int f2 = Integer.parseInt((purchases.get(i)[1]));
+						
+						categories.get(j)[1]=""+(f1+f2);
+						
+						categoryExists = true;
+						
 					}
-				}
-				categories.remove(max);
+				}					
 				
-				max=0;
-				for(int i=0; i<categories.size();i++) {
-					fi=Integer.parseInt(categories.get(i)[1]);
-					if(fi>max) {
-						p2 = categories.get(i);
-						max = fi;
-					}
+				if(!categoryExists) {
+					categories.add(purchases.get(i));
 				}
-				
-				if(p1!=null) {
-					report+= p1[1]+" sales of product: "+ p1[0]+"\n\n";
-				}if(p2!=null) {
-					report+= p2[1]+" sales of product: "+ p2[0];
+			}
+			
+			//Remove base category
+			categories.remove(0);
+			
+			//Determine the thow categories with most frecuency
+			String[] p1 = null;
+			String[] p2 = null;
+			int max=0;
+			int fi;
+			for(int i=0; i<categories.size();i++) {
+				fi=Integer.parseInt(categories.get(i)[1]);
+				if(fi>max) {
+					p1 = categories.get(i);
+					max = fi;
 				}
+			}
+			categories.remove(p1);
+			
+			max=0;
+			for(int i=0; i<categories.size();i++) {
+				fi=Integer.parseInt(categories.get(i)[1]);
+				if(fi>max) {
+					p2 = categories.get(i);
+					max = fi;
+				}
+			}
+			
+			if(p1!=null) {
+				report+= p1[1]+" sales of product: "+ p1[0]+"\n\n";
+			}if(p2!=null) {
+				report+= p2[1]+" sales of product: "+ p2[0];
 			}
 		}
 		if(report.equals("")) {
@@ -627,70 +686,81 @@ public class Company implements Serializable{
 	}
 	
 	private String[] purchasesForTheNextWeekOfCustomer(Customer c) {
-		String purchase[] = new String[] {"","0"}; //The first item is the detail, and the second item is the frecuency
-		ArrayList<Period> intervals = new ArrayList<Period>();
+		String purchase[] = new String[] {"","0"}; //The first item is the detail, and the second item is the frecuency or number of products
+
+		//Determinate the intervals between every purchase
+		ArrayList<Period> intervals = new ArrayList<Period>();		
 		
+		//If the customer is a candidate for a regular customer. (Have purchases more than 10).
 		if(c.getPurchasesDates().size()>Customer.NUMBER_OF_PURCHASES_OF_REGULAR_CUSTOMER) {
+			
+			//Determinate every interval.
 			for(int i= 0; i<c.getPurchasesDates().size() - 1;i++) {
 				intervals.add(Period.between(c.getPurchasesDates().get(i), c.getPurchasesDates().get(i+1)));
 			}
-		}
-		
-		int averagePeriodInDays=0;
-		
-		for(int i=0; i<intervals.size();i++) {
-			averagePeriodInDays+=intervals.get(i).getDays();
-		}
-		
-		averagePeriodInDays = averagePeriodInDays / intervals.size();
-		Period averagePeriod = Period.ofDays(averagePeriodInDays);
-		
-		double standardDeviation=0;
-		
-		for(int i=0; i<intervals.size();i++) {
-			standardDeviation = Math.pow((averagePeriodInDays - intervals.get(i).getDays()), 2)/intervals.size();
-		}
-		
-		standardDeviation = Math.sqrt(standardDeviation);
-		
-		LocalDate aWeekLater =  (LocalDate) Period.ofWeeks(1).addTo(LocalDate.now());
-		LocalDate nextPurchase = (LocalDate) averagePeriod.addTo(LocalDate.now());
-		
-		//If the customer is regular, and it is probably he buy the next week
-		if(standardDeviation/averagePeriodInDays<0.20  && nextPurchase.isBefore(aWeekLater)) {
-			//Determine favorite purchase
-			ArrayList<String[]> categories = new ArrayList<String[]>();
-			categories.add(new String[] {"","0"});
 			
-			//Determine Categories of purchases
-			for(int i=0; i<c.getPurchasesDetail().size();i++) {
-				for(int j=0; j<categories.size();i++) {
-					if(c.getPurchasesDetail().get(i).equals(categories.get(j)[0])) {
-						int f1 = Integer.parseInt((categories.get(j)[1]));
-						
-						categories.get(j)[1]=""+(++f1);
-						
-					}else {
-						categories.add( new String[] {c.getPurchasesDetail().get(i), ""+1});
-					}
-				}					
+			
+			//Determinate average period between evry purchase.
+			int averagePeriodInDays=0;
+			for(int i=0; i<intervals.size();i++) {
+				averagePeriodInDays+=intervals.get(i).getDays();
 			}
+			averagePeriodInDays = averagePeriodInDays / intervals.size();
+			Period averagePeriod = Period.ofDays(averagePeriodInDays);
 			
-			categories.remove(0);
 			
-			//Determine categorie with most frecuency
-			int max=0;
-			int fi;
-			for(int i=0; i<categories.size();i++) {
-				fi=Integer.parseInt(categories.get(i)[1]);
-				if(fi>max) {
-					purchase = categories.get(i);
-					max = fi;
+			//Determinate standarDeviation of every purchase.
+			double standardDeviation=0;			
+			for(int i=0; i<intervals.size();i++) {
+				standardDeviation = Math.pow((averagePeriodInDays - intervals.get(i).getDays()), 2)/intervals.size();
+			}
+			standardDeviation = Math.sqrt(standardDeviation);
+			
+			
+			//Date of seven days later.
+			LocalDate aWeekLater =  (LocalDate) Period.ofWeeks(1).addTo(LocalDate.now());
+			//Next purchase is equals to the last purchase date plus the average period
+			LocalDate nextPurchase = (LocalDate) averagePeriod.addTo(c.getPurchasesDates().get(c.getPurchasesDates().size() -1));
+			
+			
+			//If the customer is regular, and it's probably he buy the next week
+			if(standardDeviation/averagePeriodInDays<0.20  && nextPurchase.isBefore(aWeekLater)) {
+				
+				//Determine favorite purchase
+				ArrayList<String[]> categories = new ArrayList<String[]>();
+				categories.add(new String[] {"","0"});
+				
+				//Determine Categories of purchases
+				for(int i=0; i<c.getPurchasesDetail().size();i++) {
+					for(int j=0; j<categories.size();i++) {
+						if(c.getPurchasesDetail().get(i).equals(categories.get(j)[0])) {
+							int f1 = Integer.parseInt((categories.get(j)[1]));
+							
+							categories.get(j)[1]=""+(++f1);
+							
+						}else {
+							categories.add( new String[] {c.getPurchasesDetail().get(i), ""+1});
+						}
+					}					
 				}
+				
+				categories.remove(0);
+				
+				//Determine categorie with most frecuency
+				int max=0;
+				int fi;
+				for(int i=0; i<categories.size();i++) {
+					fi=Integer.parseInt(categories.get(i)[1]);
+					if(fi>max) {
+						purchase = categories.get(i);  //This is the favorite purchase. ["detail", "#"].
+						max = fi;
+					}
+				}
+				
 			}
-			
 		}
 		
+		//If the customer is not a regular customer, he doesn't have favorite purchase. ["","0"]
 		return purchase;
 	}
 	
@@ -863,13 +933,13 @@ public class Company implements Serializable{
 		
 		switch(position) {
 		case Employee.SELLER:
-			employee = new Seller(id, name, lastName, celphoneNumber, address, photo);
+			employee = new Seller(id, name, lastName, celphoneNumber, address, photo, settings);
 			break;
 		case Employee.OPERATOR:
-			employee = new Operator(id, name, lastName, celphoneNumber, address, photo);
+			employee = new Operator(id, name, lastName, celphoneNumber, address, photo, settings);
 			break;
 		case Employee.DOMICILIARY:
-			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo);
+			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo, settings);
 			break;
 		default:
 			throw new Exception("Invalided position of employee");
@@ -912,7 +982,7 @@ public class Company implements Serializable{
 		int b1 = y.calculateBreakEvenPoint(gain);
 		int b2 = o.calculateBreakEvenPoint(gain);
 		
-		return "The minimun sales required to get a gain: "+gain+"is: \n "+b1+" Sales of median yoghurt(s) and, \n"+b2+" Sales of median oat(s) and, \n";
+		return "The minimun sales required to get a gain: "+gain+" is: \n "+b1+" Sales of median yoghurt(s) and, \n"+b2+" Sales of median oat(s).";
 	}
 	
 	

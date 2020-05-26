@@ -2,11 +2,12 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @SuppressWarnings("serial")
-public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable, Serializable{
+public class Yoghurt extends DairyDrink implements AnalyzableByCost, Serializable{
 	
 	public static final ArrayList<String> FLAVORS = new ArrayList<String>(Arrays.asList("Strawberry", "Blackberry", "Berries", "Lulo", "Passion fruit", "Mango", "Pineapple", "Peach", "Grape", "Arequipe", "Soursop", "Koumiss"));
 	
@@ -31,9 +32,9 @@ public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable, 
 	}
 
 	@Override
-	public boolean isExpired(int days) {
-		
-		return false;
+	public boolean isExpired() {
+		LocalDate expiryDate = (LocalDate) Period.ofDays(getSettings().getDaysForYoghurtExpire()).addTo(getPreparationDate());
+		return LocalDate.now().isAfter(expiryDate);
 	}
 
 	@Override
