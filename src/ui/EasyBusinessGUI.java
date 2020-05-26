@@ -400,13 +400,16 @@ public class EasyBusinessGUI {
     private TableColumn<Employee, String> positionColumn;
 
     @FXML
+    private TextField employeeName;
+
+    @FXML
     private TextField employeeId;
 
     @FXML
     private TextField employeeCel;
 
     @FXML
-    private TextField EmployeeAddress;
+    private TextField employeeAddress;
     
     @FXML
 	private TextField codeSell;
@@ -460,7 +463,12 @@ public class EasyBusinessGUI {
     
     @FXML
     void searchEmployee(ActionEvent event) {
-
+    	String id=employeeId.getText();
+    	Employee employee=company.searchEmployee(id);
+    	
+    	employeeCel.setText(employee.getCelphoneNumber());
+    	employeeAddress.setText(employee.getAddress());
+    	employeeName.setText(employee.getName());
     }
 
     //Main Scene Methods------------------------------------------------------------------------------------------------------------------
@@ -834,17 +842,61 @@ public class EasyBusinessGUI {
     //Active Employees Methods--------------------------------------------------------------------------------------------------------------------
     @FXML
     void checkOut(ActionEvent event) {
+    	String id=activeEId.getText();
+    	company.registerDeparture(id);
     	
+    	initializeActiveEmployees();
     }
     
     @FXML
-    void registerEntry(ActionEvent event) {
-
+    void registerEntry(ActionEvent event) throws Exception {
+    	try {
+    		if(photoForm.getText().equals("")) {
+    			throw new EmptyDataException("Photo");
+    		}
+    		
+    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
+    		
+    		char position;
+    		
+    		if(seller.isSelected()) {
+    			position = Employee.SELLER;
+    		}else if(operator.isSelected()) {
+    			position = Employee.OPERATOR;
+    		}else {
+    			position = Employee.DOMICILIARY;
+    		}
+    		
+    		company.registerEntry(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image, position);
+    		
+    		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Successfull Process");
+			alert.setContentText("Employee is register successfully");
+			alert.showAndWait();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
+	    	loader.setController(this);
+	    	Parent scene = loader.load();
+	    	mainPane.setCenter(scene);
+	    	initializeActiveEmployees();
+	    	
+			
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
     }
 
     @FXML
     void searchActiveE(ActionEvent event) {
-
+    	String id = activeEId.getText();
+    	Employee activeEmployee= company.searchActiveEmployee(id);
+    	
+    	employeeSelectedName.setText(activeEmployee.getName());
+    	hours.setText(""+activeEmployee.getHoursWorked());
+    	
     }
     
     //Inventary scene Methods---------------------------------------------------------------------------------------------------------------
@@ -1175,4 +1227,14 @@ public class EasyBusinessGUI {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("description"));
         dateProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("preparationDate"));
 	}
+    private void initializeActiveEmployees() {
+    	ObservableList<Employee> activeEmployees = FXCollections.observableArrayList(company.getActiveEmployeesRoot());
+    	activeETable.setItems(activeEmployees);
+    	idActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("id"));
+    	nameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("name"));
+    	lastnameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("lasName"));
+    	positionActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("position"));
+    	timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("timeEntry"));
+
+    }
 }

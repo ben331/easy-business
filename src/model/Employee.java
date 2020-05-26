@@ -63,4 +63,12 @@ public abstract class Employee extends Person  {
 		return position;
 	}
 	
+	public Employee getMin() {
+		Employee min = this;
+		while(min.getLeft()!=null) {
+				min=min.getLeft();
+		}
+		return min;
+	}
+	
 }
