@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import customException.EmptyDataException;
+import customException.InsufficientBalanceException;
 
 public class CashRegister {
  
@@ -35,7 +36,7 @@ public class CashRegister {
 		this.cash = cash;
 	}
 	
-	public void registerMoney(String d, double v, boolean e) throws EmptyDataException {
+	public void registerMoney(String d, double v, boolean e) throws EmptyDataException, InsufficientBalanceException {
 		
 		//Validations
 		if(d.equals(""))
@@ -48,6 +49,10 @@ public class CashRegister {
 		//If the register is an egress, then the value will be negative
 		if(e)
 			v = v*-1;
+		
+		if((cash + v) < 50000) {
+			throw new InsufficientBalanceException(v, cash);
+		}
 		
 		Register register = new Register(d, v, e, LocalTime.now());	
 		registers.add(register);

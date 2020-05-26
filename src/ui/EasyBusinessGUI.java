@@ -378,6 +378,9 @@ public class EasyBusinessGUI {
 
     @FXML
     private TextField EmployeeAddress;
+    
+    @FXML
+	private TextField codeSell;
         
     //Employee methods----------------------------------------------------------------------------------------------------------------
     @FXML
@@ -561,10 +564,27 @@ public class EasyBusinessGUI {
 
     @FXML
     void showDialogueToSell(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToSell.fxml"));
-    	loader.setController(this);
-    	Parent scene = loader.load();
-    	mainPane.setCenter(scene);
+    	try {
+    		int code = Integer.parseInt(codeToSell.getText());
+    		
+    		if(company.searchProduct(code)==null) {
+        		Alert alert = new Alert(AlertType.WARNING);
+        		alert.setTitle("Warning");
+        		alert.setContentText("Product not found");
+        		alert.showAndWait();
+        	}else {
+        		FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToSell.fxml"));
+            	loader.setController(this);
+            	Parent scene = loader.load();
+            	mainPane.setCenter(scene);
+            	codeSell.setText(code+"");
+        	}
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+    		alert.setTitle("Warning");
+    		alert.setContentText("Type a natural number");
+    		alert.showAndWait();
+    	}
     }
     
     @FXML
@@ -601,7 +621,7 @@ public class EasyBusinessGUI {
         	mainPane.setCenter(scene);
         	initializeTableCashRegister();
         	cash.setText(company.getCashRegister().getCash()+"");
-    	}catch(EmptyDataException | NumberFormatException e) {
+    	}catch(EmptyDataException | NumberFormatException | InsufficientBalanceException e) {
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
 			alert.setContentText(e.getMessage());
@@ -897,8 +917,33 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void sell(ActionEvent event) {
-
+    void sell(ActionEvent event) throws IOException {
+    	try {
+    		if(company.searchCustomer(customerBuyingId.getText())==null) {
+    			Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Customer not found");
+    			alert.showAndWait();
+    		}else {
+    			company.sellProduct(customerBuyingId.getText(), codeSell.getText(), paid.isSelected());
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Sale done successfully");
+    			alert.setContentText("Sale done successfully");
+    			alert.showAndWait();
+    			
+    			FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyDrinks.fxml"));
+    	    	loader.setController(this);
+    	    	Parent scene = loader.load();
+    	    	mainPane.setCenter(scene);
+    	    	initializeTableDairyDrinks();
+    		}
+		} catch (EmptyDataException | BuyerWithDebtException | InsufficientBalanceException e) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+			e.printStackTrace();
+		}
     }
     
     @FXML

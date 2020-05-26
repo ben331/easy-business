@@ -119,6 +119,30 @@ public class Company {
 		return customer;
 	}
 	
+	public void addDebtor(Customer newDebtor) {		
+		//Case: Empty list.
+		if(firstDebtor==null) {
+			firstDebtor=newDebtor;
+			firstDebtor.setNextCustomer(newDebtor);
+			firstDebtor.setPrevCustomer(newDebtor);
+		}
+		//Case: List with size: 1.
+		else if(firstDebtor == firstDebtor.getNextCustomer()){
+			firstDebtor.setNextCustomer(newDebtor);
+			firstDebtor.setPrevCustomer(newDebtor);
+			newDebtor.setNextCustomer(firstDebtor);
+			newDebtor.setPrevCustomer(firstDebtor);
+		}
+		//Case: List with size >= 2.
+		else {
+			Customer last = firstDebtor.getPrevCustomer();
+			last.setNextCustomer(newDebtor);
+			newDebtor.setPrevCustomer(last);
+			newDebtor.setNextCustomer(firstDebtor);
+			firstDebtor.setPrevCustomer(newDebtor);
+		}
+	}
+	
 	public void addCustomer(String id, String name, String lastName, String celphoneNumber, String address, Image photo) throws EmptyDataException, DoubleRegistrationException {
 		
 		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
@@ -288,28 +312,67 @@ public class Company {
 		
 	}
 	
-	public void sellProduct(String id, DairyProduct d, boolean paid) {
+	public void sellProduct(String id, String c, boolean paid) throws EmptyDataException, BuyerWithDebtException, InsufficientBalanceException {
+		Customer customer = searchCustomer(id);
+		String detail;
+		int code = Integer.parseInt(c);
+		DairyProduct product = searchProduct(code);
+		
+		if(product instanceof Yoghurt) {
+			detail = product.getName()+" "+((Yoghurt) product).getFlavor();
+		}else if(product instanceof Oat) {
+			detail = product.getName()+" "+((Oat) product).getTypeOat();
+		}else {
+			detail = product.getName();
+		}
+		
+		if(paid) {
+			cashRegister.registerMoney(customer.getName()+" paid", product.getSalePrice(), false);
+		}else {
+			addDebtor(customer);
+			customer.setDebtValue(product.getSalePrice());
+		}
+		
+		customer.getPurchasesDetail().add(detail);
+		customer.getPurchasesDates().add(LocalDate.now());
+		
+		discardProduct(code);
+		
 		
 	}
 	
-	public boolean discardProduct(int code) {
-		boolean removed=false;
+	public DairyProduct searchProduct(int code) {
+		DairyProduct product=null;
+		boolean found = false;
 		if(dairyDrinks!=null) {
-			for(int i=0;i<dairyDrinks.size() && !removed;i++) {
+			for(int i=0;i<dairyDrinks.size() && !found;i++) {
 				if(code==dairyDrinks.get(i).getCode()) {
-					dairyDrinks.remove(dairyDrinks.get(i));
-					removed=true;
+					product = dairyDrinks.get(i);
+					found = true;
 				}
 			}
-		}if(dairyProducts!=null && !removed) {
-			for(int i=0;i<dairyProducts.size() && !removed;i++) {
+		}if(dairyProducts!=null && !found) {
+			for(int i=0;i<dairyProducts.size() && !found;i++) {
 				if(code==dairyProducts.get(i).getCode()) {
-					dairyProducts.remove(dairyProducts.get(i));
-					removed=true;
+					product = dairyProducts.get(i);
+					found = true;
 				}
 			}
 		}
-		return removed;
+		return product;
+	}
+	
+	public boolean discardProduct(int code) {
+		DairyProduct product = searchProduct(code);
+		if(product !=null) {
+			dairyDrinks.remove(product);
+			dairyProducts.remove(product);
+		}
+		return product !=null;
+	}
+	
+	public DairyProduct searchProduct(String code) {
+		return null;
 	}
 	
 	public ArrayList<DairyProduct> searchExpiredProducts(){
@@ -317,7 +380,7 @@ public class Company {
 		return expiredProducts;
 	}
 	
-	public void charge(String id) throws EmptyDataException {
+	public void charge(String id) throws EmptyDataException, InsufficientBalanceException {
 		Customer debtor = searchCustomer(id);
 		
 		double value=debtor.getDebtValue();
@@ -352,7 +415,7 @@ public class Company {
 				prev.setNextCustomer(next);
 				next.setPrevCustomer(prev);
 				if(debtor==firstDebtor) {
-					firstCustomer=debtor.getNextCustomer();
+					firstDebtor=debtor.getNextCustomer();
 				}
 			}
 		}
@@ -497,4 +560,5 @@ public class Company {
 		}
 		return lastCode + 1;
 	}
+
 }

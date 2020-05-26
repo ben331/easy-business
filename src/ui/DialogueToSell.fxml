@@ -13,6 +13,6 @@
       <TextField fx:id="customerBuyingId" layoutX="105.0" layoutY="71.0" />
       <Button layoutX="109.0" layoutY="127.0" mnemonicParsing="false" onAction="#sell" prefHeight="25.0" prefWidth="110.0" text="Sell" />
       <Label layoutX="22.0" layoutY="42.0" text="Product Code:" />
-      <TextField fx:id="codeToSell" editable="false" layoutX="105.0" layoutY="38.0" />
+      <TextField fx:id="codeSell" editable="false" layoutX="105.0" layoutY="38.0" />
    </children>
 </Pane>
