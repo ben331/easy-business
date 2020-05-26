@@ -465,10 +465,18 @@ public class EasyBusinessGUI {
     void searchEmployee(ActionEvent event) {
     	String id=employeeId.getText();
     	Employee employee=company.searchEmployee(id);
+    	if(employee==null) {
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setContentText("Employee not found");
+			alert.showAndWait();
+    	}else {
+    		employeeCel.setText(employee.getCelphoneNumber());
+        	employeeAddress.setText(employee.getAddress());
+        	employeeName.setText(employee.getName());
+        	employeeImg.setImage(employee.getPhoto());
+    	}
     	
-    	employeeCel.setText(employee.getCelphoneNumber());
-    	employeeAddress.setText(employee.getAddress());
-    	employeeName.setText(employee.getName());
     }
 
     //Main Scene Methods------------------------------------------------------------------------------------------------------------------
@@ -790,6 +798,7 @@ public class EasyBusinessGUI {
         	Customer debtor=company.searchCustomer(id);
         	customerFullName.setText(debtor.getName());
         	debt.setText(""+debtor.getDebtValue());
+        	customerImg.setImage(debtor.getPhoto());
     	}catch(EmptyDataException e) {
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
@@ -1122,16 +1131,21 @@ public class EasyBusinessGUI {
     	    		double g = Double.parseDouble(gain.getText());
     	    		String m = company.determineBalancePoints(g);
     	    		
-    	    		Alert alert = new Alert(AlertType.INFORMATION);
-    				alert.setTitle("Sales Required");
-    				alert.setContentText(m);
-    				alert.showAndWait();
+    	    		Platform.runLater( new Thread() {
+    	    			public void run() {
+    	    				report.setText(m);
+    	    			}
+    	    		});
     				
     	    	}catch(NumberFormatException e) {
-    	    		Alert alert = new Alert(AlertType.WARNING);
-    				alert.setTitle("Warning");
-    				alert.setContentText("Type a positive real number in the field: gain");
-    				alert.showAndWait();
+    	    		Platform.runLater( new Thread() {
+    	    			public void run() {
+    	    				Alert alert = new Alert(AlertType.WARNING);
+    	    				alert.setTitle("Warning");
+    	    				alert.setContentText("Type a positive real number in the field: gain");
+    	    				alert.showAndWait();
+    	    			}
+    	    		});	    		
     	    	}
     		}
     	}.start();
@@ -1240,13 +1254,13 @@ public class EasyBusinessGUI {
     }
 
     private void initializeTableDebtor() {
-    	ObservableList<Customer> debtors = FXCollections.observableArrayList(company.getCustomers());
+    	ObservableList<Customer> debtors = FXCollections.observableArrayList(company.getDebtors());
     	 debtorTable.setItems(debtors);
     	 idDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("id"));
     	 nameDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("name"));
     	 lastnameDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastName"));
     	 debtColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("debt"));
-    	 dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lasDate"));
+    	 dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastDate"));
     }
     
     private void initializeTableDairyProducts() {

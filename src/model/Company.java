@@ -107,6 +107,18 @@ public class Company implements Serializable{
 		return customers;
 	}
 	
+	public List<Customer> getDebtors(){
+		List<Customer> debtors = new ArrayList<Customer>();
+		if(firstDebtor!=null) {
+			Customer current = firstDebtor;
+			do {
+				debtors.add(current);
+				current=current.getNextCustomer();
+			}while(current!=firstDebtor);
+		}
+		return debtors;
+	}
+	
 	//Analyzer methods-----------------------------------------------------------------------------------------------------------------
 	
 	//Customer Methods-----------------------------------------------------------------------------------------------------------------
@@ -821,15 +833,15 @@ public class Company implements Serializable{
 	
 	private Employee searchEmployee(Employee nodo, String id) {
 		if(nodo!=null) {
-			if(nodo.getName().compareTo(id)<0) {
+			if(nodo.getId().compareTo(id)<0) {
 				return searchEmployee(nodo.getRight(), id);
-			}else if(nodo.getName().compareTo(id)>0) {
+			}else if(nodo.getId().compareTo(id)>0) {
 				return searchEmployee(nodo.getLeft(), id);
 			}else {
 				return nodo;
 			}
 		}else {
-			return nodo=null;
+			return null;
 		}
 	}
 	
@@ -889,7 +901,7 @@ public class Company implements Serializable{
 	}
 	
 	public String determineBalancePoints(double gain) {
-		if(gain<=0){
+		if(gain<0){
 			throw new NumberFormatException();
 		}
 		Yoghurt y = new Yoghurt(0, "", LocalDate.now(), DairyDrink.MEDIAN, DairyDrink.NORMAL, settings, "");
