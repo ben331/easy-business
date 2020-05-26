@@ -304,6 +304,15 @@ public class EasyBusinessGUI {
 
     @FXML
     private TableColumn<Customer, String> dateCustomerColumn;
+    
+    @FXML
+    private RadioButton radioName;
+
+    @FXML
+    private RadioButton radioDebt;
+
+    @FXML
+    private RadioButton radioPurchaseDate;
 
     @FXML
     private ImageView customerImg;
@@ -334,19 +343,19 @@ public class EasyBusinessGUI {
     private ToggleGroup sortingDebtors;
 
     @FXML
-    private TableView<?> debtorTable;
+    private TableView<Customer> debtorTable;
 
     @FXML
-    private TableColumn<?, ?> idDebtorColumn;
+    private TableColumn<Customer, String> idDebtorColumn;
 
     @FXML
-    private TableColumn<?, ?> nameDebtorColumn;
+    private TableColumn<Customer, String> nameDebtorColumn;
 
     @FXML
-    private TableColumn<?, ?> lastnameDebtorColumn;
+    private TableColumn<Customer, String> lastnameDebtorColumn;
 
     @FXML
-    private TableColumn<?, ?> debtColumn;
+    private TableColumn<Customer, String> debtColumn;
     
     //Employees scene fields-----------------------------------------------------------------------------------------------------------
     @FXML
@@ -696,13 +705,34 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void charge(ActionEvent event) {
-
+    void charge(ActionEvent event) throws EmptyDataException, InsufficientBalanceException {
+    	try {
+    		String id= customerId.getText();
+        	Customer debtor=company.searchCustomer(id);
+        	company.charge(debtor.getId());
+    	}catch(EmptyDataException | InsufficientBalanceException e){
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
+    	
     }
 
     @FXML
-    void searchDebtor(ActionEvent event) {
-
+    void searchDebtor(ActionEvent event) throws EmptyDataException {
+    	try {
+    		String id= customerId.getText();
+        	Customer debtor=company.searchCustomer(id);
+        	customerFullName.setText(debtor.getName());
+        	debt.setText(""+debtor.getDebtValue());
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
+    	
     }
     
     @FXML
@@ -730,7 +760,14 @@ public class EasyBusinessGUI {
 
     @FXML
     void sortDebtors(ActionEvent event) {
-
+    	if(radioName.isSelected()) {
+    		company.sortByName();
+    	}else if(radioDebt.isSelected()) {
+    		company.sortByDebt();
+    	}else {
+    		company.sortByDate();
+    	}
+    	initializeTableDebtor(); 
     }
 
     @FXML
@@ -994,6 +1031,16 @@ public class EasyBusinessGUI {
 
     }
 
+    private void initializeTableDebtor() {
+    	ObservableList<Customer> debtors = FXCollections.observableArrayList(company.getCustomers());
+    	 debtorTable.setItems(debtors);
+    	 idDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("id"));
+    	 nameDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("name"));
+    	 lastnameDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastName"));
+    	 debtColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("debt"));
+    	 dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lasDate"));
+    }
+    
     private void initializeTableDairyProducts() {
 
 	}
