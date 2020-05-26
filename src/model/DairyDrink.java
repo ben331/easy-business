@@ -9,13 +9,15 @@ public class DairyDrink extends DairyProduct implements Comparable<DairyDrink>{
 	public static final char LOW = 'l';
 	public static final char NORMAL = 'n';
 	
+	private Settings settings;
 	private char size;
 	private char sugarLevel;
 	
-	public DairyDrink(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel) {
-		super(code,  name,  salePrice,  preparationDate);
+	public DairyDrink(int code, String name, LocalDate preparationDate, char size, char sugarLevel, Settings settings) {
+		super(code, name, 0, preparationDate);
 		this.size=size;
 		this.sugarLevel=sugarLevel;
+		this.setSettings(settings);
 	}
 
 	public char getSize() {
@@ -46,7 +48,12 @@ public class DairyDrink extends DairyProduct implements Comparable<DairyDrink>{
 		}
 		return difference;
 	}
-	
-	
 
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
 }

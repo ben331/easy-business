@@ -282,15 +282,15 @@ public class Company {
 		String initialCode = code+"";
 		String finalCode = (code + numberOfYoghurts -1)+"";
 		for(int i=0; i<numberOfYoghurts; i++) {
-			addYoghurt(code, "Yoghurt", settings.getPriceYoghurt(), LocalDate.now(), size, suggar,flavor );
+			addYoghurt(code, "Yoghurt", LocalDate.now(), size, suggar,flavor );
 			code++;
 		}
 		
 		return "The codes generated are between "+initialCode+" and "+ finalCode+".\n\nRemember assign the code to each Yoghurt";
 	}
 	
-	public void addYoghurt(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
-		Yoghurt yoghurt = new Yoghurt(code,  name,  salePrice,  preparationDate,  size,  sugarLevel,  flavor);
+	public void addYoghurt(int code, String name, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
+		Yoghurt yoghurt = new Yoghurt(code,  name, preparationDate,  size,  sugarLevel, settings, flavor);
 		dairyDrinks.add(yoghurt);
 	}
 	
@@ -302,15 +302,15 @@ public class Company {
 		String initialCode = code+"";
 		String finalCode = (code + numberOfOats)+"";
 		for(int i=0; i<numberOfOats; i++) {
-			addOat(code, "Avena", settings.getPriceYoghurt(), LocalDate.now(), size, suggar,typeOat );
+			addOat(code, "Avena", LocalDate.now(), size, suggar,typeOat );
 			code++;
 		}
 		
 		return "The codes generated are between "+initialCode+" and "+ finalCode+"\nRemember assign the code to each Oat";
 	}
 	
-	public void addOat(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String typeOat) {
-		Oat oat = new Oat( code,  name,  salePrice,  preparationDate,  size, sugarLevel, typeOat);
+	public void addOat(int code, String name, LocalDate preparationDate, char size, char sugarLevel, String typeOat) {
+		Oat oat = new Oat( code,  name, preparationDate,  size, sugarLevel, settings, typeOat);
 		dairyDrinks.add(oat);
 	}
 	
@@ -534,19 +534,18 @@ public class Company {
 		Collections.sort(dairyDrinks, new DairyDrinkComparatorByDateAndFlavor());
 	}
 	
-	public void saveRegisters() {
-		
-	}
-	
-	public void collectMoney(String c) {
-		
-	}
-	
 	public void payPayroll() {
 		
 	}
 	
 	public void predictUpcomingSales() {
+		if(firstCustomer!=null) {
+			Customer current = firstCustomer;
+			do {
+				
+				current = current.getNextCustomer();
+			}while(current!=firstCustomer);
+		}
 		
 	}
 	
@@ -633,8 +632,16 @@ public class Company {
 	}
 	
 	public String determineBalancePoints(double gain) {
-		String report="";
-		return report;
+		if(gain<=0){
+			throw new NumberFormatException();
+		}
+		Yoghurt y = new Yoghurt(0, "", LocalDate.now(), DairyDrink.MEDIAN, DairyDrink.NORMAL, settings, "");
+		Oat o = new Oat(0, "", LocalDate.now(), DairyDrink.MEDIAN, DairyDrink.NORMAL, settings, "");
+		
+		int b1 = y.calculateBreakEvenPoint(gain);
+		int b2 = o.calculateBreakEvenPoint(gain);
+		
+		return "The minimun sales required to get a gain: "+gain+"is: \n "+b1+" Sales of median yoghurt(s) and, \n"+b2+" Sales of median oat(s) and, \n";
 	}
 	
 	

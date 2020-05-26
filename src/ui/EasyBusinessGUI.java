@@ -831,11 +831,6 @@ public class EasyBusinessGUI {
     	}
     }
     
-    @FXML
-    void browse(ActionEvent event) {
-
-    }
-    
     //Active Employees Methods--------------------------------------------------------------------------------------------------------------------
     @FXML
     void checkOut(ActionEvent event) {
@@ -1043,25 +1038,44 @@ public class EasyBusinessGUI {
 			e.printStackTrace();
 		}
     }
-    
-    @FXML
-    void sellProduct(ActionEvent event) throws IOException {
-    }
-    
-    @FXML
-    void discardProduct(ActionEvent event) {
-
-    }
+ 
     
     //Analysis scene Methods-----------------------------------------------------------------------------------------------------------------
     @FXML
     void getSalesRequired(ActionEvent event) {
-
+    	
+    	//Heavy Algorithm
+    	new Thread() {
+    		@Override
+    		public void run() {
+    			try {
+    	    		double g = Double.parseDouble(gain.getText());
+    	    		String m = company.determineBalancePoints(g);
+    	    		
+    	    		Alert alert = new Alert(AlertType.INFORMATION);
+    				alert.setTitle("Sales Required");
+    				alert.setContentText(m);
+    				alert.showAndWait();
+    				
+    	    	}catch(NumberFormatException e) {
+    	    		Alert alert = new Alert(AlertType.WARNING);
+    				alert.setTitle("Warning");
+    				alert.setContentText("Type a positive real number in the field: gain");
+    				alert.showAndWait();
+    	    	}
+    		}
+    	}.start();
     }
 
     @FXML
     void predictUpcomingSales(ActionEvent event) {
-
+    	//Heavy Algorithm
+    	new Thread() {
+    		@Override
+    		public void run() {
+    			
+    		}
+    	}.start();
     }
     //Setting methods-----------------------------------------------------------------------------------------------------------------
     
@@ -1069,15 +1083,18 @@ public class EasyBusinessGUI {
     void addNewProduct(ActionEvent event) throws IOException {
     	try {
     		company.getSettings().addDairyProduct(nameProduct.getText(), salePrice.getText(), description.getText());
+    		
     		Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Added successfully");
 			alert.setContentText("New product added successfully");
 			alert.showAndWait();
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyProducts.fxml"));
 	    	loader.setController(this);
 	    	Parent scene = loader.load();
 	    	mainPane.setCenter(scene);
 	    	initializeTableDairyProducts();
+	    	
     	}catch(NumberFormatException e) {
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");

@@ -10,13 +10,18 @@ public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable{
 	
 	private String flavor;
 	
-	public Yoghurt(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
-		super(code,  name,  salePrice,  preparationDate, size, sugarLevel);
+	public Yoghurt(int code, String name, LocalDate preparationDate, char size, char sugarLevel, Settings settings, String flavor) {
+		super(code,  name,   preparationDate, size, sugarLevel, settings);
 		this.flavor=flavor;
 	}
 
 	public String getFlavor() {
 		return flavor;
+	}
+	
+	@Override
+	public double getSalePrice() {
+		return getSettings().getYoghurtPrice(getSize());
 	}
 
 	public void setFlavor(String flavor) {
@@ -30,8 +35,9 @@ public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable{
 	}
 
 	@Override
-	public void calculateBreakEvenPoint() {
-		
+	public int calculateBreakEvenPoint(double gain) {
+		int breakEvenPoint = (int) ((getSettings().getFixedCostYoghurt()+gain) / (getSalePrice() - getSettings().getVarCostYoghurt(getSize())));
+		return breakEvenPoint;
 	}
 	
 	@Override

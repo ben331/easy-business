@@ -6,8 +6,8 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Expirable {
 
 	private String typeOat;
 	
-	public Oat(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String typeOat) {
-		super(code,  name,  salePrice,  preparationDate, size, sugarLevel);
+	public Oat(int code, String name, LocalDate preparationDate, char size, char sugarLevel, Settings settings, String typeOat) {
+		super(code,  name,    preparationDate, size, sugarLevel, settings);
 		this.typeOat=typeOat;
 	}
 
@@ -18,6 +18,11 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Expirable {
 	public void setTypeOat(String typeOat) {
 		this.typeOat = typeOat;
 	}
+	
+	@Override
+	public double getSalePrice() {
+		return getSettings().getOatPrice(getSize());
+	}
 
 	@Override
 	public boolean isExpired(int days) {
@@ -26,7 +31,8 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Expirable {
 	}
 
 	@Override
-	public void calculateBreakEvenPoint() {
-		
+	public int calculateBreakEvenPoint(double gain) {
+		int breakEvenPoint = (int) ((getSettings().getFixedCostOat() + gain)/ (getSalePrice() - getSettings().getVarCostOat(getSize())));
+		return breakEvenPoint;
 	}
 }
