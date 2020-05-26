@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 
 public class Customer extends Person{
-
+	
+	public static final int NUMBER_OF_PURCHASES_OF_REGULAR_CUSTOMER = 10;
 	private Customer nextCustomer;
 	private Customer prevCustomer;
 	private double debtValue;

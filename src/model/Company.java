@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -538,15 +539,142 @@ public class Company {
 		
 	}
 	
-	public void predictUpcomingSales() {
+	public String predictUpcomingSales() {
+		String report="";
+		
 		if(firstCustomer!=null) {
 			Customer current = firstCustomer;
+			ArrayList<String[]> purchases = new ArrayList<String[]>();
 			do {
-				
+				purchases.add(purchasesForTheNextWeekOfCustomer(current));
 				current = current.getNextCustomer();
 			}while(current!=firstCustomer);
+			
+			if(purchases.size()!=0) {
+				ArrayList<String[]> categories = new ArrayList<String[]>();
+				categories.add(new String[] {"","0"});
+				
+				//Determine Categories of purchases
+				for(int i=0; i<purchases.size();i++) {
+					for(int j=0; j<categories.size();i++) {
+						if(purchases.get(i)[0].equals(categories.get(j)[0])) {
+							int f1 = Integer.parseInt((categories.get(j)[1]));
+							int f2 = Integer.parseInt((purchases.get(i)[1]));
+							
+							categories.get(j)[1]=""+(f1+f2);
+							
+						}else {
+							categories.add(purchases.get(i));
+						}
+					}					
+				}
+				
+				categories.remove(0);
+				
+				//Determine the thow categories with most frecuency
+				String[] p1 = null;
+				String[] p2 = null;
+				int max=0;
+				int fi;
+				for(int i=0; i<categories.size();i++) {
+					fi=Integer.parseInt(categories.get(i)[1]);
+					if(fi>max) {
+						p1 = categories.get(i);
+						max = fi;
+					}
+				}
+				categories.remove(max);
+				
+				max=0;
+				for(int i=0; i<categories.size();i++) {
+					fi=Integer.parseInt(categories.get(i)[1]);
+					if(fi>max) {
+						p2 = categories.get(i);
+						max = fi;
+					}
+				}
+				
+				if(p1!=null) {
+					report+= p1[1]+" sales of product: "+ p1[0]+"\n\n";
+				}if(p2!=null) {
+					report+= p2[1]+" sales of product: "+ p2[0];
+				}
+			}
+		}
+		if(report.equals("")) {
+			report = "None";
 		}
 		
+		report= "The most likely sales for the next week are: \n"+report;
+		return report;
+	}
+	
+	private String[] purchasesForTheNextWeekOfCustomer(Customer c) {
+		String purchase[] = new String[] {"","0"}; //The first item is the detail, and the second item is the frecuency
+		ArrayList<Period> intervals = new ArrayList<Period>();
+		
+		if(c.getPurchasesDates().size()>Customer.NUMBER_OF_PURCHASES_OF_REGULAR_CUSTOMER) {
+			for(int i= 0; i<c.getPurchasesDates().size() - 1;i++) {
+				intervals.add(Period.between(c.getPurchasesDates().get(i), c.getPurchasesDates().get(i+1)));
+			}
+		}
+		
+		int averagePeriodInDays=0;
+		
+		for(int i=0; i<intervals.size();i++) {
+			averagePeriodInDays+=intervals.get(i).getDays();
+		}
+		
+		averagePeriodInDays = averagePeriodInDays / intervals.size();
+		Period averagePeriod = Period.ofDays(averagePeriodInDays);
+		
+		double standardDeviation=0;
+		
+		for(int i=0; i<intervals.size();i++) {
+			standardDeviation = Math.pow((averagePeriodInDays - intervals.get(i).getDays()), 2)/intervals.size();
+		}
+		
+		standardDeviation = Math.sqrt(standardDeviation);
+		
+		LocalDate aWeekLater =  (LocalDate) Period.ofWeeks(1).addTo(LocalDate.now());
+		LocalDate nextPurchase = (LocalDate) averagePeriod.addTo(LocalDate.now());
+		
+		//If the customer is regular, and it is probably he buy the next week
+		if(standardDeviation/averagePeriodInDays<0.20  && nextPurchase.isBefore(aWeekLater)) {
+			//Determine favorite purchase
+			ArrayList<String[]> categories = new ArrayList<String[]>();
+			categories.add(new String[] {"","0"});
+			
+			//Determine Categories of purchases
+			for(int i=0; i<c.getPurchasesDetail().size();i++) {
+				for(int j=0; j<categories.size();i++) {
+					if(c.getPurchasesDetail().get(i).equals(categories.get(j)[0])) {
+						int f1 = Integer.parseInt((categories.get(j)[1]));
+						
+						categories.get(j)[1]=""+(++f1);
+						
+					}else {
+						categories.add( new String[] {c.getPurchasesDetail().get(i), ""+1});
+					}
+				}					
+			}
+			
+			categories.remove(0);
+			
+			//Determine categorie with most frecuency
+			int max=0;
+			int fi;
+			for(int i=0; i<categories.size();i++) {
+				fi=Integer.parseInt(categories.get(i)[1]);
+				if(fi>max) {
+					purchase = categories.get(i);
+					max = fi;
+				}
+			}
+			
+		}
+		
+		return purchase;
 	}
 	
 	public void registerEntry(String id) {
