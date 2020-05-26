@@ -317,16 +317,56 @@ public class Company {
 		return expiredProducts;
 	}
 	
-	
-	
-	public Customer searchDebtor(String id) {
-		Customer debtor = null;
-		return debtor;
+	public Customer searchDebtor(String id) throws EmptyDataException {
+		if(id==null || id.equals("")) {
+			throw new EmptyDataException("id");
+		}
+		Customer deptorCustomer=null;
+		Customer current = firstDebtor;
+		if(firstDebtor!=null) {
+			do {
+				current = current.getNextCustomer();
+			}while(current!=firstDebtor && !current.getId().equals(id));
+			if(current.getId().equals(id)) {
+				deptorCustomer = current;
+			}
+		}
+		return deptorCustomer;
+	}
+	public void charge(String id) throws EmptyDataException {
+		Customer debtor = searchDebtor(id);
+		
+		double value=debtor.getDebtValue();
+		String detail="the deptor"+debtor.getName()+"is paying the debt";
+		boolean e =false;
+		
+		cashRegister.registerMoney(detail, value, e);
+		
+		deleteDebtor(debtor.getId());
+		debtor.setDebtValue(0);
 	}
 	
-	public Employee searchEmployee(String id) {
-		Employee employee = null;
-		return employee;
+	public void deleteDebtor(String id) throws EmptyDataException {
+		if(firstDebtor!=null) {
+			Customer debtor = searchDebtor(id);
+			
+			if(firstDebtor==firstDebtor.getNextCustomer()) {
+				firstDebtor=null;
+			}else if(debtor.getNextCustomer().getNextCustomer()==debtor) {
+				firstDebtor=debtor.getNextCustomer();
+				firstDebtor.setNextCustomer(null);
+				firstDebtor.setPrevCustomer(null);
+			}else {
+				Customer prev=debtor.getPrevCustomer();
+				Customer next=debtor.getNextCustomer();
+				
+				prev.setNextCustomer(next);
+				next.setPrevCustomer(prev);
+				if(debtor==firstDebtor) {
+					firstCustomer=debtor.getNextCustomer();
+				}
+			}
+		}
 	}
 	
 	public ArrayList<Register> searchRegisterOfDate(LocalDate date){
@@ -345,8 +385,6 @@ public class Company {
 	public void sortPByDateAndFlavor() {
 		
 	}
-	
-	
 	
 	public void saveRegisters() {
 		
@@ -371,9 +409,12 @@ public class Company {
 	public void registerDeparture(String id) {
 		
 	}
-	
-	
 
+	public Employee searchEmployee(String id) {
+		Employee employee = employeesRoot;
+		return employee;
+	}
+	
 	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, char position) throws Exception {
 		
 		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
@@ -427,10 +468,6 @@ public class Company {
 		}else {
 			employeesRoot=employee;
 		}
-	}
-	
-	public void addNewProduct(String c, String n, double sp, LocalDate	pd) {
-		
 	}
 	
 	public String determineBalancePoints(double gain) {
