@@ -420,7 +420,65 @@ public class Company {
 			}
 		}
 	}
+	public void sortByName() {
+		if(firstDebtor!=null) {
+			boolean thereWasSwap=true;
+			
+			while(thereWasSwap) {
+				Customer current = firstDebtor;
+				thereWasSwap=false;
+				
+				//Case: list >=2
+				while(current.getNextCustomer()!=firstDebtor) {
+					if(current.getNextCustomer().compareTo(current)<0) {
+						swap(current, current.getNextCustomer());
+						thereWasSwap = true;
+					}
+					current=current.getNextCustomer();
+				}
+			}
+		}
+	}
 	
+	public void sortByDebt() {
+		if(firstDebtor!=null) {
+			boolean thereWasSwap=true;
+			
+			while(thereWasSwap) {
+				Customer current = firstDebtor;
+				thereWasSwap=false;
+				
+				//Case: list >=2
+				while(current.getNextCustomer()!=firstDebtor) {
+					if(current.getNextCustomer().compareToDebt(current)<0) {
+						swap(current, current.getNextCustomer());
+						thereWasSwap = true;
+					}
+					current=current.getNextCustomer();
+				}
+			}
+		}
+	}
+	
+	public void sortByDate() {
+		if(firstDebtor!=null) {
+			boolean thereWasSwap=true;
+			
+			while(thereWasSwap) {
+				Customer current = firstDebtor;
+				thereWasSwap=false;
+				
+				//Case: list >=2
+				while(current.getNextCustomer()!=firstDebtor) {
+					if(current.getNextCustomer().compareByDate(current)<0) {
+						swap(current, current.getNextCustomer());
+						thereWasSwap = true;
+					}
+					current=current.getNextCustomer();
+				}
+			}
+		}
+	}
 	public ArrayList<Register> searchRegisterOfDate(LocalDate date){
 		ArrayList<Register> registers = null;
 		return registers;

@@ -22,8 +22,7 @@
           <TableColumn fx:id="nameDebtorColumn" prefWidth="120.0" text="Name" />
             <TableColumn fx:id="lastnameDebtorColumn" prefWidth="120.0" text="Last name" />
             <TableColumn fx:id="debtColumn" prefWidth="122.0" text="Debt" />
-            <TableColumn fx:id="dateCustomerColumn" prefWidth="124.0" text="Purchase Date" />
-            <TableColumn fx:id="dateCustomerColumn1" prefWidth="124.0" text="Purchase Date" />
+            <TableColumn fx:id="dateDebtPurchaseDate" prefWidth="124.0" text="Purchase Date" />
         </columns>
       </TableView>
    </center>
@@ -50,13 +49,13 @@
                         <Font name="System Italic" size="20.0" />
                      </font>
                   </Label>
-                  <RadioButton layoutX="26.0" layoutY="76.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="173.0" selected="true" text="Name and lastname">
+                  <RadioButton fx:id="radioName" layoutX="26.0" layoutY="76.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="173.0" selected="true" text="Name">
                      <toggleGroup>
                         <ToggleGroup fx:id="sortingDebtors" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton layoutX="25.0" layoutY="101.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="169.0" text="Debt" toggleGroup="$sortingDebtors" />
-                  <RadioButton layoutX="26.0" layoutY="126.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="178.0" text="Date of last purchase" toggleGroup="$sortingDebtors" />
+                  <RadioButton fx:id="radioDebt" layoutX="25.0" layoutY="101.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="169.0" text="Debt" toggleGroup="$sortingDebtors" />
+                  <RadioButton fx:id="radioPurchaseDate" layoutX="26.0" layoutY="126.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="178.0" text="Date of last purchase" toggleGroup="$sortingDebtors" />
                </children>
             </Pane>
             <Button mnemonicParsing="false" onAction="#sortDebtors" prefHeight="30.0" prefWidth="90.0" text="Sort" />

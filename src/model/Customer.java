@@ -52,6 +52,11 @@ public class Customer extends Person{
 		
 		return difference;
 	}
+	
+	public int compareToDebt(Customer p) {
+		return (int)(p.getDebtValue()*100-this.debtValue*100);
+		
+	}
 
 	public ArrayList<LocalDate> getPurchasesDates() {
 		return purchasesDates;
