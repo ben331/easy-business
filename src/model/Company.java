@@ -23,12 +23,15 @@ public class Company {
 	
 	private Customer firstCustomer;
 	
+	private Settings settings;
+	
 	
 	//Constructor----------------------------------------------------------------------------------------------------------------------
 	public Company() {
 		cashRegister = new CashRegister();
 		dairyProducts = new ArrayList<DairyProduct>();
 		dairyDrinks = new ArrayList<DairyDrink>();
+		settings = new Settings();
 	}
 	
 	
@@ -244,13 +247,39 @@ public class Company {
 		
 	}
 	
+	public String addYoghurts(int numberOfYoghurts, char size, char suggar, String flavor) throws EmptyDataException {
+		int code = searchLastCode();
+		String initialCode = code+"";
+		String finalCode = (code + numberOfYoghurts -1)+"";
+		for(int i=0; i<numberOfYoghurts; i++) {
+			addYoghurt(code, "Yoghurt", settings.getPriceYoghurt(), LocalDate.now(), size, suggar,flavor );
+			code++;
+		}
+		
+		return "The codes generated are between "+initialCode+" and "+ finalCode+".\n\nRemember assign the code to each Yoghurt";
+	}
 	
-	public void addYoghurts(String code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
+	public void addYoghurt(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String flavor) {
 		Yoghurt yoghurt = new Yoghurt(code,  name,  salePrice,  preparationDate,  size,  sugarLevel,  flavor);
 		dairyDrinks.add(yoghurt);
 	}
 	
-	public void addOats(String code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String typeOat) {
+	public String addOats(int numberOfOats, char size, char suggar, String typeOat) throws EmptyDataException {
+		if(typeOat.equals("")) {
+			throw new EmptyDataException("Type Oat");
+		}
+		int code = searchLastCode();
+		String initialCode = code+"";
+		String finalCode = (code + numberOfOats)+"";
+		for(int i=0; i<numberOfOats; i++) {
+			addOat(code, "Avena", settings.getPriceYoghurt(), LocalDate.now(), size, suggar,typeOat );
+			code++;
+		}
+		
+		return "The codes generated are between "+initialCode+" and "+ finalCode+"\nRemember assign the code to each Oat";
+	}
+	
+	public void addOat(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel, String typeOat) {
 		Oat oat = new Oat( code,  name,  salePrice,  preparationDate,  size, sugarLevel, typeOat);
 		dairyDrinks.add(oat);
 	}
@@ -263,18 +292,18 @@ public class Company {
 		
 	}
 	
-	public boolean discardProduct(String code) {
+	public boolean discardProduct(int code) {
 		boolean removed=false;
 		if(dairyDrinks!=null) {
 			for(int i=0;i<dairyDrinks.size() && !removed;i++) {
-				if(code.equals(dairyDrinks.get(i).getCode())) {
+				if(code==dairyDrinks.get(i).getCode()) {
 					dairyDrinks.remove(dairyDrinks.get(i));
 					removed=true;
 				}
 			}
 		}if(dairyProducts!=null && !removed) {
 			for(int i=0;i<dairyProducts.size() && !removed;i++) {
-				if(code.equals(dairyProducts.get(i).getCode())) {
+				if(code==dairyProducts.get(i).getCode()) {
 					dairyProducts.remove(dairyProducts.get(i));
 					removed=true;
 				}
@@ -425,5 +454,21 @@ public class Company {
 			fields+="Address ";
 		}
 		return fields;
-	}	
+	}
+	
+	public int searchLastCode() {
+		int lastCode = 0;
+		for(int i=0; i<dairyDrinks.size();i++) {
+			if(dairyDrinks.get(i).getCode()>lastCode) {
+				lastCode = dairyDrinks.get(i).getCode();
+			}
+		}
+		
+		for(int i=0; i<dairyProducts.size();i++) {
+			if(dairyProducts.get(i).getCode()>lastCode) {
+				lastCode = dairyProducts.get(i).getCode();
+			}
+		}
+		return lastCode + 1;
+	}
 }

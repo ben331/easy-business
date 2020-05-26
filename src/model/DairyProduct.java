@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 public class DairyProduct {
 
-	private String code;
+	private int code;
 	private String name;
 	private double salePrice;
 	private LocalDate preparationDate;
 	
-	public DairyProduct(String code, String name, double salePrice, LocalDate preparationDate) {
+	public DairyProduct(int code, String name, double salePrice, LocalDate preparationDate) {
 		super();
 		this.code = code;
 		this.name = name;
@@ -17,8 +17,12 @@ public class DairyProduct {
 		this.preparationDate = preparationDate;
 	}
 
-	public String getCode() {
+	public int getCode() {
 		return code;
+	}
+	
+	public Integer getCode1() {
+		return new Integer(code);
 	}
 
 	public String getName() {
@@ -33,7 +37,7 @@ public class DairyProduct {
 		return preparationDate;
 	}
 
-	public void setCode(String code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 

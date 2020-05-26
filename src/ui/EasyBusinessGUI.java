@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -105,7 +106,7 @@ public class EasyBusinessGUI {
     private TableColumn<DairyDrink, String> drinkColumn;
 
     @FXML
-    private TableColumn<DairyDrink, String> codeColumn;
+    private TableColumn<DairyDrink, Integer> codeColumn;
     
     @FXML
     private TableColumn<DairyDrink, String> flavorColumn;
@@ -168,13 +169,28 @@ public class EasyBusinessGUI {
     private TextField among;
 
     @FXML
+    private RadioButton radBig;
+    
+    @FXML
+    private RadioButton radMedian;
+    
+    @FXML
+    private RadioButton radSmall;
+    
+    @FXML
+    private RadioButton radNormal;
+    
+    @FXML
+    private RadioButton radLow;
+    
+    @FXML
     private Button addYoghurts;
 
     @FXML
     private ToggleGroup size;
 
     @FXML
-    private MenuButton flavorMenu;
+    private ChoiceBox<String> flavorMenu;
 
     @FXML
     private ToggleGroup suggar;
@@ -479,6 +495,7 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeTableDairyDrinks();
     }
 
     @FXML
@@ -487,9 +504,11 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeTableDairyProducts();
     }
 
-    @FXML
+
+	@FXML
     void showDebtors(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("Debtors.fxml"));
     	loader.setController(this);
@@ -533,6 +552,8 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	ObservableList<String> flavors = FXCollections.observableArrayList(Yoghurt.FLAVORS);
+    	flavorMenu.setItems(flavors);;
     }
 
     @FXML
@@ -770,8 +791,96 @@ public class EasyBusinessGUI {
     }
 
     @FXML
-    void addOats(ActionEvent event) {
-
+    void addOats(ActionEvent event) throws IOException {
+    	try {
+    		int numberOfOats = Integer.parseInt(among.getText());
+    		char size;
+    		char suggar;
+    		String typeOat;
+    		
+    		if(radBig.isSelected()) {
+    			size = DairyDrink.BIG;
+    		}else if(radMedian.isSelected()) {
+    			size = DairyDrink.MEDIAN;
+    		}else {
+    			size = DairyDrink.SMALL;
+    		}
+    		
+    		if(radNormal.isSelected()) {
+    			suggar = DairyDrink.NORMAL;
+    		}else {
+    			suggar = DairyDrink.LOW;
+    		}
+    		
+    		typeOat = this.typeOat.getText();
+    		
+    		String confirmation= company.addOats(numberOfOats, size, suggar, typeOat);
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyDrinks.fxml"));
+        	loader.setController(this);
+        	Parent scene = loader.load();
+        	mainPane.setCenter(scene);
+        	initializeTableDairyDrinks();
+        	Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Dairys Added successfully");
+			alert.setContentText(confirmation);
+			alert.showAndWait();	
+    	}catch(NumberFormatException | EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Please, type a natural number");
+			alert.showAndWait();
+    	}
+    	
+    }
+    
+    @FXML
+    void addYoghurts(ActionEvent event) throws IOException {
+    	try {
+    		int numberOfYoghurts = Integer.parseInt(among.getText());
+    		char size;
+    		char suggar;
+    		String flavor;
+    		
+    		if(radBig.isSelected()) {
+    			size = DairyDrink.BIG;
+    		}else if(radMedian.isSelected()) {
+    			size = DairyDrink.MEDIAN;
+    		}else {
+    			size = DairyDrink.SMALL;
+    		}
+    		
+    		if(radNormal.isSelected()) {
+    			suggar = DairyDrink.NORMAL;
+    		}else {
+    			suggar = DairyDrink.LOW;
+    		}
+    		if(flavorMenu.getSelectionModel().getSelectedItem()==null) {
+    			throw new EmptyDataException("Flavor");
+    		}
+    		flavor = flavorMenu.getSelectionModel().getSelectedItem().toString();
+    		
+    		String confirmation= company.addYoghurts(numberOfYoghurts, size, suggar, flavor);
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyDrinks.fxml"));
+        	loader.setController(this);
+        	Parent scene = loader.load();
+        	mainPane.setCenter(scene);
+        	initializeTableDairyDrinks();
+        	Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Dairys Added successfully");
+			alert.setContentText(confirmation);
+			alert.showAndWait();	
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Please, type a natural number");
+			alert.showAndWait();
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+    	}
+    	
     }
     
     @FXML
@@ -840,17 +949,17 @@ public class EasyBusinessGUI {
     	dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("dateCustomer")); 
     }
     
-    private void initializeTableDairyProducts() {
-    	ObservableList<DairyDrink> dairyProducts = FXCollections.observableArrayList(company.getDairyDrink());
-    	dairyDrinksTable.setItems(dairyProducts);
+    private void initializeTableDairyDrinks() {
+    	ObservableList<DairyDrink> dairyDrinks = FXCollections.observableArrayList(company.getDairyDrink());
+    	dairyDrinksTable.setItems(dairyDrinks);
     	
-    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("drink"));
-    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("code"));
+    	drinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("name"));
+    	codeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, Integer>("code1"));
     	flavorColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("flavor"));
     	sizeColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("size"));
-    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("suggar"));
+    	suggarColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("sugarLevel"));
     	typeOatColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("typeOat"));
-    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("dateDrin"));
+    	dateDrinkColumn.setCellValueFactory(new PropertyValueFactory<DairyDrink, String>("preparationDate"));
     }
     
     private void initializeTableCashRegister() {
@@ -862,4 +971,8 @@ public class EasyBusinessGUI {
     	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("time"));
 
     }
+
+    private void initializeTableDairyProducts() {
+
+	}
 }

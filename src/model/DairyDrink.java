@@ -13,7 +13,7 @@ public class DairyDrink extends DairyProduct {
 	private char size;
 	private char sugarLevel;
 	
-	public DairyDrink(String code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel) {
+	public DairyDrink(int code, String name, double salePrice, LocalDate preparationDate, char size, char sugarLevel) {
 		super(code,  name,  salePrice,  preparationDate);
 		this.size=size;
 		this.sugarLevel=sugarLevel;

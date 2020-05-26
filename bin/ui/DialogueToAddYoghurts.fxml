@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -14,27 +13,22 @@
       <Label layoutX="26.0" layoutY="18.0" prefHeight="17.0" prefWidth="65.0" text="Quantity" />
       <Label layoutX="30.0" layoutY="84.0" text="Size" />
       <TextField fx:id="among" layoutX="100.0" layoutY="14.0" onAction="#quantityYoghurts" />
-      <Button fx:id="addYoghurts" layoutX="93.0" layoutY="306.0" mnemonicParsing="false" onAction="#toRegister" prefHeight="38.0" prefWidth="69.0" text="Add" />
-      <RadioButton layoutX="100.0" layoutY="68.0" mnemonicParsing="false" text="Big">
+      <Button layoutX="93.0" layoutY="306.0" mnemonicParsing="false" onAction="#addYoghurts" prefHeight="38.0" prefWidth="69.0" text="Add" />
+      <RadioButton fx:id="radBig" layoutX="100.0" layoutY="68.0" mnemonicParsing="false" text="Big">
          <toggleGroup>
             <ToggleGroup fx:id="size" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="100.0" layoutY="94.0" mnemonicParsing="false" selected="true" text="Median" toggleGroup="$size" />
-      <RadioButton layoutX="100.0" layoutY="124.0" mnemonicParsing="false" text="Small" toggleGroup="$size" />
+      <RadioButton fx:id="radMedian" layoutX="100.0" layoutY="94.0" mnemonicParsing="false" selected="true" text="Median" toggleGroup="$size" />
+      <RadioButton fx:id="radSmall" layoutX="100.0" layoutY="124.0" mnemonicParsing="false" text="Small" toggleGroup="$size" />
       <Label layoutX="29.0" layoutY="259.0" text="Flavor" />
-      <MenuButton fx:id="flavorMenu" layoutX="90.0" layoutY="255.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" text="select flavor">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-      </MenuButton>
       <Label layoutX="32.0" layoutY="188.0" text="Suggar" />
-      <RadioButton layoutX="91.0" layoutY="179.0" mnemonicParsing="false" selected="true" text="Normal">
+      <RadioButton fx:id="radNormal" layoutX="91.0" layoutY="179.0" mnemonicParsing="false" selected="true" text="Normal">
          <toggleGroup>
             <ToggleGroup fx:id="suggar" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="91.0" layoutY="205.0" mnemonicParsing="false" text="Low" toggleGroup="$suggar" />
+      <RadioButton fx:id="radLow" layoutX="91.0" layoutY="205.0" mnemonicParsing="false" text="Low" toggleGroup="$suggar" />
+      <ChoiceBox fx:id="flavorMenu" layoutX="77.0" layoutY="255.0" prefWidth="150.0" />
    </children>
 </Pane>

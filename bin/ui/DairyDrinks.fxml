@@ -5,6 +5,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -18,11 +19,11 @@
       <TableView fx:id="dairyDrinksTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="drinkColumn" prefWidth="100.0" text="Drink" />
-          <TableColumn fx:id="codeColumn" prefWidth="113.0" text="Code" />
-            <TableColumn fx:id="flavorColumn" prefWidth="94.0" text="Flavor" />
-            <TableColumn fx:id="sizeColumn" prefWidth="61.0" text="Size" />
-            <TableColumn fx:id="suggarColumn" prefWidth="90.0" text="Suggar" />
-            <TableColumn fx:id="typeOatColumn" prefWidth="99.0" text="Type Oat" />
+          <TableColumn fx:id="codeColumn" prefWidth="104.0" text="Code" />
+            <TableColumn fx:id="flavorColumn" prefWidth="83.0" text="Flavor" />
+            <TableColumn fx:id="sizeColumn" prefWidth="81.0" text="Size" />
+            <TableColumn fx:id="suggarColumn" prefWidth="96.0" text="Suggar" />
+            <TableColumn fx:id="typeOatColumn" prefWidth="93.0" text="Type Oat" />
             <TableColumn fx:id="dateDrinkColumn" prefWidth="100.0" text="Date" />
         </columns>
       </TableView>
@@ -37,7 +38,7 @@
                         <Font name="System Italic" size="20.0" />
                      </font>
                   </Label>
-                  <RadioButton layoutX="23.0" layoutY="75.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="173.0" text="By flavor and size">
+                  <RadioButton layoutX="23.0" layoutY="75.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="173.0" selected="true" text="By flavor and size">
                      <toggleGroup>
                         <ToggleGroup fx:id="Sorting" />
                      </toggleGroup>
@@ -48,6 +49,8 @@
                </children>
             </Pane>
             <ImageView fx:id="drinkImg" fitHeight="150.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true" />
+            <Label text="Code:" />
+            <TextField fx:id="codeToSell" prefHeight="25.0" prefWidth="130.0" />
             <Label prefHeight="23.0" prefWidth="26.0" />
             <Button mnemonicParsing="false" onAction="#showDialogueToSell" prefHeight="29.0" prefWidth="72.0" text="Sell" />
             <Label prefHeight="25.0" prefWidth="28.0" />
