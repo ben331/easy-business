@@ -677,14 +677,148 @@ public class Company {
 		return purchase;
 	}
 	
-	public void registerEntry(String id) {
+	public void registerEntry(String id, String name, String lastName, String celphoneNumber, String address, Image photo, char position) throws Exception {
+		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
 		
+		if(!emptyData.equals("")) {
+			throw new EmptyDataException(emptyData);
+		}
+		
+		if(searchEmployee(id)!=null) {
+			throw new DoubleRegistrationException(id, "Employees");
+		}
+		
+		Employee employee=null;
+		
+		switch(position) {
+		case Employee.SELLER:
+			employee = new Seller(id, name, lastName, celphoneNumber, address, photo);
+			break;
+		case Employee.OPERATOR:
+			employee = new Operator(id, name, lastName, celphoneNumber, address, photo);
+			break;
+		case Employee.DOMICILIARY:
+			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo);
+			break;
+		default:
+			throw new Exception("Invalided position of employee");
+		}
+		Employee current = activeEmployeesRoot;
+		boolean wasAdded=false;
+		
+		if(activeEmployeesRoot!=null) {
+			while(!wasAdded) {
+				if(current.compareTo(employee)<0) {
+					if(current.getLeft()==null) {
+						current.setLeft(employee);
+						employee.setHead(current);
+						wasAdded=true;
+					}else {
+						current=current.getLeft();
+					}
+				}else {
+					if(current.getRight()==null) {
+						current.setRight(employee);
+						employee.setHead(current);
+						wasAdded=true;
+					}else {
+						current=current.getRight();
+					}
+				}
+			}
+		}else {
+			activeEmployeesRoot=employee;
+		}
 	}
 	
-	public void registerDeparture(String id) {
-		
+	public Employee searchActiveEmployee(String id) {
+		searchActiveEmployee(activeEmployeesRoot, id);
+		return searchActiveEmployee(id);
 	}
-
+	
+	private Employee searchActiveEmployee(Employee nodo, String id) {
+		if(nodo!=null) {
+			if(nodo.getName().compareTo(id)<0) {
+				return searchActiveEmployee(nodo.getRight(), id);
+			}else if(nodo.getName().compareTo(id)>0) {
+				return searchActiveEmployee(nodo.getLeft(), id);
+			}else {
+				return nodo;
+			}
+		}else {
+			return nodo=null;
+		}
+	}
+	
+	public boolean registerDeparture(String id) {
+		
+		Employee nodo=searchActiveEmployee(id);
+		if(nodo==null) {
+			return false;
+		}else if(nodo.getLeft()==null | nodo.getRight()==null) {      //Delete element with one child
+			if(nodo==activeEmployeesRoot) {
+				if(nodo.getLeft()!=null) {
+					nodo.getLeft().setHead(null);
+					activeEmployeesRoot=nodo.getLeft();
+				}else {
+					nodo.getRight().setHead(null);
+					activeEmployeesRoot=nodo.getRight();
+				}
+			}else {
+				if(nodo.getLeft()!=null) {
+					nodo.getLeft().setHead(nodo.getHead());
+					if(nodo.getHead().getLeft()==nodo) {
+						nodo.getHead().setLeft(nodo.getLeft());
+					}else {
+						nodo.getHead().setRight(nodo.getLeft());
+					}					
+				}else {
+					nodo.getRight().setHead(nodo.getHead());
+					if(nodo.getHead().getLeft()==nodo) {
+						nodo.getHead().setLeft(nodo.getRight());
+					}else {
+						nodo.getHead().setRight(nodo.getRight());
+					}
+				}				
+			}
+			return true;
+			
+			
+		}else if(nodo.getLeft()==null && nodo.getRight()==null) {     //Delete sheet
+			if(nodo==activeEmployeesRoot) {
+				activeEmployeesRoot=null;
+			}else {
+				if(nodo.getHead().getLeft()==nodo) {
+					nodo.getHead().setLeft(null);
+				}else {
+					nodo.getHead().setRight(null);
+				}
+			}
+			return true;
+			
+			
+		}else {				                                             //Delete element with both children
+			Employee min = nodo.getRight().getMin();
+			registerDeparture(min);
+			min.setHead(nodo.getHead());
+			min.setRight(nodo.getRight());
+			min.setLeft(nodo.getLeft());
+			nodo.getLeft().setHead(min);
+			if(nodo.getRight()!=null) {
+				nodo.getRight().setHead(min);
+			}
+			if(nodo==activeEmployeesRoot) {
+				activeEmployeesRoot=min;
+			}else {
+				if(nodo.getHead().getLeft()==nodo) {
+					nodo.getHead().setLeft(min);
+				}else {
+					nodo.getHead().setRight(min);
+				}
+			}
+			return true;
+		}
+	}
 	public Employee searchEmployee(String id) {
 		searchEmployee(employeesRoot, id);
 		return searchEmployee(id);
