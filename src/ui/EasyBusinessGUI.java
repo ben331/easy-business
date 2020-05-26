@@ -7,7 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import customException.*;
 import javafx.application.Platform;
@@ -240,7 +242,7 @@ public class EasyBusinessGUI {
     private TableColumn<Employee, String> positionActiveEColumn;
 
     @FXML
-    private TableColumn<Employee, String> timeEntryColumn;
+    private TableColumn<Employee, LocalTime> timeEntryColumn;
 
     @FXML
     private ImageView employeeImg;
@@ -497,13 +499,17 @@ public class EasyBusinessGUI {
     	oos.close();
 	}
 	
-	public void loadData() throws ClassNotFoundException {
+	public void loadData() throws ClassNotFoundException, IOException {
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(new FileInputStream(FILE_NAME_MODEL));
 			company = (Company)(ois.readObject());
 			ois.close();
-		} catch (IOException e) {
+		} catch (FileNotFoundException e) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Welcome");
+			alert.setContentText("Welcome to Easy Business \n Follow the instrutions");
+			alert.showAndWait();
 		}
 		
 	}
@@ -870,7 +876,15 @@ public class EasyBusinessGUI {
     @FXML
     void checkOut(ActionEvent event) {
     	String id=activeEId.getText();
-    	company.registerDeparture(id);
+    	Employee e = company.searchActiveEmployee(id);
+    	if(company.registerDeparture(id)) {
+    		Duration d = Duration.between(e.getTimeEntry(), LocalTime.now());
+    		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Successfull Process");
+			alert.setContentText("Employee went out. \nHours Worked: "+d.toHours()+" hours.");
+			alert.showAndWait();
+	    	initializeActiveEmployees();
+    	}
     	
     	initializeActiveEmployees();
     }
@@ -878,37 +892,21 @@ public class EasyBusinessGUI {
     @FXML
     void registerEntry(ActionEvent event) throws Exception {
     	try {
-    		if(photoForm.getText().equals("")) {
-    			throw new EmptyDataException("Photo");
-    		}
     		
-    		Image image = new Image(new File(photoForm.getText()).toURI().toString());
-    		
-    		char position;
-    		
-    		if(seller.isSelected()) {
-    			position = Employee.SELLER;
-    		}else if(operator.isSelected()) {
-    			position = Employee.OPERATOR;
+    		if(company.registerEntry(activeEId.getText())) {
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Successfull Process");
+    			alert.setContentText("Employee was registered successfully");
+    			alert.showAndWait();
+    	    	initializeActiveEmployees();
     		}else {
-    			position = Employee.DOMICILIARY;
+    			Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Employee not faound");
+    			alert.showAndWait();
     		}
-    		
-    		company.registerEntry(idForm.getText(), nameForm.getText(), lastnameForm.getText(), celNumberForm.getText(), addressForm.getText(), image, position);
-    		
-    		Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Successfull Process");
-			alert.setContentText("Employee is register successfully");
-			alert.showAndWait();
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Employees.fxml"));
-	    	loader.setController(this);
-	    	Parent scene = loader.load();
-	    	mainPane.setCenter(scene);
-	    	initializeActiveEmployees();
-	    	
-			
-    	}catch(EmptyDataException e) {
+    	}catch(EmptyDataException | DoubleRegistrationException e) {
     		Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setContentText(e.getMessage());
@@ -919,10 +917,18 @@ public class EasyBusinessGUI {
     @FXML
     void searchActiveE(ActionEvent event) {
     	String id = activeEId.getText();
-    	Employee activeEmployee= company.searchActiveEmployee(id);
+    	Employee activeEmployee= company.searchEmployee(id);
     	
-    	employeeSelectedName.setText(activeEmployee.getName());
-    	hours.setText(""+activeEmployee.getHoursWorked());
+    	if(activeEmployee !=null) {
+    		activeEName.setText(activeEmployee.getName());
+    		employeeImg.setImage(activeEmployee.getPhoto());
+        	hours.setText(""+activeEmployee.getHoursWorked());
+    	}else {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Employee not found");
+			alert.showAndWait();
+    	}
     	
     }
     
@@ -1262,7 +1268,6 @@ public class EasyBusinessGUI {
     	 debtColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("debt"));
     	 dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastDate"));
     }
-    
     private void initializeTableDairyProducts() {
     	ObservableList<DairyProduct> dairyProducts = FXCollections.observableArrayList(company.getDairyProducts());
     	dairyProductsTable.setItems(dairyProducts);;
@@ -1272,13 +1277,13 @@ public class EasyBusinessGUI {
         dateProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("preparationDate"));
 	}
     private void initializeActiveEmployees() {
-    	ObservableList<Employee> activeEmployees = FXCollections.observableArrayList(company.getActiveEmployeesRoot());
+    	ObservableList<Employee> activeEmployees = FXCollections.observableArrayList(company.getActiveEmployees());
     	activeETable.setItems(activeEmployees);
     	idActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("id"));
     	nameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("name"));
-    	lastnameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("lasName"));
+    	lastnameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("lastName"));
     	positionActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("position"));
-    	timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("timeEntry"));
+    	timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee,LocalTime>("timeEntry"));
 
     }
 }

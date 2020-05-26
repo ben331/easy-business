@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 import javafx.scene.image.Image;
 
@@ -16,9 +17,14 @@ public abstract class Employee extends Person implements Serializable {
 	private Employee head;
 	private Employee left;
 	private Employee right;
+	private LocalTime timeEntry;
 	
 	public Employee(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
 		super( id,  name,  lastName,  celphoneNumber,  address, photo);
+	}
+
+	public void setTimeEntry(LocalTime timeEntry) {
+		this.timeEntry = timeEntry;
 	}
 
 	public int getHoursWorked() {
@@ -73,5 +79,8 @@ public abstract class Employee extends Person implements Serializable {
 		}
 		return min;
 	}
-	
+
+	public LocalTime getTimeEntry() {
+		return timeEntry;
+	}
 }

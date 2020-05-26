@@ -12,7 +12,7 @@ public abstract class Person implements Comparable<Person>, Serializable{
 	private String lastName;
 	private String celphoneNumber;
 	private String address;
-	private Image photo;
+	private transient Image photo;
 	
 	public Person(String id, String name, String lastName, String celphoneNumber, String address, Image photo) {
 		super();

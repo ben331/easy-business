@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,8 +10,9 @@ import java.util.List;
 import customException.*;
 import javafx.scene.image.Image;
 
-@SuppressWarnings("serial")
 public class Company implements Serializable{
+	
+	private static final long serialVersionUID = 42L;
 	
 	//Attributes
 	private CashRegister cashRegister;
@@ -81,6 +83,14 @@ public class Company implements Serializable{
 		List<Employee> employees = new ArrayList<Employee>();
 		if(employeesRoot!=null) {
 			BSTtoListInOrder(employeesRoot, employees);
+		}
+		return employees;
+	}
+	
+	public List<Employee> getActiveEmployees(){
+		List<Employee> employees = new ArrayList<Employee>();
+		if(activeEmployeesRoot!=null) {
+			BSTtoListInOrder(activeEmployeesRoot, employees);
 		}
 		return employees;
 	}
@@ -684,147 +694,139 @@ public class Company implements Serializable{
 		return purchase;
 	}
 	
-	public void registerEntry(String id, String name, String lastName, String celphoneNumber, String address, Image photo, char position) throws Exception {
-		String emptyData=verifyFields(id, name, lastName, celphoneNumber, address);
+	public boolean registerEntry(String e) throws Exception {
+		boolean registered=false;
 		
-		if(!emptyData.equals("")) {
-			throw new EmptyDataException(emptyData);
+		if(e.equals("")) {
+			throw new EmptyDataException("Id");
 		}
 		
-		if(searchEmployee(id)!=null) {
-			throw new DoubleRegistrationException(id, "Employees");
+		if(searchActiveEmployee(e)!=null) {
+			throw new DoubleRegistrationException(e, "Actives Employees");
 		}
 		
-		Employee employee=null;
+		Employee employee=searchEmployee(e);
 		
-		switch(position) {
-		case Employee.SELLER:
-			employee = new Seller(id, name, lastName, celphoneNumber, address, photo);
-			break;
-		case Employee.OPERATOR:
-			employee = new Operator(id, name, lastName, celphoneNumber, address, photo);
-			break;
-		case Employee.DOMICILIARY:
-			employee = new Domiciliary(id, name, lastName, celphoneNumber, address, photo);
-			break;
-		default:
-			throw new Exception("Invalided position of employee");
-		}
-		Employee current = activeEmployeesRoot;
-		boolean wasAdded=false;
-		
-		if(activeEmployeesRoot!=null) {
-			while(!wasAdded) {
-				if(current.compareTo(employee)<0) {
-					if(current.getLeft()==null) {
-						current.setLeft(employee);
-						employee.setHead(current);
-						wasAdded=true;
+		if(employee!=null) {
+			Employee current = activeEmployeesRoot;
+			boolean wasAdded=false;
+			
+			if(activeEmployeesRoot!=null) {
+				while(!wasAdded) {
+					if(current.compareTo(employee)<0) {
+						if(current.getLeft()==null) {
+							current.setLeft(employee);
+							employee.setHead(current);
+							wasAdded=true;
+						}else {
+							current=current.getLeft();
+						}
 					}else {
-						current=current.getLeft();
-					}
-				}else {
-					if(current.getRight()==null) {
-						current.setRight(employee);
-						employee.setHead(current);
-						wasAdded=true;
-					}else {
-						current=current.getRight();
+						if(current.getRight()==null) {
+							current.setRight(employee);
+							employee.setHead(current);
+							wasAdded=true;
+						}else {
+							current=current.getRight();
+						}
 					}
 				}
+			}else {
+				activeEmployeesRoot=employee;
 			}
-		}else {
-			activeEmployeesRoot=employee;
+			employee.setTimeEntry(LocalTime.now());
+			registered = true;
 		}
+		return registered;
 	}
 	
 	public Employee searchActiveEmployee(String id) {
-		searchActiveEmployee(activeEmployeesRoot, id);
-		return searchActiveEmployee(id);
+		return searchActiveEmployee(activeEmployeesRoot, id);
 	}
 	
 	private Employee searchActiveEmployee(Employee nodo, String id) {
 		if(nodo!=null) {
-			if(nodo.getName().compareTo(id)<0) {
+			if(nodo.getId().compareTo(id)<0) {
 				return searchActiveEmployee(nodo.getRight(), id);
-			}else if(nodo.getName().compareTo(id)>0) {
+			}else if(nodo.getId().compareTo(id)>0) {
 				return searchActiveEmployee(nodo.getLeft(), id);
 			}else {
 				return nodo;
 			}
 		}else {
-			return nodo=null;
+			return null;
 		}
 	}
 	
 	public boolean registerDeparture(String id) {
 		
 		Employee nodo=searchActiveEmployee(id);
-		if(nodo==null) {
-			return false;
-		}else if(nodo.getLeft()==null | nodo.getRight()==null) {      //Delete element with one child
-			if(nodo==activeEmployeesRoot) {
-				if(nodo.getLeft()!=null) {
-					nodo.getLeft().setHead(null);
-					activeEmployeesRoot=nodo.getLeft();
-				}else {
-					nodo.getRight().setHead(null);
-					activeEmployeesRoot=nodo.getRight();
-				}
-			}else {
-				if(nodo.getLeft()!=null) {
-					nodo.getLeft().setHead(nodo.getHead());
-					if(nodo.getHead().getLeft()==nodo) {
-						nodo.getHead().setLeft(nodo.getLeft());
+		if(nodo!=null) {
+			if(nodo.getLeft()==null | nodo.getRight()==null) {      //Delete element with one child
+				if(nodo==activeEmployeesRoot) {
+					if(nodo.getLeft()!=null) {
+						nodo.getLeft().setHead(null);
+						activeEmployeesRoot=nodo.getLeft();
 					}else {
-						nodo.getHead().setRight(nodo.getLeft());
-					}					
-				}else {
-					nodo.getRight().setHead(nodo.getHead());
-					if(nodo.getHead().getLeft()==nodo) {
-						nodo.getHead().setLeft(nodo.getRight());
-					}else {
-						nodo.getHead().setRight(nodo.getRight());
+						nodo.getRight().setHead(null);
+						activeEmployeesRoot=nodo.getRight();
 					}
-				}				
-			}
-			return true;
-			
-			
-		}else if(nodo.getLeft()==null && nodo.getRight()==null) {     //Delete sheet
-			if(nodo==activeEmployeesRoot) {
-				activeEmployeesRoot=null;
-			}else {
-				if(nodo.getHead().getLeft()==nodo) {
-					nodo.getHead().setLeft(null);
 				}else {
-					nodo.getHead().setRight(null);
+					if(nodo.getLeft()!=null) {
+						nodo.getLeft().setHead(nodo.getHead());
+						if(nodo.getHead().getLeft()==nodo) {
+							nodo.getHead().setLeft(nodo.getLeft());
+						}else {
+							nodo.getHead().setRight(nodo.getLeft());
+						}					
+					}else {
+						nodo.getRight().setHead(nodo.getHead());
+						if(nodo.getHead().getLeft()==nodo) {
+							nodo.getHead().setLeft(nodo.getRight());
+						}else {
+							nodo.getHead().setRight(nodo.getRight());
+						}
+					}				
 				}
-			}
-			return true;
-			
-			
-		}else {				                                             //Delete element with both children
-			Employee min = nodo.getRight().getMin();
-			registerDeparture(min.getId());
-			min.setHead(nodo.getHead());
-			min.setRight(nodo.getRight());
-			min.setLeft(nodo.getLeft());
-			nodo.getLeft().setHead(min);
-			if(nodo.getRight()!=null) {
-				nodo.getRight().setHead(min);
-			}
-			if(nodo==activeEmployeesRoot) {
-				activeEmployeesRoot=min;
-			}else {
-				if(nodo.getHead().getLeft()==nodo) {
-					nodo.getHead().setLeft(min);
+				return true;
+				
+				
+			}else if(nodo.getLeft()==null && nodo.getRight()==null) {     //Delete sheet
+				if(nodo==activeEmployeesRoot) {
+					activeEmployeesRoot=null;
 				}else {
-					nodo.getHead().setRight(min);
+					if(nodo.getHead().getLeft()==nodo) {
+						nodo.getHead().setLeft(null);
+					}else {
+						nodo.getHead().setRight(null);
+					}
 				}
+				return true;
+				
+				
+			}else {				                                             //Delete element with both children
+				Employee min = nodo.getRight().getMin();
+				registerDeparture(min.getId());
+				min.setHead(nodo.getHead());
+				min.setRight(nodo.getRight());
+				min.setLeft(nodo.getLeft());
+				nodo.getLeft().setHead(min);
+				if(nodo.getRight()!=null) {
+					nodo.getRight().setHead(min);
+				}
+				if(nodo==activeEmployeesRoot) {
+					activeEmployeesRoot=min;
+				}else {
+					if(nodo.getHead().getLeft()==nodo) {
+						nodo.getHead().setLeft(min);
+					}else {
+						nodo.getHead().setRight(min);
+					}
+				}
+				return true;
 			}
-			return true;
 		}
+		return false;
 	}
 	public Employee searchEmployee(String id) {
 		
