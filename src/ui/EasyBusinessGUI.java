@@ -105,6 +105,16 @@ public class EasyBusinessGUI {
     @FXML
     private TableColumn<DairyDrink, String> drinkColumn;
 
+
+    @FXML
+    private CheckBox paid;
+
+    @FXML
+    private TextField customerBuyingId;
+
+    @FXML
+    private TextField codeToSell;
+    
     @FXML
     private TableColumn<DairyDrink, Integer> codeColumn;
     
@@ -337,13 +347,6 @@ public class EasyBusinessGUI {
 
     @FXML
     private TableColumn<?, ?> debtColumn;
-    
-    @FXML
-    private CheckBox paid;
-
-    @FXML
-    private TextField customerBuyingId;
-    
     
     //Employees scene fields-----------------------------------------------------------------------------------------------------------
     @FXML
@@ -709,11 +712,6 @@ public class EasyBusinessGUI {
     void sortDebtors(ActionEvent event) {
 
     }
-    
-    @FXML
-    void sell(ActionEvent event) {
-
-    }
 
     @FXML
     void sortCustomers(ActionEvent event) {
@@ -897,19 +895,14 @@ public class EasyBusinessGUI {
     void discardDrink(ActionEvent event) {
 
     }
-
+    
     @FXML
-    void sellDrink(ActionEvent event) {
+    void sell(ActionEvent event) {
 
     }
     
     @FXML
     void discardProduct(ActionEvent event) {
-
-    }
-
-    @FXML
-    void sellProduct(ActionEvent event) {
 
     }
     

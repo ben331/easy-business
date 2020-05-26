@@ -317,46 +317,35 @@ public class Company {
 		return expiredProducts;
 	}
 	
-	public Customer searchDebtor(String id) throws EmptyDataException {
-		if(id==null || id.equals("")) {
-			throw new EmptyDataException("id");
-		}
-		Customer deptorCustomer=null;
-		Customer current = firstDebtor;
-		if(firstDebtor!=null) {
-			do {
-				current = current.getNextCustomer();
-			}while(current!=firstDebtor && !current.getId().equals(id));
-			if(current.getId().equals(id)) {
-				deptorCustomer = current;
-			}
-		}
-		return deptorCustomer;
-	}
 	public void charge(String id) throws EmptyDataException {
-		Customer debtor = searchDebtor(id);
+		Customer debtor = searchCustomer(id);
 		
 		double value=debtor.getDebtValue();
-		String detail="the deptor"+debtor.getName()+"is paying the debt";
-		boolean e =false;
+		String detail=debtor.getName()+" paid";
 		
-		cashRegister.registerMoney(detail, value, e);
+		cashRegister.registerMoney(detail, value, false);
 		
 		deleteDebtor(debtor.getId());
 		debtor.setDebtValue(0);
 	}
 	
 	public void deleteDebtor(String id) throws EmptyDataException {
+		
+		//Case > 0
 		if(firstDebtor!=null) {
-			Customer debtor = searchDebtor(id);
-			
+			Customer debtor = searchCustomer(id);
+			//Case 1: list size: 1.
 			if(firstDebtor==firstDebtor.getNextCustomer()) {
 				firstDebtor=null;
-			}else if(debtor.getNextCustomer().getNextCustomer()==debtor) {
+			}
+			//Case 1: list size: 2.
+			else if(debtor.getNextCustomer().getNextCustomer()==debtor) {
 				firstDebtor=debtor.getNextCustomer();
 				firstDebtor.setNextCustomer(null);
 				firstDebtor.setPrevCustomer(null);
-			}else {
+			}
+			//Case 1: list size >= 3.
+			else {
 				Customer prev=debtor.getPrevCustomer();
 				Customer next=debtor.getNextCustomer();
 				
