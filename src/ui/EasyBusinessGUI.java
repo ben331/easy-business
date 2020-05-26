@@ -735,33 +735,13 @@ public class EasyBusinessGUI {
 
     @FXML
     void sortCustomers(ActionEvent event) {
+    	
     	if(sortByDate.isSelected()) {
-    		new Thread() {
-    			@Override
-    			public void run() {
-    				company.sortCByLastPurchase();;
-    			}
-    		}.start();
-    		Platform.runLater( new Thread() {
-    			@Override
-    			public void run() {
-    				initializeTableCustomers();
-    			}
-    		});
+    		company.sortCByLastPurchase();
     	}else {
-    		new Thread() {
-    			@Override
-    			public void run() {
-    				company.sortCByFullName();
-    			}
-    		}.start();
-    		Platform.runLater( new Thread() {
-    			@Override
-    			public void run() {
-    				initializeTableCustomers();
-    			}
-    		});
+    		company.sortCByFullName();
     	}
+    	initializeTableCustomers();
     }
     
     //Form Methods--------------------------------------------------------------------------------------------------------------------
@@ -944,6 +924,10 @@ public class EasyBusinessGUI {
 			alert.showAndWait();
 			e.printStackTrace();
 		}
+    }
+    
+    @FXML
+    void sellProduct(ActionEvent event) throws IOException {
     }
     
     @FXML

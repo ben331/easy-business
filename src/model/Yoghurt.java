@@ -34,4 +34,14 @@ public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable{
 		
 	}
 	
+	@Override
+	public int compareTo(DairyDrink y) {
+		int difference  = super.compareTo(y);
+		if(difference ==0) {
+			difference = this.flavor.compareTo(((Yoghurt)(y)).flavor);
+		}if(difference ==0) {
+			difference = y.getSize() - this.getSize();
+		}
+		return difference;
+	}
 }

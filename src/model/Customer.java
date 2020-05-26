@@ -80,5 +80,4 @@ public class Customer extends Person{
 	public void setPurchasesDetail(ArrayList<String> purchasesDetail) {
 		this.purchasesDetail = purchasesDetail;
 	}
-	
 }
