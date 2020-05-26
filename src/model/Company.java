@@ -538,8 +538,22 @@ public class Company {
 	}
 
 	public Employee searchEmployee(String id) {
-		Employee employee = employeesRoot;
-		return employee;
+		searchEmployee(employeesRoot, id);
+		return searchEmployee(id);
+	}
+	
+	private Employee searchEmployee(Employee nodo, String id) {
+		if(nodo!=null) {
+			if(nodo.getName().compareTo(id)<0) {
+				return searchEmployee(nodo.getRight(), id);
+			}else if(nodo.getName().compareTo(id)>0) {
+				return searchEmployee(nodo.getLeft(), id);
+			}else {
+				return nodo;
+			}
+		}else {
+			return nodo=null;
+		}
 	}
 	
 	public void addEmployee(String id, String name, String lastName, String celphoneNumber, String address, Image photo, char position) throws Exception {

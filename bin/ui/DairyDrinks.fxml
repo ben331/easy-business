@@ -38,12 +38,12 @@
                         <Font name="System Italic" size="20.0" />
                      </font>
                   </Label>
-                  <RadioButton layoutX="23.0" layoutY="75.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="173.0" selected="true" text="By flavor and size">
+                  <RadioButton fx:id="flavorAndSize" layoutX="23.0" layoutY="75.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="173.0" selected="true" text="By flavor and size">
                      <toggleGroup>
                         <ToggleGroup fx:id="Sorting" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton layoutX="23.0" layoutY="124.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="169.0" text="By suggar level and flavor" toggleGroup="$Sorting" />
+                  <RadioButton fx:id="sugarAndFlavor" layoutX="23.0" layoutY="124.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="169.0" text="By suggar level and flavor" toggleGroup="$Sorting" />
                   <RadioButton layoutX="23.0" layoutY="178.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="178.0" text="By date and flavor" toggleGroup="$Sorting" />
                   <Button layoutX="81.0" layoutY="209.0" mnemonicParsing="false" onAction="#sortDairyDrinks" text="Sort" />
                </children>

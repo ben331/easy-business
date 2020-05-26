@@ -140,7 +140,7 @@ public class EasyBusinessGUI {
     private ImageView drinkImg;
 
     @FXML
-    private TableView<?> dairyProductsTable;
+    private TableView<DairyProduct> dairyProductsTable;
 
     @FXML
     private TableColumn<DairyProduct, String> productColumn;
@@ -1075,6 +1075,11 @@ public class EasyBusinessGUI {
     }
     
     private void initializeTableDairyProducts() {
-
+    	ObservableList<DairyProduct> dairyProducts = FXCollections.observableArrayList(company.getDairyProducts());
+    	dairyProductsTable.setItems(dairyProducts);;
+    	productColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("product"));
+        codeProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("code"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("description"));
+        dateProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("dateProduct"));
 	}
 }
