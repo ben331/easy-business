@@ -37,14 +37,14 @@
                <children>
                   <ImageView fx:id="employeeImg" fitHeight="97.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
                   <Label layoutX="95.0" layoutY="28.0" text="Name:" />
-                  <TextField fx:id="customerName" editable="false" layoutX="139.0" layoutY="24.0" prefHeight="26.0" prefWidth="122.0" />
+                  <TextField fx:id="employeeName" editable="false" layoutX="139.0" layoutY="24.0" prefHeight="26.0" prefWidth="122.0" />
                   <Label layoutX="95.0" layoutY="89.0" text="Id:" />
                   <TextField fx:id="employeeId" layoutX="120.0" layoutY="85.0" prefHeight="26.0" prefWidth="141.0" />
                   <Button layoutX="184.0" layoutY="129.0" mnemonicParsing="false" onAction="#searchEmployee" prefHeight="29.0" prefWidth="72.0" text="Search" />
                   <Label layoutX="18.0" layoutY="135.0" text="Cel:" />
                   <TextField fx:id="employeeCel" editable="false" layoutX="39.0" layoutY="131.0" prefHeight="26.0" prefWidth="117.0" />
                   <Label layoutX="16.0" layoutY="186.0" text="Address:" />
-                  <TextField fx:id="EmployeeAddress" editable="false" layoutX="57.0" layoutY="182.0" prefHeight="26.0" prefWidth="205.0" />
+                  <TextField fx:id="employeeAddress" editable="false" layoutX="57.0" layoutY="182.0" prefHeight="26.0" prefWidth="205.0" />
                </children>
             </Pane>
          </children>

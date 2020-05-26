@@ -25,6 +25,9 @@
       </HBox>
    </top>
    <center>
-      <TextArea fx:id="report" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="report" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="20.0" />
+         </font></TextArea>
    </center>
 </BorderPane>
