@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class DairyProduct {
+@SuppressWarnings("serial")
+public class DairyProduct implements Serializable{
 
 	private int code;
 	private String name;

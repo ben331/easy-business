@@ -1,8 +1,12 @@
 package ui;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 
 import customException.*;
@@ -39,6 +43,7 @@ import model.*;
 public class EasyBusinessGUI {
 	//Constant
 	public static final String DEFAULT_PROFILE_PHOTO = "imgs/deafultProfile.jpg";
+	private static final String FILE_NAME_MODEL = "data/model.ser";
 	//Relations--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
@@ -455,11 +460,6 @@ public class EasyBusinessGUI {
 			alert.showAndWait();
     	}
     }
-
-    @FXML
-    void browseEmployee(ActionEvent event) {
-
-    }
     
     @FXML
     void searchEmployee(ActionEvent event) {
@@ -479,9 +479,27 @@ public class EasyBusinessGUI {
     }
 
     @FXML
-    void saveChanges(ActionEvent event) {
-
+    void saveChanges(ActionEvent event) throws FileNotFoundException, IOException {
+    	saveData();
     }
+    
+	public void saveData() throws FileNotFoundException, IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME_MODEL));
+    	oos.writeObject(company);
+    	oos.close();
+	}
+	
+	public void loadData() throws ClassNotFoundException {
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(FILE_NAME_MODEL));
+			company = (Company)(ois.readObject());
+			ois.close();
+		} catch (IOException e) {
+		}
+		
+	}
+	
     
     @FXML
     void about(ActionEvent event) {
@@ -1125,10 +1143,22 @@ public class EasyBusinessGUI {
     	new Thread() {
     		@Override
     		public void run() {
+    			String report = company.predictUpcomingSales();
     			
+    			Platform.runLater( new Thread() {
+    				@Override
+    				public void run() {
+    					updateReport(report);
+    				}
+    			});
     		}
     	}.start();
     }
+    
+    private void updateReport(String r) {
+		report.setText(r);
+	}
+    
     //Setting methods-----------------------------------------------------------------------------------------------------------------
     
     @FXML

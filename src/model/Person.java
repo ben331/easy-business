@@ -1,8 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 import javafx.scene.image.Image;
 
-public abstract class Person implements Comparable<Person>{
+@SuppressWarnings("serial")
+public abstract class Person implements Comparable<Person>, Serializable{
 
 	private String id;
 	private String name;

@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Oat extends DairyDrink implements AnalyzableByCost, Expirable {
+@SuppressWarnings("serial")
+public class Oat extends DairyDrink implements AnalyzableByCost, Expirable, Serializable {
 
 	private String typeOat;
 	

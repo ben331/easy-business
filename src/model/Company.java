@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -8,7 +9,8 @@ import java.util.List;
 import customException.*;
 import javafx.scene.image.Image;
 
-public class Company {
+@SuppressWarnings("serial")
+public class Company implements Serializable{
 	
 	//Attributes
 	private CashRegister cashRegister;
@@ -270,14 +272,7 @@ public class Company {
 	}
 	
 	//Stock scene methods-------------------------------------------------------------------------------------------------------------
-	public void saveData() {
-		
-	}
-	
-	public void loadData() {
-		
-	}
-	
+
 	public String addYoghurts(int numberOfYoghurts, char size, char suggar, String flavor) throws EmptyDataException {
 		int code = searchLastCode();
 		String initialCode = code+"";
@@ -799,7 +794,7 @@ public class Company {
 			
 		}else {				                                             //Delete element with both children
 			Employee min = nodo.getRight().getMin();
-			registerDeparture(min);
+			registerDeparture(min.getId());
 			min.setHead(nodo.getHead());
 			min.setRight(nodo.getRight());
 			min.setLeft(nodo.getLeft());
@@ -820,8 +815,8 @@ public class Company {
 		}
 	}
 	public Employee searchEmployee(String id) {
-		searchEmployee(employeesRoot, id);
-		return searchEmployee(id);
+		
+		return searchEmployee(employeesRoot, id);
 	}
 	
 	private Employee searchEmployee(Employee nodo, String id) {

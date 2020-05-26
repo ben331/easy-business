@@ -1,8 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 import javafx.scene.image.Image;
 
-public abstract class Employee extends Person  {
+@SuppressWarnings("serial")
+public abstract class Employee extends Person implements Serializable {
 	//Domain constants of employee type
 	public static final char SELLER = 'S';
 	public static final char OPERATOR = 'O';

@@ -30,5 +30,7 @@ public class Main extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Easy Business");
 		primaryStage.show();
+		
+		easyBusinessGUI.loadData();
 	}
 }

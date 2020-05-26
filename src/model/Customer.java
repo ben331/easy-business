@@ -1,11 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 
-public class Customer extends Person{
+@SuppressWarnings("serial")
+public class Customer extends Person implements Serializable{
 	
 	public static final int NUMBER_OF_PURCHASES_OF_REGULAR_CUSTOMER = 10;
 	private Customer nextCustomer;

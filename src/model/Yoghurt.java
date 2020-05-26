@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable{
+@SuppressWarnings("serial")
+public class Yoghurt extends DairyDrink implements AnalyzableByCost, Expirable, Serializable{
 	
 	public static final ArrayList<String> FLAVORS = new ArrayList<String>(Arrays.asList("Strawberry", "Blackberry", "Berries", "Lulo", "Passion fruit", "Mango", "Pineapple", "Peach", "Grape", "Arequipe", "Soursop", "Koumiss"));
 	

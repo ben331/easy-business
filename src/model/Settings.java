@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import customException.EmptyDataException;
 
-public class Settings {
+@SuppressWarnings("serial")
+public class Settings implements Serializable {
 	private ArrayList<String> productsNames;
 	private ArrayList<DairyProduct> products;
 	

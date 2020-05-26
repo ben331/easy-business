@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import customException.EmptyDataException;
 import customException.InsufficientBalanceException;
 
-public class CashRegister {
+
+@SuppressWarnings("serial")
+public class CashRegister implements Serializable {
  
 	public static final String FILE_NAME_PREFIX="data/registersCash/Registers_OfDate_";
 	public static final String EXTENSION = ".reg";
