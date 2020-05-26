@@ -27,6 +27,11 @@ public class Company {
 	private Settings settings;
 	
 	
+	public Settings getSettings() {
+		return settings;
+	}
+
+
 	//Constructor----------------------------------------------------------------------------------------------------------------------
 	public Company() {
 		cashRegister = new CashRegister();
@@ -309,8 +314,24 @@ public class Company {
 		dairyDrinks.add(oat);
 	}
 	
-	public void addProduct(String c, String n, double sp) {
+	public String addProducts(String num, int indexName) {
+		int n =Integer.parseInt(num);
+		DairyProduct base = settings.getProducts().get(indexName);
+		int initialCode = searchLastCode();
+		int code = initialCode;
+		int finalCode = initialCode + n - 1;
 		
+		for(int i=0; i<n; i++) {
+			DairyProduct dp = new DairyProduct(code, base.getName(), base.getSalePrice(), LocalDate.now(), base.getDescription());
+			dairyProducts.add(dp);
+			code++;
+		}
+		return "The codes generated are between "+initialCode+" and "+ finalCode+"\nRemember assign the code to each Product";
+	}
+	
+	public void addProduct(int code, String name, double salePrice, LocalDate preparationDate) {
+		DairyProduct d= new DairyProduct(code, name, salePrice, preparationDate);
+		dairyProducts.add(d);
 	}
 	
 	public void sellProduct(String id, String c, boolean paid) throws EmptyDataException, BuyerWithDebtException, InsufficientBalanceException {

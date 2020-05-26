@@ -40,10 +40,15 @@
                   <MenuItem mnemonicParsing="false" onAction="#showDairyDrinks" text="Dairy Drinks" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Settings">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showDialogueToAddNewProduct" text="Add new product" />
+                  <MenuItem mnemonicParsing="false" onAction="#showDialogueToSetPrices" text="Set prices" />
+               </items>
+            </Menu>
             <Menu mnemonicParsing="false" text="Others">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#showAnalysis" text="Analysis" />
-                  <MenuItem mnemonicParsing="false" onAction="#showSettings" text="Settings" />
                   <MenuItem mnemonicParsing="false" onAction="#showSettings" text="Warnings" />
                </items>
             </Menu>

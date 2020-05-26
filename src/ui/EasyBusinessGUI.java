@@ -158,6 +158,9 @@ public class EasyBusinessGUI {
     private ImageView productImg;
     
     @FXML
+    private ChoiceBox<String> menuProduct;
+    
+    @FXML
     private TextField quantityOats;
 
     @FXML
@@ -287,6 +290,17 @@ public class EasyBusinessGUI {
 
     @FXML
     private RadioButton seller;
+    
+    //Settings--------------------------------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private TextField nameProduct;
+
+    @FXML
+    private TextField salePrice;
+
+    @FXML
+    private TextArea description;
     
     //Customers Scene fields------------------------------------------------------------------------------------------------------------------------------------------------
     
@@ -500,6 +514,22 @@ public class EasyBusinessGUI {
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
     }
+    
+    @FXML
+    void showDialogueToAddNewProduct(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToAddNewProduct.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
+
+    @FXML
+    void showDialogueToSetPrices(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToSetPrices.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
 
     @FXML
     void showCustomers(ActionEvent event) throws IOException {
@@ -608,6 +638,8 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	ObservableList<String> products = FXCollections.observableArrayList(company.getSettings().getProductsNames());
+    	menuProduct.setItems(products);
     }
     
     //Cash Register Methods-------------------------------------------------------------------------------------------------------------
@@ -844,6 +876,8 @@ public class EasyBusinessGUI {
     			alert.setTitle("Product removed");
     			alert.setContentText("This product was discarded");
     			alert.showAndWait();
+    			initializeTableDairyProducts();
+    			initializeTableDairyDrinks();
         	}else {
         		Alert alert = new Alert(AlertType.WARNING);
     			alert.setTitle("Warning");
@@ -934,7 +968,7 @@ public class EasyBusinessGUI {
         	mainPane.setCenter(scene);
         	initializeTableDairyDrinks();
         	Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Dairys Added successfully");
+			alert.setTitle("DairyDrinks Added successfully");
 			alert.setContentText(confirmation);
 			alert.showAndWait();	
     	}catch(NumberFormatException e) {
@@ -952,18 +986,32 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void addProducts(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void quantityYoghurts(ActionEvent event) {
-
-    }
-    
-    @FXML
-    void discardDrink(ActionEvent event) {
-
+    void addProducts(ActionEvent event) throws IOException {
+    	try {
+    		if(menuProduct.getSelectionModel()==null) {
+    			Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Select a product, or create a product in settings");
+    			alert.showAndWait();
+    		}else {
+    			String m = company.addProducts(quantityProducts.getText(), menuProduct.getSelectionModel().getSelectedIndex());
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("DairyProducts Added successfully");
+    			alert.setContentText(m);
+    			alert.showAndWait();
+    			FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyProducts.fxml"));
+    	    	loader.setController(this);
+    	    	Parent scene = loader.load();
+    	    	mainPane.setCenter(scene);
+    	    	initializeTableDairyProducts();
+    		}
+    		
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Type a natural number");
+			alert.showAndWait();
+    	}
     }
     
     @FXML
@@ -1014,6 +1062,34 @@ public class EasyBusinessGUI {
     @FXML
     void predictUpcomingSales(ActionEvent event) {
 
+    }
+    //Setting methods-----------------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    void addNewProduct(ActionEvent event) throws IOException {
+    	try {
+    		company.getSettings().addDairyProduct(nameProduct.getText(), salePrice.getText(), description.getText());
+    		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Added successfully");
+			alert.setContentText("New product added successfully");
+			alert.showAndWait();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("DairyProducts.fxml"));
+	    	loader.setController(this);
+	    	Parent scene = loader.load();
+	    	mainPane.setCenter(scene);
+	    	initializeTableDairyProducts();
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Type a positive real number in the field: price");
+			alert.showAndWait();
+    	}catch(EmptyDataException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+			
+    	}
     }
     
     //Initializer Methods----------------------------------------------------------------------------------------------------------------
@@ -1077,9 +1153,9 @@ public class EasyBusinessGUI {
     private void initializeTableDairyProducts() {
     	ObservableList<DairyProduct> dairyProducts = FXCollections.observableArrayList(company.getDairyProducts());
     	dairyProductsTable.setItems(dairyProducts);;
-    	productColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("product"));
+    	productColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("name"));
         codeProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("code"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("description"));
-        dateProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("dateProduct"));
+        dateProductColumn.setCellValueFactory(new PropertyValueFactory<DairyProduct,String>("preparationDate"));
 	}
 }

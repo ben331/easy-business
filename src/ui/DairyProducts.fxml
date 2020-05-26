@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -25,10 +26,12 @@
       <VBox alignment="CENTER" prefHeight="454.0" prefWidth="219.0" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="productImg" fitHeight="150.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true" />
+            <Label text="Product id to Sell or Discard:" />
+            <TextField fx:id="codeToSell" />
             <Label prefHeight="23.0" prefWidth="26.0" />
-            <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="29.0" prefWidth="72.0" text="Sell" />
+            <Button mnemonicParsing="false" onAction="#showDialogueToSell" prefHeight="29.0" prefWidth="72.0" text="Sell" />
             <Label prefHeight="25.0" prefWidth="28.0" />
-            <Button mnemonicParsing="false" onAction="#discardProduct" prefHeight="30.0" prefWidth="90.0" text="Discard" />
+            <Button mnemonicParsing="false" onAction="#discard" prefHeight="30.0" prefWidth="90.0" text="Discard" />
          </children>
       </VBox>
    </right>

@@ -8,6 +8,7 @@ public class DairyProduct {
 	private String name;
 	private double salePrice;
 	private LocalDate preparationDate;
+	private String description;
 	
 	public DairyProduct(int code, String name, double salePrice, LocalDate preparationDate) {
 		super();
@@ -15,6 +16,22 @@ public class DairyProduct {
 		this.name = name;
 		this.salePrice = salePrice;
 		this.preparationDate = preparationDate;
+	}
+	
+	public DairyProduct(String name, double salePrice, String description) {
+		super();
+		this.name = name;
+		this.salePrice = salePrice;
+		this.setDescription(description);
+	}
+	
+	public DairyProduct(int code, String name, double salePrice, LocalDate preparationDate, String description) {
+		super();
+		this.code = code;
+		this.name = name;
+		this.salePrice = salePrice;
+		this.preparationDate = preparationDate;
+		this.setDescription(description);
 	}
 
 	public int getCode() {
@@ -51,6 +68,14 @@ public class DairyProduct {
 
 	public void setPreparationDate(LocalDate preparationDate) {
 		this.preparationDate = preparationDate;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
