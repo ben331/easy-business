@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import customException.*;
 import javafx.scene.image.Image;
@@ -484,16 +485,32 @@ public class Company {
 		return registers;
 	}
 	
-	public void sortPByFlavorAndSize() {
-		
+	public void sortPByFlavorAndSize() { // Selection Sort
+		DairyDrink temp;
+		DairyDrink current;
+		int minIndex;
+		for(int i=0; i<dairyDrinks.size() -1;i++) {
+			 minIndex = i;
+			
+			for(int j=i; j<dairyDrinks.size(); j++) {
+				current = dairyDrinks.get(j);
+				if(current.compareTo(dairyDrinks.get(minIndex))<0) {
+					minIndex = j;
+				}
+			}
+			
+			temp = dairyDrinks.get(i);
+			dairyDrinks.set(i, dairyDrinks.get(minIndex));
+			dairyDrinks.set(minIndex, temp);
+		}
 	}
 	
 	public void sortPBySugarLevelAndFlavor() {
-		
+		Collections.sort(dairyDrinks, new DairyDrinkComparatorBySugarLevelAndFlavor());
 	}
 	
 	public void sortPByDateAndFlavor() {
-		
+		Collections.sort(dairyDrinks, new DairyDrinkComparatorByDateAndFlavor());
 	}
 	
 	public void saveRegisters() {

@@ -162,6 +162,12 @@ public class EasyBusinessGUI {
 
     @FXML
     private ToggleGroup sizeOats;
+    
+    @FXML
+    private RadioButton sugarAndFlavor;
+    
+    @FXML
+    private RadioButton flavorAndSize;
 
     @FXML
     private ToggleGroup suggarOats;
@@ -817,12 +823,39 @@ public class EasyBusinessGUI {
     //Inventary scene Methods---------------------------------------------------------------------------------------------------------------
     @FXML
     void sortDairyDrinks(ActionEvent event) {
-
+    	if(flavorAndSize.isSelected()) {
+    		company.sortPByFlavorAndSize();
+    	}else if(sugarAndFlavor.isSelected()) {
+    		company.sortPBySugarLevelAndFlavor();
+    	}else {
+    		company.sortPByDateAndFlavor();
+    	}
+    	
+    	initializeTableDairyDrinks();
     }
     
     @FXML
     void discard(ActionEvent event) {
-
+    	try {
+    		int num = Integer.parseInt(codeToSell.getText());
+    		
+    		if(company.discardProduct(num)){
+        		Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Product removed");
+    			alert.setContentText("This product was discarded");
+    			alert.showAndWait();
+        	}else {
+        		Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Product not found");
+    			alert.showAndWait();
+        	}
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Type a natural number");
+			alert.showAndWait();
+    	}
     }
 
     @FXML
