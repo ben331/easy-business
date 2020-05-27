@@ -91,7 +91,8 @@ public abstract class Employee extends Person implements Remunerable, Serializab
 	}
 	
 	public String getTimeSEntry() {
-		return (timeEntry+"").substring(0,5);
+		String m = timeEntry.toString().length()>5 ? (timeEntry+"").substring(0,5) : timeEntry.toString();
+		return m ;
 	}
 
 	public Settings getSettings() {

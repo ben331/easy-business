@@ -43,7 +43,7 @@ import model.*;
 public class EasyBusinessGUI {
 	//Constant
 	public static final String DEFAULT_PROFILE_PHOTO = "imgs/deafultProfile.jpg";
-	private static final String FILE_NAME_MODEL = "data/model.srl";
+	private static final String FILE_NAME_MODEL = "data/company.srl";
 	//Relations--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
@@ -936,10 +936,18 @@ public class EasyBusinessGUI {
     void searchDebtor(ActionEvent event) throws EmptyDataException {
     	try {
     		String id= customerId.getText();
-        	Customer debtor=company.searchCustomer(id);
-        	customerFullName.setText(debtor.getName());
-        	debt.setText(""+debtor.getDebtValue());
-        	customerImg.setImage(debtor.getPhoto());
+        	Customer debtor=company.searchDebtor(id);
+        	if(debtor!=null) {
+        		customerFullName.setText(debtor.getName());
+            	debt.setText(""+debtor.getDebtValue());
+            	customerImg.setImage(debtor.getPhoto());
+        	}else {
+        		Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Debtor not found");
+    			alert.showAndWait();
+        	}
+        	
     	}catch(EmptyDataException e) {
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");

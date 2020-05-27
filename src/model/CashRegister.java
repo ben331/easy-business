@@ -18,7 +18,7 @@ import customException.InsufficientBalanceException;
 @SuppressWarnings("serial")
 public class CashRegister implements Serializable {
  
-	public static final String FILE_NAME_PREFIX="registersCash/Registers_OfDate_";
+	public static final String FILE_NAME_PREFIX="data/registersCash/Registers_OfDate_";
 	public static final String EXTENSION = ".reg";
 	private ArrayList<Register> registers;
 	private double cash;

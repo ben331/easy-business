@@ -138,7 +138,7 @@ public class Company implements Serializable{
 	//Customer Methods-----------------------------------------------------------------------------------------------------------------
 	
 	public Customer searchCustomer(String id) throws EmptyDataException {
-		if(id==null || id.equals("")) {
+		if(id.equals("")) {
 			throw new EmptyDataException("id");
 		}
 		Customer customer=null;
@@ -154,7 +154,11 @@ public class Company implements Serializable{
 		return customer;
 	}
 	
-	public void addDebtor(Customer newDebtor) {		
+	public void addDebtor(Customer c) {
+		
+		Customer newDebtor = new Customer(c.getId(), c.getName(), c.getLastName(), c.getCelphoneNumber(), c.getAddress(), c.getPhoto());
+		newDebtor.setDebtValue(c.getDebtValue());
+		
 		//Case: Empty list.
 		if(firstDebtor==null) {
 			firstDebtor=newDebtor;
@@ -175,6 +179,62 @@ public class Company implements Serializable{
 			newDebtor.setPrevCustomer(last);
 			newDebtor.setNextCustomer(firstDebtor);
 			firstDebtor.setPrevCustomer(newDebtor);
+		}
+	}
+	
+	public Customer searchDebtor(String id) throws EmptyDataException {
+		if(id==null || id.equals("")) {
+			throw new EmptyDataException("id");
+		}
+		Customer customer=null;
+		Customer current = firstDebtor;
+		if(firstDebtor!=null) {
+			do {
+				current = current.getNextCustomer();
+			}while(current!=firstDebtor && !current.getId().equals(id));
+			if(current.getId().equals(id)) {
+				customer = current;
+			}
+		}
+		return customer;
+	}
+	
+	public void charge(String id) throws EmptyDataException, InsufficientBalanceException {
+		Customer c = searchCustomer(id);
+		if(c.hasDebt()) {
+			
+			cashRegister.registerMoney(c.getName()+" Paid", c.getDebtValue(), false);
+			c.setDebtValue(0);
+			Customer debtor = searchDebtor(id);
+			deleteDebtor(debtor);
+		}
+	}
+	
+	public void deleteDebtor(Customer debtor) throws EmptyDataException {
+		
+		//Case > 0
+		if(firstDebtor!=null) {
+			//Case 1: list size: 1.
+			if(firstDebtor==firstDebtor.getNextCustomer()) {
+				firstDebtor=null;
+			}
+			//Case 1: list size: 2.
+			else if(debtor.getNextCustomer().getNextCustomer()==debtor) {
+				firstDebtor=debtor.getNextCustomer();
+				firstDebtor.setNextCustomer(null);
+				firstDebtor.setPrevCustomer(null);
+			}
+			//Case 1: list size >= 3.
+			else {
+				Customer prev=debtor.getPrevCustomer();
+				Customer next=debtor.getNextCustomer();
+				
+				prev.setNextCustomer(next);
+				next.setPrevCustomer(prev);
+				if(debtor==firstDebtor) {
+					firstDebtor=debtor.getNextCustomer();
+				}
+			}
 		}
 	}
 	
@@ -358,6 +418,11 @@ public class Company implements Serializable{
 	
 	public void sellProduct(String id, String c, boolean paid) throws EmptyDataException, BuyerWithDebtException, InsufficientBalanceException, SaleOfExpiredProductException {
 		Customer customer = searchCustomer(id);
+		
+		if(customer.hasDebt()) {
+			throw new BuyerWithDebtException(customer.getName(), customer.getDebtValue());
+		}
+		
 		String detail;
 		int code = Integer.parseInt(c);
 		DairyProduct product = searchProduct(code);
@@ -379,8 +444,8 @@ public class Company implements Serializable{
 		if(paid) {
 			cashRegister.registerMoney(customer.getName()+" paid", product.getSalePrice(), false);
 		}else {
-			addDebtor(customer);
 			customer.setDebtValue(product.getSalePrice());
+			addDebtor(customer);
 		}
 		
 		customer.getPurchasesDetail().add(detail);
@@ -450,16 +515,6 @@ public class Company implements Serializable{
 		return paid;
 	}
 	
-	public void charge(String id) throws EmptyDataException, InsufficientBalanceException {
-		Customer c = searchCustomer(id);
-		if(c.hasDebt()) {
-			
-			cashRegister.registerMoney(c.getName()+" Paid", c.getDebtValue(), false);
-			c.setDebtValue(0);
-			deleteDebtor(c);
-		}
-	}
-	
 	private String generateReport(Employee e) {
 		String report="";
 		if(e.getLeft()!=null) {
@@ -492,33 +547,7 @@ public class Company implements Serializable{
 		return sum;
 	}
 	
-	public void deleteDebtor(Customer debtor) throws EmptyDataException {
-		
-		//Case > 0
-		if(firstDebtor!=null) {
-			//Case 1: list size: 1.
-			if(firstDebtor==firstDebtor.getNextCustomer()) {
-				firstDebtor=null;
-			}
-			//Case 1: list size: 2.
-			else if(debtor.getNextCustomer().getNextCustomer()==debtor) {
-				firstDebtor=debtor.getNextCustomer();
-				firstDebtor.setNextCustomer(null);
-				firstDebtor.setPrevCustomer(null);
-			}
-			//Case 1: list size >= 3.
-			else {
-				Customer prev=debtor.getPrevCustomer();
-				Customer next=debtor.getNextCustomer();
-				
-				prev.setNextCustomer(next);
-				next.setPrevCustomer(prev);
-				if(debtor==firstDebtor) {
-					firstDebtor=debtor.getNextCustomer();
-				}
-			}
-		}
-	}
+	
 	public void sortByName() {
 		if(firstDebtor!=null) {
 			boolean thereWasSwap=true;
@@ -768,21 +797,33 @@ public class Company implements Serializable{
 		return purchase;
 	}
 	
-	public boolean registerEntry(String e) throws Exception {
+	public boolean registerEntry(String id) throws Exception {
 		boolean registered=false;
 		
-		if(e.equals("")) {
+		if(id.equals("")) {
 			throw new EmptyDataException("Id");
 		}
 		
-		if(searchActiveEmployee(e)!=null) {
-			throw new DoubleRegistrationException(e, "Actives Employees");
+		if(searchActiveEmployee(id)!=null) {
+			throw new DoubleRegistrationException(id, "Actives Employees");
 		}
 		
-		Employee employee=searchEmployee(e);
+		Employee e=searchEmployee(id);
 		
-		if(employee!=null) {
+		if(e!=null) {
+			
+			Employee employee;
+			
+			if(e instanceof Seller) {
+				employee = new Seller(e.getId(), e.getName(), e.getLastName(), e.getCelphoneNumber(), e.getAddress(), e.getPhoto(), settings);
+			}else if(e instanceof Operator) {
+				employee = new Operator(e.getId(), e.getName(), e.getLastName(), e.getCelphoneNumber(), e.getAddress(), e.getPhoto(), settings);
+			}else {
+				employee = new Domiciliary(e.getId(), e.getName(), e.getLastName(), e.getCelphoneNumber(), e.getAddress(), e.getPhoto(), settings);
+			}
+			
 			Employee current = activeEmployeesRoot;
+			employee.setTimeEntry(LocalTime.now());
 			boolean wasAdded=false;
 			
 			if(activeEmployeesRoot!=null) {
@@ -808,7 +849,7 @@ public class Company implements Serializable{
 			}else {
 				activeEmployeesRoot=employee;
 			}
-			employee.setTimeEntry(LocalTime.now());
+			
 			registered = true;
 		}
 		return registered;
@@ -838,9 +879,9 @@ public class Company implements Serializable{
 		if(nodo!=null) {
 			
 			//Registers the hours worked
+			Employee employee = searchEmployee(id);
 			int hours = (int) Duration.between(nodo.getTimeEntry(), LocalTime.now()).toHours();
-			nodo.setHoursWorked(nodo.getHoursWorked() + hours);
-			nodo.setTimeEntry(null);
+			employee.setHoursWorked(employee.getHoursWorked() + hours);
 			
 			if((nodo.getLeft()==null || nodo.getRight()==null) && !(nodo.getLeft()==null && nodo.getRight()==null)) {      //Delete element with one child
 				if(nodo==activeEmployeesRoot) {
