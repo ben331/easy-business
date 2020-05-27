@@ -39,7 +39,7 @@ public class Yoghurt extends DairyDrink implements AnalyzableByCost, Serializabl
 
 	@Override
 	public int calculateBreakEvenPoint(double gain) {
-		int breakEvenPoint = (int) ((getSettings().getFixedCostYoghurt()+gain) / (getSalePrice() - getSettings().getVarCostYoghurt(getSize())));
+		int breakEvenPoint = (int) Math.ceil((getSettings().getFixedCostYoghurt() + gain)/ (getSalePrice() - getSettings().getVarCostYoghurt(getSize())));
 		return breakEvenPoint;
 	}
 	

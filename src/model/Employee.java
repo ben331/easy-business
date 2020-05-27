@@ -89,6 +89,10 @@ public abstract class Employee extends Person implements Remunerable, Serializab
 	public LocalTime getTimeEntry() {
 		return timeEntry;
 	}
+	
+	public String getTimeSEntry() {
+		return (timeEntry+"").substring(0,5);
+	}
 
 	public Settings getSettings() {
 		return settings;

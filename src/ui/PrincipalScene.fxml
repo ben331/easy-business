@@ -43,13 +43,14 @@
             <Menu mnemonicParsing="false" text="Settings">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#showDialogueToAddNewProduct" text="Add new product" />
-                  <MenuItem mnemonicParsing="false" onAction="#showDialogueToSetPrices" text="Set prices" />
+                  <MenuItem mnemonicParsing="false" onAction="#showDialogueToSetPrices" text="Products Prices" />
+                  <MenuItem mnemonicParsing="false" onAction="#showDialogueToSetSalarys" text="Salary Prices" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Others">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#showAnalysis" text="Analysis" />
-                  <MenuItem mnemonicParsing="false" onAction="#showSettings" text="Warnings" />
+                  <MenuItem mnemonicParsing="false" onAction="#showWarnings" text="Warnings" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">

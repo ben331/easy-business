@@ -54,7 +54,7 @@ public class CashRegister implements Serializable {
 			v = v*-1;
 		
 		if((cash + v) < 50000) {
-			throw new InsufficientBalanceException(v, cash);
+			throw new InsufficientBalanceException(-v, cash);
 		}
 		
 		Register register = new Register(d, v, e, LocalTime.now());	
@@ -70,14 +70,25 @@ public class CashRegister implements Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void loadRegistersOfDate(LocalDate localDate) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException {
+	public void loadRegistersOfDate(LocalDate localDate) throws ClassNotFoundException, EmptyDataException, IOException, InsufficientBalanceException {
 		if(localDate == null) {
 			throw new EmptyDataException("Date");
 		}
 		String fileName = FILE_NAME_PREFIX + localDate + EXTENSION;
-		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
-		registers = (ArrayList<Register>)(ois.readObject());
-		ois.close();
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(fileName));
+			registers = (ArrayList<Register>)(ois.readObject());
+			ois.close();
+		} catch (FileNotFoundException e) {
+			if(localDate.isEqual(LocalDate.now())) {
+				registerMoney("In existence", cash, false);
+				cash= cash/2;
+			}else {
+				throw e;
+			}
+		}
+		
 	}
 	
 	public double determineCash() {

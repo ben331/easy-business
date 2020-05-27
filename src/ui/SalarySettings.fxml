@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="762.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="expireDYog" disable="true" layoutX="180.0" layoutY="271.0" />
+      <Label layoutX="92.0" layoutY="275.0" text="Yoghurt" />
+      <TextField fx:id="expireDOat" disable="true" layoutX="180.0" layoutY="310.0" />
+      <Label layoutX="97.0" layoutY="314.0" text="Oat" />
+      <Label layoutX="269.0" layoutY="14.0" text="DairyDrinks Settings">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <TextField fx:id="vCostS" disable="true" layoutX="481.0" layoutY="116.0" />
+      <TextField fx:id="vCostO" disable="true" layoutX="481.0" layoutY="155.0" />
+      <TextField fx:id="vCostD" disable="true" layoutX="481.0" layoutY="194.0" />
+      <TextField fx:id="fCostS" disable="true" layoutX="180.0" layoutY="112.0" />
+      <TextField fx:id="fCostO" disable="true" layoutX="180.0" layoutY="151.0" />
+      <TextField fx:id="fCostD" disable="true" layoutX="180.0" layoutY="190.0" />
+      <Button layoutX="386.0" layoutY="266.0" mnemonicParsing="false" onAction="#edit2" prefHeight="36.0" prefWidth="99.0" text="Edit" />
+      <Button fx:id="buttonSet2" layoutX="502.0" layoutY="266.0" mnemonicParsing="false" onAction="#saveSettings2" prefHeight="36.0" prefWidth="106.0" text="Save Changes" />
+      <Label layoutX="180.0" layoutY="78.0" text="Fixed cost">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="555.0" layoutY="78.0" text="Var cost">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="112.0" layoutY="125.0" text="Seller" />
+      <Label layoutX="101.0" layoutY="164.0" text="Operary" />
+      <Label layoutX="92.0" layoutY="199.0" text="Domiciliary" />
+      <Label layoutX="186.0" layoutY="234.0" text="Expire days">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="426.0" layoutY="122.0" text="Seller" />
+      <Label layoutX="415.0" layoutY="161.0" text="Operary" />
+      <Label layoutX="406.0" layoutY="196.0" text="Domiciliary" />
+   </children>
+</Pane>

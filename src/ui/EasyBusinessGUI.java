@@ -242,7 +242,7 @@ public class EasyBusinessGUI {
     private TableColumn<Employee, String> positionActiveEColumn;
 
     @FXML
-    private TableColumn<Employee, LocalTime> timeEntryColumn;
+    private TableColumn<Employee, String> timeEntryColumn;
 
     @FXML
     private ImageView employeeImg;
@@ -384,6 +384,80 @@ public class EasyBusinessGUI {
     @FXML
     private TableColumn<Customer, String> debtColumn;
     
+    //Settings fields-----------------------------------------------------------------------------------------------------------------
+    
+    @FXML
+    private Button buttonSet1;
+    
+    @FXML
+    private TextField pBigY;
+
+    @FXML
+    private TextField pMedianY;
+
+    @FXML
+    private TextField pSmallY;
+
+    @FXML
+    private TextField pBigO;
+
+    @FXML
+    private TextField pMedianO;
+
+    @FXML
+    private TextField pSmallO;
+
+    @FXML
+    private TextField vBigY;
+
+    @FXML
+    private TextField vMedianY;
+
+    @FXML
+    private TextField vSmallY;
+
+    @FXML
+    private TextField vBigO;
+
+    @FXML
+    private TextField vMedianO;
+
+    @FXML
+    private TextField vSmallO;
+
+    @FXML
+    private TextField fYoghurt;
+
+    @FXML
+    private TextField fOat;
+    
+    @FXML
+    private TextField expireDYog;
+
+    @FXML
+    private TextField expireDOat;
+
+    @FXML
+    private TextField vCostS;
+
+    @FXML
+    private TextField vCostO;
+
+    @FXML
+    private TextField vCostD;
+
+    @FXML
+    private TextField fCostS;
+
+    @FXML
+    private TextField fCostO;
+
+    @FXML
+    private TextField fCostD;
+
+    @FXML
+    private Button buttonSet2;
+    
     //Employees scene fields-----------------------------------------------------------------------------------------------------------
     @FXML
     private TableView<Employee> employeeTable;
@@ -485,12 +559,16 @@ public class EasyBusinessGUI {
     
     @FXML
     void close(ActionEvent event) {
-
+    	
     }
 
     @FXML
     void saveChanges(ActionEvent event) throws FileNotFoundException, IOException {
     	saveData();
+    	Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Save");
+		alert.setContentText("Data saved successfully");
+		alert.showAndWait();
     }
     
 	public void saveData() throws FileNotFoundException, IOException {
@@ -508,8 +586,18 @@ public class EasyBusinessGUI {
 		} catch (FileNotFoundException e) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Welcome");
-			alert.setContentText("Welcome to Easy Business \n Follow the instrutions");
+			alert.setContentText("Welcome to Easy Business \n To Start registers an initial amount greater than $ 50 000");
 			alert.showAndWait();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToRegister.fxml"));
+	    	loader.setController(this);
+	    	Parent scene = loader.load();
+	    	mainPane.setCenter(scene);
+	    	
+	    	valueToRegister.setPromptText("Type an initial amoung");
+	    	detailToRegister.setText("Initial Amoung");
+	    	detailToRegister.setDisable(true);;
+	    	radButEgress.setDisable(true);
 		}
 		
 	}
@@ -517,7 +605,10 @@ public class EasyBusinessGUI {
     
     @FXML
     void about(ActionEvent event) {
-
+    	Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("About");
+		alert.setContentText("Credits\n\n Anderson Cardenas\nBenjamin Silva\n\nAlgorithms II");
+		alert.showAndWait();
     }
     
     //Navigators Methods--------------------------------------------------------------------------------------------------------------------------
@@ -565,10 +656,44 @@ public class EasyBusinessGUI {
 
     @FXML
     void showDialogueToSetPrices(ActionEvent event) throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("DialogueToSetPrices.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Settings1.fxml"));
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	
+    	pBigY.setText(company.getSettings().getPriceBigYoghurt()+"");
+    	pMedianY.setText(company.getSettings().getPriceMedianYoghurt()+"");
+    	pSmallY.setText(company.getSettings().getPriceSmallYoghurt()+"");
+    	pBigO.setText(company.getSettings().getPriceBigOat()+"");
+    	pMedianO.setText(company.getSettings().getPriceMedianOat()+"");
+    	pSmallO.setText(company.getSettings().getPriceSmallOat()+"");
+    	vBigY.setText(company.getSettings().getVarCostBigYoghurt()+"");
+    	vMedianY.setText(company.getSettings().getVarCostMedianYoghurt()+"");
+    	vSmallY.setText(company.getSettings().getVarCostSmallYoghurt()+"");
+    	vBigO.setText(company.getSettings().getVarCostBigOat()+"");
+    	vMedianO.setText(company.getSettings().getVarCostMedianOat()+"");
+    	vSmallO.setText(company.getSettings().getVarCostSmallOat()+"");
+    	fYoghurt.setText(company.getSettings().getFixedCostYoghurt()+"");
+    	fOat.setText(company.getSettings().getFixedCostOat()+"");
+    }
+    
+    @FXML
+    void showDialogueToSetSalarys(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("SalarySettings.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    	
+    	fCostS.setText(company.getSettings().getFixedCostSeller()+"");
+    	fCostO.setText(company.getSettings().getFixedCostOperator()+"");
+    	fCostD.setText(company.getSettings().getFixedCostDomiciliary()+"");
+    	
+    	vCostS.setText(company.getSettings().getVarCostSeller()+"");
+    	vCostO.setText(company.getSettings().getVarCostOperator()+"");
+    	vCostD.setText(company.getSettings().getVarCostDomiciliary()+"");
+    	
+    	expireDYog.setText(company.getSettings().getDaysForYoghurtExpire()+"");
+    	expireDOat.setText(company.getSettings().getDaysForOatExpire()+"");
     }
 
     @FXML
@@ -617,8 +742,11 @@ public class EasyBusinessGUI {
     }
 
     @FXML
-    void showSettings(ActionEvent event) {
-
+    void showSettings(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
     }
     
     @FXML
@@ -682,6 +810,14 @@ public class EasyBusinessGUI {
     	menuProduct.setItems(products);
     }
     
+    @FXML
+    void showWarnings(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("Warnings.fxml"));
+    	loader.setController(this);
+    	Parent scene = loader.load();
+    	mainPane.setCenter(scene);
+    }
+    
     //Cash Register Methods-------------------------------------------------------------------------------------------------------------
     
     @FXML
@@ -717,7 +853,7 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void searchRegisters(ActionEvent event) throws ClassNotFoundException {
+    void searchRegisters(ActionEvent event) throws ClassNotFoundException, InsufficientBalanceException {
     	
     	try {
     		company.getCashRegister().saveRegisters();
@@ -740,7 +876,7 @@ public class EasyBusinessGUI {
     }
     
     @FXML
-    void backToToday(ActionEvent event) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException {
+    void backToToday(ActionEvent event) throws FileNotFoundException, IOException, ClassNotFoundException, EmptyDataException, InsufficientBalanceException {
     	company.getCashRegister().loadRegistersOfDate(LocalDate.now());
     	initializeTableCashRegister();
 		cash.setText(company.getCashRegister().determineCash()+"");
@@ -1179,6 +1315,14 @@ public class EasyBusinessGUI {
     private void updateReport(String r) {
 		report.setText(r);
 	}
+    //Warnings methods----------------------------------------------------------------------------------------------------------------
+    @FXML
+    private TextArea warningsTxt;
+
+    @FXML
+    void updateWarnings(ActionEvent event) {
+    	warningsTxt.setText(company.determinateWarnings());
+    }
     
     //Setting methods-----------------------------------------------------------------------------------------------------------------
     
@@ -1209,6 +1353,126 @@ public class EasyBusinessGUI {
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 			
+    	}
+    }
+    //Settings methods------------------------------------------------------------------------------------------------------------------------------------------------------------
+    @FXML
+    void edit1(ActionEvent event) {
+    	pBigY.setDisable(false);
+    	pMedianY.setDisable(false);
+    	pSmallY.setDisable(false);
+    	pBigO.setDisable(false);
+    	pMedianO.setDisable(false);
+    	pSmallO.setDisable(false);
+    	vBigY.setDisable(false);
+    	vMedianY.setDisable(false);
+    	vSmallY.setDisable(false);
+    	vBigO.setDisable(false);
+    	vMedianO.setDisable(false);
+    	vSmallO.setDisable(false);
+    	fYoghurt.setDisable(false);
+    	fOat.setDisable(false);
+    	buttonSet1.setVisible(true);
+    }
+
+    @FXML
+    void saveSettings1(ActionEvent event) {
+    	
+    	try {
+    		company.getSettings().setPriceBigYoghurt(Double.parseDouble(pBigY.getText()));
+        	company.getSettings().setPriceMedianYoghurt(Double.parseDouble(pMedianY.getText()));
+        	company.getSettings().setPriceSmallYoghurt(Double.parseDouble(pSmallY.getText()));
+        	
+        	company.getSettings().setPriceBigOat(Double.parseDouble(pBigO.getText()));
+        	company.getSettings().setPriceMedianOat(Double.parseDouble(pMedianO.getText()));
+        	company.getSettings().setPriceSmallOat(Double.parseDouble(pSmallO.getText()));
+        	
+        	company.getSettings().setVarCostBigYoghurt(Double.parseDouble(vBigY.getText()));
+        	company.getSettings().setVarCostMedianYoghurt(Double.parseDouble(vMedianY.getText()));
+        	company.getSettings().setVarCostSmallYoghurt(Double.parseDouble(vSmallY.getText()));
+        	
+        	company.getSettings().setVarCostBigOat(Double.parseDouble(vBigO.getText()));
+        	company.getSettings().setVarCostMedianOat(Double.parseDouble(vMedianO.getText()));
+        	company.getSettings().setVarCostSmallOat(Double.parseDouble(vSmallO.getText()));
+        	
+        	company.getSettings().setFixedCostOat(Double.parseDouble(fOat.getText()));
+        	company.getSettings().setFixedCostYoghurt(Double.parseDouble(fYoghurt.getText()));
+        	
+        	buttonSet1.setVisible(false);
+        	
+        	pBigY.setDisable(true);
+        	pMedianY.setDisable(true);
+        	pSmallY.setDisable(true);
+        	pBigO.setDisable(true);
+        	pMedianO.setDisable(true);
+        	pSmallO.setDisable(true);
+        	vBigY.setDisable(true);
+        	vMedianY.setDisable(true);
+        	vSmallY.setDisable(true);
+        	vBigO.setDisable(true);
+        	vMedianO.setDisable(true);
+        	vSmallO.setDisable(true);
+        	fYoghurt.setDisable(true);
+        	fOat.setDisable(true);
+        	buttonSet1.setVisible(false);
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Type a positive real number in each field");
+			alert.showAndWait();
+    	}
+    	
+    	
+    }    
+
+    @FXML
+    void edit2(ActionEvent event) {
+    	fCostS.setDisable(false);
+    	fCostO.setDisable(false);
+    	fCostD.setDisable(false);
+    	
+    	vCostS.setDisable(false);
+    	vCostO.setDisable(false);
+    	vCostD.setDisable(false);
+    	
+    	expireDYog.setDisable(false);
+    	expireDOat.setDisable(false);
+    	
+    	buttonSet2.setVisible(true);
+    }
+
+    @FXML
+    void saveSettings2(ActionEvent event) {
+    	try {
+    		company.getSettings().setFixedCostSeller(Double.parseDouble(fCostS.getText()));
+    		company.getSettings().setFixedCostOperator(Double.parseDouble(fCostO.getText()));
+    		company.getSettings().setFixedCostDomiciliary(Double.parseDouble(fCostD.getText()));
+    		
+    		company.getSettings().setVarCostSeller(Double.parseDouble(vCostS.getText()));
+    		company.getSettings().setVarCostOperator(Double.parseDouble(vCostO.getText()));
+    		company.getSettings().setVarCostDomiciliary(Double.parseDouble(vCostD.getText()));
+    		
+    		company.getSettings().setDaysForYoghurtExpire((Integer.parseInt(expireDYog.getText())));
+    		company.getSettings().setDaysForOatExpire((Integer.parseInt(expireDOat.getText())));
+    		   		
+    		fCostS.setDisable(true);
+        	fCostO.setDisable(true);
+        	fCostD.setDisable(true);
+        	
+        	vCostS.setDisable(true);
+        	vCostO.setDisable(true);
+        	vCostD.setDisable(true);
+        	
+        	expireDYog.setDisable(true);
+        	expireDOat.setDisable(true);
+    		
+        	buttonSet2.setVisible(false);
+        	
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Type a positive real number in each field");
+			alert.showAndWait();
     	}
     }
     
@@ -1256,7 +1520,7 @@ public class EasyBusinessGUI {
     	
     	detailColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("detail"));
     	movementColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("value"));
-    	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("time"));
+    	timeColumn.setCellValueFactory(new PropertyValueFactory<Register,String>("STime"));
 
     }
 
@@ -1284,7 +1548,7 @@ public class EasyBusinessGUI {
     	nameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("name"));
     	lastnameActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("lastName"));
     	positionActiveEColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("position"));
-    	timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee,LocalTime>("timeEntry"));
+    	timeEntryColumn.setCellValueFactory(new PropertyValueFactory<Employee,String>("timeSEntry"));
 
     }
 }

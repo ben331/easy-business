@@ -9,6 +9,7 @@ public class InsufficientBalanceException extends Exception{
 	
 	public InsufficientBalanceException(double attempedSpending, double cash) {
 		this.attempedSpending = attempedSpending; 
+		this.cash = cash;
 	}
 
 	public double getAttempedSpending() {

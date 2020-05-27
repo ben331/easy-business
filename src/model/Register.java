@@ -34,4 +34,8 @@ public class Register implements Serializable {
 	public LocalTime getTime() {
 		return time;
 	}
+	
+	public String getSTime() {
+		return (time+"").substring(0, 5);
+	}
 }

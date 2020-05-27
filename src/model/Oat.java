@@ -35,7 +35,7 @@ public class Oat extends DairyDrink implements AnalyzableByCost, Serializable {
 
 	@Override
 	public int calculateBreakEvenPoint(double gain) {
-		int breakEvenPoint = (int) ((getSettings().getFixedCostOat() + gain)/ (getSalePrice() - getSettings().getVarCostOat(getSize())));
+		int breakEvenPoint = (int) Math.ceil((getSettings().getFixedCostOat() + gain)/ (getSalePrice() - getSettings().getVarCostOat(getSize())));
 		return breakEvenPoint;
 	}
 }

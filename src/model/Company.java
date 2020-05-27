@@ -1019,4 +1019,33 @@ public class Company implements Serializable{
 		return lastCode + 1;
 	}
 
+
+	public String determinateWarnings() {
+		String warnings = "EXPIRED DAIRY DRINKS: \n\n";
+		
+		for(int i=0; i<dairyDrinks.size();i++) {
+			if(dairyDrinks.get(i).isExpired()) {
+				warnings+=dairyDrinks.get(i).getName()+ " "+dairyDrinks.get(i).getCode()+"\n";
+			}
+		}
+		
+		warnings+="\n DEBTORS SINCE A MONTH AGO: ";
+		
+		if(firstDebtor!=null) {
+			Customer current = firstDebtor;
+			do {
+
+				LocalDate lastPurchase = current.getPurchasesDates().get(current.getPurchasesDates().size() -1);
+				
+				if(((LocalDate) Period.ofMonths(1).addTo(lastPurchase)).isBefore(LocalDate.now())) {
+					warnings+="Name: "+current.getName()+ "   Id: "+current.getId()+"\n";
+				}
+				
+				current = current.getNextCustomer();
+			}while(current!=firstDebtor);
+		}
+		
+		return warnings;
+	}
+
 }

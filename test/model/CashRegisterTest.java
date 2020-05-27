@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("unused")
 class CashRegisterTest {
 
 	private CashRegister cashRegister;
