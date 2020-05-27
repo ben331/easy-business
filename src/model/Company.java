@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
@@ -832,6 +833,12 @@ public class Company implements Serializable{
 		
 		Employee nodo=searchActiveEmployee(id);
 		if(nodo!=null) {
+			
+			//Registers the hours worked
+			int hours = (int) Duration.between(nodo.getTimeEntry(), LocalTime.now()).toHours();
+			nodo.setHoursWorked(nodo.getHoursWorked() + hours);
+			nodo.setTimeEntry(null);
+			
 			if((nodo.getLeft()==null || nodo.getRight()==null) && !(nodo.getLeft()==null && nodo.getRight()==null)) {      //Delete element with one child
 				if(nodo==activeEmployeesRoot) {
 					if(nodo.getLeft()!=null) {
