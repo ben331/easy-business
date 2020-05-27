@@ -832,7 +832,7 @@ public class Company implements Serializable{
 		}
 	}
 	
-	public boolean registerDeparture(String id) {
+	public int registerDeparture(String id) {
 		
 		Employee nodo=searchActiveEmployee(id);
 		if(nodo!=null) {
@@ -868,7 +868,7 @@ public class Company implements Serializable{
 						}
 					}				
 				}
-				return true;
+				return hours;
 				
 				
 			}else if(nodo.getLeft()==null && nodo.getRight()==null) {     //Delete sheet
@@ -881,7 +881,7 @@ public class Company implements Serializable{
 						nodo.getHead().setRight(null);
 					}
 				}
-				return true;
+				return hours;
 				
 				
 			}else {				                                             //Delete element with both children
@@ -903,10 +903,10 @@ public class Company implements Serializable{
 						nodo.getHead().setRight(min);
 					}
 				}
-				return true;
+				return hours;
 			}
 		}
-		return false;
+		return -1;
 	}
 	public Employee searchEmployee(String id) {
 		

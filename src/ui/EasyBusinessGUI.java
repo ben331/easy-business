@@ -7,9 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import customException.*;
 import javafx.application.Platform;
@@ -632,6 +630,7 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeActiveEmployees();
     }
 
     @FXML
@@ -1012,12 +1011,12 @@ public class EasyBusinessGUI {
     @FXML
     void checkOut(ActionEvent event) {
     	String id=activeEId.getText();
-    	Employee e = company.searchActiveEmployee(id);
-    	if(company.registerDeparture(id)) {
-    		Duration d = Duration.between(e.getTimeEntry(), LocalTime.now());
+    	
+    	int hours = company.registerDeparture(id);
+    	if(hours>=0) {
     		Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Successfull Process");
-			alert.setContentText("Employee went out. \nHours Worked: "+d.toHours()+" hours.");
+			alert.setContentText("Employee went out. \nHours Worked: "+hours+" hours.");
 			alert.showAndWait();
 	    	initializeActiveEmployees();
     	}
@@ -1038,7 +1037,7 @@ public class EasyBusinessGUI {
     		}else {
     			Alert alert = new Alert(AlertType.WARNING);
     			alert.setTitle("Warning");
-    			alert.setContentText("Employee not faound");
+    			alert.setContentText("Employee not found");
     			alert.showAndWait();
     		}
 			
