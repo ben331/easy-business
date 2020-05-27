@@ -556,15 +556,11 @@ public class EasyBusinessGUI {
     }
 
     //Main Scene Methods------------------------------------------------------------------------------------------------------------------
-    
-    @FXML
-    void close(ActionEvent event) {
-    	
-    }
 
     @FXML
     void saveChanges(ActionEvent event) throws FileNotFoundException, IOException {
     	saveData();
+    	company.getCashRegister().saveRegisters();
     	Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Save");
 		alert.setContentText("Data saved successfully");
@@ -730,6 +726,7 @@ public class EasyBusinessGUI {
     	loader.setController(this);
     	Parent scene = loader.load();
     	mainPane.setCenter(scene);
+    	initializeTableDebtor();
     }
 
     @FXML
@@ -923,6 +920,10 @@ public class EasyBusinessGUI {
     	try {
         	company.charge(customerId.getText());
         	initializeTableDebtor();
+        	Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Charged");
+			alert.setContentText("Debt charged, new registered in cash register");
+			alert.showAndWait();
     	}catch(InsufficientBalanceException | EmptyDataException e){
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
@@ -1057,7 +1058,6 @@ public class EasyBusinessGUI {
     	if(activeEmployee !=null) {
     		activeEName.setText(activeEmployee.getName());
     		employeeImg.setImage(activeEmployee.getPhoto());
-        	hours.setText(""+activeEmployee.getHoursWorked());
     	}else {
     		Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");
@@ -1092,6 +1092,30 @@ public class EasyBusinessGUI {
     			alert.setContentText("This product was discarded");
     			alert.showAndWait();
     			initializeTableDairyProducts();
+        	}else {
+        		Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("Product not found");
+    			alert.showAndWait();
+        	}
+    	}catch(NumberFormatException e) {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Type a natural number");
+			alert.showAndWait();
+    	}
+    }
+    
+    @FXML
+    void discardDrink(ActionEvent event) {
+    	try {
+    		int num = Integer.parseInt(codeToSell.getText());
+    		
+    		if(company.discardProduct(num)){
+        		Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Product removed");
+    			alert.setContentText("This product was discarded");
+    			alert.showAndWait();
     			initializeTableDairyDrinks();
         	}else {
         		Alert alert = new Alert(AlertType.WARNING);
@@ -1530,7 +1554,7 @@ public class EasyBusinessGUI {
     	 idDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("id"));
     	 nameDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("name"));
     	 lastnameDebtorColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastName"));
-    	 debtColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("debt"));
+    	 debtColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("debtValue"));
     	 dateCustomerColumn.setCellValueFactory(new PropertyValueFactory<Customer,String>("lastDate"));
     }
     private void initializeTableDairyProducts() {

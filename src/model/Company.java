@@ -832,7 +832,7 @@ public class Company implements Serializable{
 		
 		Employee nodo=searchActiveEmployee(id);
 		if(nodo!=null) {
-			if(nodo.getLeft()==null | nodo.getRight()==null) {      //Delete element with one child
+			if((nodo.getLeft()==null || nodo.getRight()==null) && !(nodo.getLeft()==null && nodo.getRight()==null)) {      //Delete element with one child
 				if(nodo==activeEmployeesRoot) {
 					if(nodo.getLeft()!=null) {
 						nodo.getLeft().setHead(null);
