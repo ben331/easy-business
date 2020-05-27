@@ -1067,6 +1067,23 @@ public class EasyBusinessGUI {
     	
     }
     
+    @FXML
+    void payPayroll(ActionEvent event) throws IOException {
+    	try {
+			company.payPayroll();
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Payroll paid successsfully");
+			alert.setContentText("Cahs register updated \n New registers of salary generated in folder 'reports'.");
+			alert.showAndWait();
+		} catch (EmptyDataException | InsufficientBalanceException e) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+    }
+    
     //Inventary scene Methods---------------------------------------------------------------------------------------------------------------
     @FXML
     void sortDairyDrinks(ActionEvent event) {

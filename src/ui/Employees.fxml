@@ -47,6 +47,7 @@
                   <TextField fx:id="employeeAddress" editable="false" layoutX="57.0" layoutY="182.0" prefHeight="26.0" prefWidth="205.0" />
                </children>
             </Pane>
+            <Button mnemonicParsing="false" onAction="#payPayroll" prefHeight="38.0" prefWidth="108.0" text="Pay Payroll" />
          </children>
       </VBox>
    </right>
