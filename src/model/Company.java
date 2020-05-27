@@ -430,8 +430,9 @@ public class Company implements Serializable{
 		return expiredProducts;
 	}
 	
-	public void payPayroll() throws EmptyDataException, InsufficientBalanceException, IOException {
+	public boolean payPayroll() throws EmptyDataException, InsufficientBalanceException, IOException {
 		
+		boolean paid=false;
 		if(employeesRoot!=null) {
 			
 			
@@ -444,7 +445,9 @@ public class Company implements Serializable{
 			double totalPayRoll = payAndReset(employeesRoot);
 					
 			cashRegister.registerMoney("Payment PayRoll", totalPayRoll, true);
+			paid=true;
 		}
+		return paid;
 	}
 	
 	public void charge(String id) throws EmptyDataException, InsufficientBalanceException {

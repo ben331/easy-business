@@ -45,7 +45,7 @@ import model.*;
 public class EasyBusinessGUI {
 	//Constant
 	public static final String DEFAULT_PROFILE_PHOTO = "imgs/deafultProfile.jpg";
-	private static final String FILE_NAME_MODEL = "data/serials/model.srl";
+	private static final String FILE_NAME_MODEL = "data/model.srl";
 	//Relations--------------------------------------------------------------------------------------------------------------------------
 	private Company company;
 	
@@ -1070,12 +1070,18 @@ public class EasyBusinessGUI {
     @FXML
     void payPayroll(ActionEvent event) throws IOException {
     	try {
-			company.payPayroll();
+    		if(company.payPayroll()) {
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Payroll paid successsfully");
+    			alert.setContentText("Cahs register updated \n New registers of salary generated in folder 'registersPayRoll'.");
+    			alert.showAndWait();
+    		}else{
+    			Alert alert = new Alert(AlertType.WARNING);
+    			alert.setTitle("Warning");
+    			alert.setContentText("There is not employees");
+    			alert.showAndWait();
+    		}
 			
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Payroll paid successsfully");
-			alert.setContentText("Cahs register updated \n New registers of salary generated in folder 'reports'.");
-			alert.showAndWait();
 		} catch (EmptyDataException | InsufficientBalanceException e) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning");

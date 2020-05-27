@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 @SuppressWarnings("serial")
 public abstract class Employee extends Person implements Remunerable, Serializable {
 	
-	public static final String FILE_NAME_PREFIX="data/registersPayRoll/Payroll_OfDate_";
-	public static final String EXTENSION = ".prl";
+	public static final String FILE_NAME_PREFIX="registersPayRoll/Payroll_OfDate_";
+	public static final String EXTENSION = ".txt";
 	
 	//Domain constants of employee type
 	public static final char SELLER = 'S';
