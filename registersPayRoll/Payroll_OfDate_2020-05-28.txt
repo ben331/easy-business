@@ -1,0 +1,12 @@
+
+---------------------------PAYMENT--PAYROLL---REPORT-----------------------------------
+
+
+
+ Id: 123456        Name: nnn     Hours Worked: 0    Salary: 0.0
+
+ Id: 14893622        Name: Ruben Dario     Hours Worked: 0    Salary: 30000.0
+
+ Id: 38875128        Name: Esperanza     Hours Worked: 0    Salary: 20000.0
+
+ Id: 123        Name: ben     Hours Worked: 0    Salary: 0.0

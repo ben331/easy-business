@@ -28,6 +28,6 @@
 		Diagrama de clases de la interfaz gráfica:	https://drive.google.com/file/d/1vb7WXhbfRABW4DqoROZRRvLplA99gTYj/view?usp=sharing
 3. Video:
 	
-	Breve demostración de las funcionalidades del programa:
+	Video: https://youtu.be/ZEJ7BEOAHkw
 		
 
