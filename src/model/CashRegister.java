@@ -82,8 +82,10 @@ public class CashRegister implements Serializable {
 			ois.close();
 		} catch (FileNotFoundException e) {
 			if(localDate.isEqual(LocalDate.now())) {
+				registers = new ArrayList<Register>();
 				registerMoney("In existence", cash, false);
 				cash= cash/2;
+				saveRegisters();
 			}else {
 				throw e;
 			}

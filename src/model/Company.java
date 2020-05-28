@@ -294,13 +294,17 @@ public class Company implements Serializable{
 			}
 		}
 	}
-	
 	private void swap(Customer c1, Customer c2) {
 		
-		//Case: list size: 2.
-		if(c2.getNextCustomer()==firstCustomer) {
+		//Case: c1 is the first
+		if(c1==firstCustomer) {
 			firstCustomer = c2;
 		}
+		//Case: c1 is the last
+		else if(c2==firstCustomer) {
+			firstCustomer = c1;
+		}
+		
 		//Case: list size: 3.
 		else if(c1.getPrevCustomer()==c2.getNextCustomer()){
 			Customer c3=c1.getPrevCustomer();
@@ -325,15 +329,6 @@ public class Company implements Serializable{
 			
 			c1.setPrevCustomer(c2);
 			c1.setNextCustomer(nc2);
-		}
-		
-		//Case: c1 is the first
-		if(c1==firstCustomer) {
-			firstCustomer = c2;
-		}
-		//Case: c1 is the last
-		else if(c2==firstCustomer) {
-			firstCustomer = c1;
 		}
 	}
 	

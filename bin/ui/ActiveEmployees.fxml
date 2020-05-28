@@ -38,15 +38,8 @@
                   <Button layoutX="25.0" layoutY="131.0" mnemonicParsing="false" onAction="#searchActiveE" prefHeight="28.0" prefWidth="64.0" text="Search" />
                </children>
             </Pane>
+            <Button mnemonicParsing="false" onAction="#checkOut" prefHeight="29.0" prefWidth="141.0" text="Check out" />
             <Label prefHeight="167.0" prefWidth="28.0" />
-            <Pane prefHeight="195.0" prefWidth="275.0">
-               <children>
-                  <ImageView fx:id="activeEImg" fitHeight="97.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="97.0" layoutY="73.0" text="Id:" />
-                  <TextField fx:id="employeeSelectedId" layoutX="141.0" layoutY="69.0" prefHeight="26.0" prefWidth="122.0" />
-                  <Button layoutX="122.0" layoutY="129.0" mnemonicParsing="false" onAction="#checkOut" prefHeight="29.0" prefWidth="141.0" text="Check out" />
-               </children>
-            </Pane>
          </children>
       </VBox>
    </right>

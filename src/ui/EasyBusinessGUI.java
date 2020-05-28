@@ -571,12 +571,13 @@ public class EasyBusinessGUI {
     	oos.close();
 	}
 	
-	public void loadData() throws ClassNotFoundException, IOException {
+	public void loadData() throws ClassNotFoundException, IOException, EmptyDataException, InsufficientBalanceException {
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(new FileInputStream(FILE_NAME_MODEL));
 			company = (Company)(ois.readObject());
 			ois.close();
+			company.getCashRegister().loadRegistersOfDate(LocalDate.now());
 		} catch (FileNotFoundException e) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Welcome");
@@ -1027,8 +1028,12 @@ public class EasyBusinessGUI {
 			alert.setContentText("Employee went out. \nHours Worked: "+hours+" hours.");
 			alert.showAndWait();
 	    	initializeActiveEmployees();
-    	}
-    	
+    	}else {
+    		Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setContentText("Employee not found");
+			alert.showAndWait();
+    	}	
     	initializeActiveEmployees();
     }
     
